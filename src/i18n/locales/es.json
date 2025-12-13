@@ -25,6 +25,7 @@
         "create": "Crear",
         "update": "Actualizar",
         "categories": {
+            "all": "Todos",
             "frontend": "Frontend",
             "backend": "Backend",
             "fullstack": "Full Stack",
