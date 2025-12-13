@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import { LogOut, FolderOpen, Briefcase, Code, Plus, Edit, Trash2, Eye, Database } from 'lucide-react';
+import { LogOut, FolderOpen, Briefcase, Code, Plus, Edit, Trash2, Eye } from 'lucide-react';
 import { signOut } from '../../lib/firebase/auth';
 import { useAuthContext } from '../../context/AuthContext';
 import { Card } from '../../components/ui/Card';
@@ -23,7 +23,6 @@ import {
   deleteSkill,
 } from '../../lib/firebase/firestore';
 import { seedDatabase } from '../../lib/data/seedDatabase';
-import { migrateProjectCategories } from '../../lib/firebase/migrateProjectCategories';
 import { ProjectForm } from '../../components/admin/ProjectForm';
 import { ExperienceForm } from '../../components/admin/ExperienceForm';
 import { SkillForm } from '../../components/admin/SkillForm';
@@ -37,7 +36,6 @@ export const Dashboard = () => {
   const { projects, refetch: refetchProjects } = useProjects(true);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [isLoadingSampleData, setIsLoadingSampleData] = useState(false);
-  const [isMigrating, setIsMigrating] = useState(false);
   const [activeSection, setActiveSection] = useState<Section>('overview');
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [skills, setSkills] = useState<Skill[]>([]);
@@ -100,27 +98,6 @@ export const Dashboard = () => {
       toast.error('Error al cargar datos de ejemplo');
     } finally {
       setIsLoadingSampleData(false);
-    }
-  };
-
-  const handleMigrateCategories = async () => {
-    if (!window.confirm('¿Deseas migrar las categorías antiguas de los proyectos a las nuevas?')) {
-      return;
-    }
-
-    setIsMigrating(true);
-    try {
-      const result = await migrateProjectCategories();
-      if (result.success) {
-        toast.success(result.message);
-        if (refetchProjects) refetchProjects();
-      } else {
-        toast.error(result.message);
-      }
-    } catch (error) {
-      toast.error('Error al migrar categorías');
-    } finally {
-      setIsMigrating(false);
     }
   };
 
@@ -258,7 +235,7 @@ export const Dashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-dark">
+    <div className="min-h-screen bg-slate-50 dark:bg-dark">
       {/* Header */}
       <header className="glass border-b border-white/10 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -269,21 +246,11 @@ export const Dashboard = () => {
               </div>
               <div>
                 <h1 className="text-lg font-bold gradient-text">Admin Dashboard</h1>
-                <p className="text-xs text-light/60">{user?.email}</p>
+                <p className="text-xs text-slate-600 dark:text-light/60">{user?.email}</p>
               </div>
             </div>
 
             <div className="flex items-center space-x-3">
-              <Button
-                variant="primary"
-                onClick={handleMigrateCategories}
-                isLoading={isMigrating}
-                size="sm"
-                title="Migrar categorías antiguas (web, desktop, other) a las nuevas categorías"
-              >
-                {!isMigrating && <Database className="w-4 h-4 mr-2" />}
-                Migrar Categorías
-              </Button>
               <Button
                 variant="outline"
                 onClick={handleViewPortfolio}
@@ -317,7 +284,7 @@ export const Dashboard = () => {
           <h2 className="text-3xl font-bold mb-2">
             Bienvenido, {user?.displayName || 'Admin'}
           </h2>
-          <p className="text-light/70">
+          <p className="text-slate-600 dark:text-light/70">
             Gestiona el contenido de tu portafolio desde aquí
           </p>
         </motion.div>
@@ -337,7 +304,7 @@ export const Dashboard = () => {
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-light/60 text-sm mb-1">{item.label}</p>
+                    <p className="text-slate-500 dark:text-light/60 text-sm mb-1">{item.label}</p>
                     <p className="text-3xl font-bold gradient-text">{item.count}</p>
                   </div>
                   <div className="w-12 h-12 rounded-lg gradient-primary flex items-center justify-center">
