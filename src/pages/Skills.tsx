@@ -6,6 +6,7 @@ import { Card } from '../components/ui/Card';
 import { getSkills } from '../lib/firebase/firestore';
 import type { Skill, SkillCategory } from '../types';
 import { staggerContainer, staggerItem } from '../lib/utils/animations';
+import { useTranslation } from 'react-i18next';
 
 const categoryNames: Record<SkillCategory, string> = {
   frontend: 'Frontend Development',
@@ -20,6 +21,7 @@ const categoryNames: Record<SkillCategory, string> = {
 export const Skills = () => {
   const [skills, setSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchSkills = async () => {
@@ -51,9 +53,9 @@ export const Skills = () => {
           {/* Header */}
           <FadeIn className="text-center mb-16">
             <h1 className="text-4xl md:text-6xl font-bold gradient-text mb-4">
-              Habilidades 
+              {t('skills.title')} 
             </h1>
-            <p className="text-xl text-light/70">Mi stack tecnológico</p>
+            <p className="text-xl text-light/70">{t('skills.description')}</p>
             <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full mt-4" />
           </FadeIn>
 
@@ -109,10 +111,10 @@ export const Skills = () => {
                           {(skill.yearsOfExperience || skill.projectsCount) && (
                             <div className="flex justify-between text-sm text-light/60 pt-3 border-t border-white/10">
                               {skill.yearsOfExperience && (
-                                <span>{skill.yearsOfExperience}+ años</span>
+                                <span>{skill.yearsOfExperience}+ {t('skills.yearsOfExperience')}</span>
                               )}
                               {skill.projectsCount && (
-                                <span>{skill.projectsCount} proyectos</span>
+                                <span>{skill.projectsCount} {t('skills.projectsCount')}</span>
                               )}
                             </div>
                           )}

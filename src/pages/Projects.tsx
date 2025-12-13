@@ -7,8 +7,10 @@ import { ProjectModal } from '../components/projects/ProjectModal';
 import { ProjectFilters } from '../components/projects/ProjectFilters';
 import { useProjects } from '../hooks/useProjects';
 import type { Project, ProjectFilterCategory } from '../types';
+import { useTranslation } from 'react-i18next';
 
 export const Projects = () => {
+  const { t } = useTranslation();
   const { projects, loading } = useProjects();
   const [activeFilter, setActiveFilter] = useState<ProjectFilterCategory>('all');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -30,10 +32,10 @@ export const Projects = () => {
           {/* Header */}
           <FadeIn className="text-center mb-12">
             <h1 className="text-4xl md:text-6xl font-bold gradient-text mb-4">
-              Proyectos
+              {t('projects.title')}
             </h1>
             <p className="text-xl text-light/70 max-w-2xl mx-auto">
-              Una selección de mis trabajos más destacados
+              {t('projects.description')}
             </p>
             <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full mt-4" />
           </FadeIn>
@@ -74,7 +76,7 @@ export const Projects = () => {
           {!loading && filteredProjects.length === 0 && (
             <div className="text-center py-20">
               <p className="text-xl text-light/60">
-                No hay proyectos en esta categoría
+                {t('projects.noProjects')}
               </p>
             </div>
           )}
