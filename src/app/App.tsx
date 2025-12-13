@@ -8,11 +8,6 @@ import { Footer } from '../components/layout/Footer';
 
 // Pages
 import { Home } from '../pages/Home';
-import { About } from '../pages/About';
-import { Projects } from '../pages/Projects';
-import { Experience } from '../pages/Experience';
-import { Skills } from '../pages/Skills';
-import { Contact } from '../pages/Contact';
 import { Login } from '../pages/admin/Login';
 import { Dashboard } from '../pages/admin/Dashboard';
 
@@ -53,46 +48,6 @@ function AppContent() {
             element={
               <MainLayout>
                 <Home />
-              </MainLayout>
-            }
-          />
-          <Route
-            path="/about"
-            element={
-              <MainLayout>
-                <About />
-              </MainLayout>
-            }
-          />
-          <Route
-            path="/projects"
-            element={
-              <MainLayout>
-                <Projects />
-              </MainLayout>
-            }
-          />
-          <Route
-            path="/experience"
-            element={
-              <MainLayout>
-                <Experience />
-              </MainLayout>
-            }
-          />
-          <Route
-            path="/skills"
-            element={
-              <MainLayout>
-                <Skills />
-              </MainLayout>
-            }
-          />
-          <Route
-            path="/contact"
-            element={
-              <MainLayout>
-                <Contact />
               </MainLayout>
             }
           />
