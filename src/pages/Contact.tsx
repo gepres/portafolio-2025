@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { Mail, MapPin, Send, Copy } from 'lucide-react';
 import { PageTransition } from '../components/layout/PageTransition';
 import { FadeIn } from '../components/animations/FadeIn';
@@ -10,16 +11,18 @@ import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { copyToClipboard } from '../lib/utils/helpers';
 
-const contactSchema = z.object({
-  name: z.string().min(2, 'El nombre debe tener al menos 2 caracteres'),
-  email: z.string().email('Email inválido'),
-  subject: z.string().min(3, 'El asunto debe tener al menos 3 caracteres'),
-  message: z.string().min(10, 'El mensaje debe tener al menos 10 caracteres'),
-});
-
-type ContactFormData = z.infer<typeof contactSchema>;
-
 export const Contact = () => {
+  const { t } = useTranslation();
+
+  const contactSchema = z.object({
+    name: z.string().min(2, t('home.validation.nameMin')),
+    email: z.string().email(t('home.validation.emailInvalid')),
+    subject: z.string().min(3, t('home.validation.subjectMin')),
+    message: z.string().min(10, t('home.validation.messageMin')),
+  });
+
+  type ContactFormData = z.infer<typeof contactSchema>;
+
   const {
     register,
     handleSubmit,
@@ -34,17 +37,17 @@ export const Contact = () => {
       // Simular envío de email - en producción integrar con EmailJS o Firebase Functions
       await new Promise((resolve) => setTimeout(resolve, 2000));
       console.log('Form data:', data);
-      toast.success('¡Mensaje enviado con éxito!');
+      toast.success(t('home.validation.success'));
       reset();
     } catch (error) {
-      toast.error('Error al enviar el mensaje');
+      toast.error(t('home.validation.error'));
     }
   };
 
   const handleCopyEmail = async () => {
     const success = await copyToClipboard('contact@example.com');
     if (success) {
-      toast.success('Email copiado al portapapeles');
+      toast.success(t('home.validation.emailCopied'));
     }
   };
 
@@ -55,10 +58,10 @@ export const Contact = () => {
           {/* Header */}
           <FadeIn className="text-center mb-16">
             <h1 className="text-4xl md:text-6xl font-bold gradient-text mb-4">
-              Trabajemos Juntos
+              {t('home.contact.title')}
             </h1>
             <p className="text-xl text-light/70">
-              ¿Tienes un proyecto en mente? ¡Hablemos!
+              {t('home.contact.subtitle')}
             </p>
             <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full mt-4" />
           </FadeIn>
@@ -68,10 +71,9 @@ export const Contact = () => {
             <SlideIn direction="left">
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-3xl font-bold mb-6">Información de Contacto</h2>
+                  <h2 className="text-3xl font-bold mb-6">{t('home.contact.info.title')}</h2>
                   <p className="text-light/70 leading-relaxed mb-8">
-                    Estoy siempre abierto a nuevas oportunidades y colaboraciones.
-                    No dudes en contactarme para discutir tu proyecto o simplemente para saludar.
+                    {t('home.contact.info.description')}
                   </p>
                 </div>
 
@@ -80,7 +82,7 @@ export const Contact = () => {
                     <Mail className="w-6 h-6" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold mb-1">Email</h3>
+                    <h3 className="font-semibold mb-1">{t('home.contact.info.email')}</h3>
                     <p className="text-light/70 text-sm flex items-center">
                       contact@example.com
                       <Copy className="w-4 h-4 ml-2 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -93,7 +95,7 @@ export const Contact = () => {
                     <MapPin className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-1">Ubicación</h3>
+                    <h3 className="font-semibold mb-1">{t('home.contact.info.location')}</h3>
                     <p className="text-light/70 text-sm">Lima, Perú</p>
                   </div>
                 </Card>
@@ -106,12 +108,12 @@ export const Contact = () => {
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                   <div>
                     <label className="block text-sm font-medium mb-2">
-                      Nombre
+                      {t('home.contact.form.name')}
                     </label>
                     <input
                       {...register('name')}
                       className="w-full px-4 py-3 rounded-lg glass border border-white/10 focus:border-primary focus:outline-none transition-all"
-                      placeholder="Tu nombre"
+                      placeholder={t('home.contact.form.namePlaceholder')}
                     />
                     {errors.name && (
                       <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
@@ -120,13 +122,13 @@ export const Contact = () => {
 
                   <div>
                     <label className="block text-sm font-medium mb-2">
-                      Email
+                      {t('home.contact.form.email')}
                     </label>
                     <input
                       {...register('email')}
                       type="email"
                       className="w-full px-4 py-3 rounded-lg glass border border-white/10 focus:border-primary focus:outline-none transition-all"
-                      placeholder="tu@email.com"
+                      placeholder={t('home.contact.form.emailPlaceholder')}
                     />
                     {errors.email && (
                       <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
@@ -135,12 +137,12 @@ export const Contact = () => {
 
                   <div>
                     <label className="block text-sm font-medium mb-2">
-                      Asunto
+                      {t('home.contact.form.subject')}
                     </label>
                     <input
                       {...register('subject')}
                       className="w-full px-4 py-3 rounded-lg glass border border-white/10 focus:border-primary focus:outline-none transition-all"
-                      placeholder="Asunto del mensaje"
+                      placeholder={t('home.contact.form.subjectPlaceholder')}
                     />
                     {errors.subject && (
                       <p className="text-red-500 text-sm mt-1">{errors.subject.message}</p>
@@ -149,13 +151,13 @@ export const Contact = () => {
 
                   <div>
                     <label className="block text-sm font-medium mb-2">
-                      Mensaje
+                      {t('home.contact.form.message')}
                     </label>
                     <textarea
                       {...register('message')}
                       rows={5}
                       className="w-full px-4 py-3 rounded-lg glass border border-white/10 focus:border-primary focus:outline-none transition-all resize-none"
-                      placeholder="Tu mensaje..."
+                      placeholder={t('home.contact.form.messagePlaceholder')}
                     />
                     {errors.message && (
                       <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>
@@ -170,7 +172,7 @@ export const Contact = () => {
                     className="w-full"
                   >
                     {!isSubmitting && <Send className="w-4 h-4 mr-2" />}
-                    Enviar Mensaje
+                    {t('home.contact.form.send')}
                   </Button>
                 </form>
               </Card>

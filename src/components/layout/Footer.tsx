@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Github, Linkedin, Mail, ArrowUp } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const socialLinks = [
   { icon: Github, href: 'https://github.com', label: 'GitHub' },
@@ -9,15 +10,16 @@ const socialLinks = [
   { icon: Mail, href: 'mailto:contact@example.com', label: 'Email' },
 ];
 
-const footerLinks = [
-  { name: 'Home', path: '/' },
-  { name: 'About', path: '/about' },
-  { name: 'Projects', path: '/projects' },
-  { name: 'Contact', path: '/contact' },
-];
-
 export const Footer = () => {
+  const { t } = useTranslation();
   const [showScrollTop, setShowScrollTop] = useState(false);
+
+  const footerLinks = [
+    { name: t('nav.home'), path: '/' },
+    { name: t('nav.about'), path: '/about' },
+    { name: t('nav.projects'), path: '/projects' },
+    { name: t('nav.contact'), path: '/contact' },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -47,13 +49,13 @@ export const Footer = () => {
               </span>
             </div>
             <p className="text-slate-600 dark:text-light/60 text-sm">
-              Full Stack Developer especializado en React y Node.js. Creando experiencias web modernas y escalables.
+              {t('footer.description')}
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Enlaces Rápidos</h3>
+            <h3 className="font-semibold text-lg mb-4">{t('footer.quickLinks')}</h3>
             <ul className="space-y-2">
               {footerLinks.map((link) => (
                 <li key={link.path}>
@@ -70,7 +72,7 @@ export const Footer = () => {
 
           {/* Social */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Sígueme</h3>
+            <h3 className="font-semibold text-lg mb-4">{t('footer.followMe')}</h3>
             <div className="flex space-x-4">
               {socialLinks.map((link) => (
                 <a
@@ -89,7 +91,7 @@ export const Footer = () => {
         </div>
 
         <div className="mt-8 pt-8 border-t border-white/10 text-center text-slate-600 dark:text-light/60 text-sm">
-          <p>© 2025 Genaro Pretill. Hecho con ❤️ y React</p>
+          <p>{t('footer.madeWith')}</p>
         </div>
       </div>
 

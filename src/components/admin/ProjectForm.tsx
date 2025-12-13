@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FormModal } from './FormModal';
 import { Input } from '../ui/Input';
 import { TechnologyInput } from '../ui/TechnologyInput';
+import { BilingualInput } from './BilingualInput';
+
+import { createEmptyBilingualText, isBilingualText, stringToBilingualText, getLocalizedText } from '../../lib/utils/i18n';
 import { getExperiences } from '../../lib/firebase/firestore';
 import type { Project, ProjectCategory, Experience } from '../../types';
 
@@ -13,13 +17,6 @@ interface ProjectFormProps {
   isLoading?: boolean;
 }
 
-const categories: { value: ProjectCategory; label: string }[] = [
-  { value: 'frontend', label: 'Frontend' },
-  { value: 'backend', label: 'Backend' },
-  { value: 'mobile', label: 'Mobile' },
-  { value: 'fullstack', label: 'Fullstack' },
-];
-
 export const ProjectForm = ({
   isOpen,
   onClose,
@@ -27,10 +24,19 @@ export const ProjectForm = ({
   project,
   isLoading = false,
 }: ProjectFormProps) => {
+  const { t, i18n } = useTranslation();
+  
+  const categories: { value: ProjectCategory; label: string }[] = [
+    { value: 'frontend', label: t('admin.skillForm.categories.frontend', { defaultValue: 'Frontend' }) },
+    { value: 'backend', label: t('admin.skillForm.categories.backend', { defaultValue: 'Backend' }) },
+    { value: 'mobile', label: t('admin.skillForm.categories.mobile', { defaultValue: 'Mobile' }) },
+    { value: 'fullstack', label: t('admin.skillForm.categories.fullstack', { defaultValue: 'Fullstack' }) },
+  ];
+
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    longDescription: '',
+    title: createEmptyBilingualText(),
+    description: createEmptyBilingualText(),
+    longDescription: createEmptyBilingualText(),
     technologies: [] as string[],
     category: 'frontend' as ProjectCategory,
     imageUrl: '',
@@ -52,9 +58,11 @@ export const ProjectForm = ({
   useEffect(() => {
     if (project) {
       setFormData({
-        title: project.title,
-        description: project.description,
-        longDescription: project.longDescription || '',
+        title: isBilingualText(project.title) ? project.title : stringToBilingualText(project.title),
+        description: isBilingualText(project.description) ? project.description : stringToBilingualText(project.description),
+        longDescription: project.longDescription 
+          ? (isBilingualText(project.longDescription) ? project.longDescription : stringToBilingualText(project.longDescription))
+          : createEmptyBilingualText(),
         technologies: project.technologies || [],
         category: project.category,
         imageUrl: project.imageUrl || '',
@@ -66,9 +74,9 @@ export const ProjectForm = ({
     } else {
       // Reset form
       setFormData({
-        title: '',
-        description: '',
-        longDescription: '',
+        title: createEmptyBilingualText(),
+        description: createEmptyBilingualText(),
+        longDescription: createEmptyBilingualText(),
         technologies: [],
         category: 'frontend',
         imageUrl: '',
@@ -86,7 +94,7 @@ export const ProjectForm = ({
     const projectData: Omit<Project, 'id'> = {
       title: formData.title,
       description: formData.description,
-      longDescription: formData.longDescription || null,
+      longDescription: (formData.longDescription.es || formData.longDescription.en) ? formData.longDescription : null,
       technologies: formData.technologies,
       category: formData.category,
       imageUrl: formData.imageUrl || null,
@@ -96,7 +104,6 @@ export const ProjectForm = ({
       featured: formData.featured,
       createdAt: project?.createdAt || new Date(),
     };
-    console.log('projectData',projectData);
 
     await onSubmit(projectData);
   };
@@ -113,69 +120,78 @@ export const ProjectForm = ({
     <FormModal
       isOpen={isOpen}
       onClose={onClose}
-      title={project ? 'Editar Proyecto' : 'Nuevo Proyecto'}
+      title={project ? t('admin.projectForm.editProject') : t('admin.projectForm.newProject')}
       onSubmit={handleSubmit}
       isLoading={isLoading}
-      submitText={project ? 'Actualizar' : 'Crear'}
+      submitText={project ? t('common.update') : t('common.create')}
     >
-      <div>
-        <label className="block text-sm font-medium mb-2">
-          Título <span className="text-red-400">*</span>
-        </label>
-        <Input
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          placeholder="Nombre del proyecto"
-          required
-        />
-      </div>
+      <div className="space-y-6">
+        <div className="flex justify-between items-start gap-4">
+          <div className="flex-1">
+            <BilingualInput
+              label={t('admin.projectForm.title')}
+              value={formData.title}
+              onChange={(value) => setFormData({ ...formData, title: value })}
+              placeholder={{ 
+                es: t('admin.projectForm.titlePlaceholder', { lng: 'es' }), 
+                en: t('admin.projectForm.titlePlaceholder', { lng: 'en' }) 
+              }}
+              required
+            />
+          </div>
+          <div className="pt-8">
+             <label className="flex items-center space-x-2 cursor-pointer glass px-4 py-2 rounded-lg border border-white/10 hover:bg-white/5 transition-colors">
+              <input
+                type="checkbox"
+                name="featured"
+                checked={formData.featured}
+                onChange={handleChange}
+                className="w-5 h-5 rounded border-white/20 bg-white/10 text-primary focus:ring-primary"
+              />
+              <span className="text-sm font-medium">{t('admin.projectForm.featured')}</span>
+            </label>
+          </div>
+        </div>
 
-      <div>
-        <label className="block text-sm font-medium mb-2">
-          Descripción Corta <span className="text-red-400">*</span>
-        </label>
-        <textarea
-          name="description"
+        <BilingualInput
+          label={t('admin.projectForm.shortDescription')}
+          type="textarea"
           value={formData.description}
-          onChange={handleChange}
-          placeholder="Descripción breve del proyecto (2-3 líneas)"
+          onChange={(value) => setFormData({ ...formData, description: value })}
+          placeholder={{ 
+            es: t('admin.projectForm.shortDescPlaceholder', { lng: 'es' }), 
+            en: t('admin.projectForm.shortDescPlaceholder', { lng: 'en' }) 
+          }}
           required
-          rows={3}
-          className="w-full px-4 py-3 rounded-lg glass border border-white/10 focus:border-primary focus:outline-none transition-all resize-none"
         />
-      </div>
 
-      <div>
-        <label className="block text-sm font-medium mb-2">
-          Descripción Detallada
-        </label>
-        <textarea
-          name="longDescription"
+        <BilingualInput
+          label={t('admin.projectForm.longDescription')}
+          type="textarea"
           value={formData.longDescription}
-          onChange={handleChange}
-          placeholder="Descripción completa del proyecto"
-          rows={4}
-          className="w-full px-4 py-3 rounded-lg glass border border-white/10 focus:border-primary focus:outline-none transition-all resize-none"
+          onChange={(value) => setFormData({ ...formData, longDescription: value })}
+          placeholder={{ 
+            es: t('admin.projectForm.longDescPlaceholder', { lng: 'es' }), 
+            en: t('admin.projectForm.longDescPlaceholder', { lng: 'en' }) 
+          }}
         />
-      </div>
 
-      <div>
-        <label className="block text-sm font-medium mb-2">
-          Tecnologías <span className="text-red-400">*</span>
-        </label>
-        <TechnologyInput
-          value={formData.technologies}
-          onChange={(technologies) => setFormData((prev) => ({ ...prev, technologies }))}
-          placeholder="Escribe o selecciona tecnologías..."
-          required
-        />
-      </div>
+        <div>
+          <label className="block text-sm font-medium mb-2">
+            {t('admin.projectForm.technologies')} <span className="text-red-400">*</span>
+          </label>
+          <TechnologyInput
+            value={formData.technologies}
+            onChange={(technologies) => setFormData((prev) => ({ ...prev, technologies }))}
+            placeholder={t('admin.projectForm.techPlaceholder')}
+            required
+          />
+        </div>
 
       <div className="grid md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium mb-2">
-            Categoría <span className="text-red-400">*</span>
+            {t('admin.skillForm.category')} <span className="text-red-400">*</span>
           </label>
           <select
             name="category"
@@ -194,7 +210,7 @@ export const ProjectForm = ({
 
         <div>
           <label className="block text-sm font-medium mb-2">
-            Cliente / Empresa
+            {t('admin.projectForm.client')}
           </label>
           <select
             name="clientId"
@@ -202,34 +218,23 @@ export const ProjectForm = ({
             onChange={handleChange}
             className="w-full px-4 py-3 rounded-lg glass border border-white/10 focus:border-primary focus:outline-none transition-all"
           >
-            <option value="" className="bg-dark">Sin asignar</option>
+            <option value="" className="bg-dark">{t('admin.projectForm.noClient')}</option>
             {experiences.map((exp) => (
               <option key={exp.id} value={exp.id} className="bg-dark">
-                {exp.company} - {exp.role}
+                {exp.company} - {getLocalizedText(exp.role, i18n.language as 'es' | 'en')}
               </option>
             ))}
           </select>
           <p className="text-xs text-light/30 mt-1">
-            Relaciona este proyecto con una experiencia laboral
+            {t('admin.projectForm.clientPlaceholder')}
           </p>
         </div>
       </div>
 
-      <div>
-        <label className="flex items-center space-x-2 cursor-pointer">
-          <input
-            type="checkbox"
-            name="featured"
-            checked={formData.featured}
-            onChange={handleChange}
-            className="w-5 h-5 rounded border-white/20 bg-white/10 text-primary focus:ring-primary"
-          />
-          <span className="text-sm font-medium">Proyecto Destacado</span>
-        </label>
-      </div>
+
 
       <div>
-        <label className="block text-sm font-medium mb-2">URL de Imagen</label>
+        <label className="block text-sm font-medium mb-2">{t('admin.projectForm.image')}</label>
         <Input
           name="imageUrl"
           value={formData.imageUrl}
@@ -241,7 +246,7 @@ export const ProjectForm = ({
 
       <div className="grid md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-2">URL Demo</label>
+          <label className="block text-sm font-medium mb-2">{t('admin.projectForm.demo')}</label>
           <Input
             name="demoUrl"
             value={formData.demoUrl}
@@ -252,7 +257,7 @@ export const ProjectForm = ({
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2">URL GitHub</label>
+          <label className="block text-sm font-medium mb-2">{t('admin.projectForm.github')}</label>
           <Input
             name="githubUrl"
             value={formData.githubUrl}
@@ -260,6 +265,7 @@ export const ProjectForm = ({
             placeholder="https://github.com/usuario/repo"
             type="url"
           />
+        </div>
         </div>
       </div>
     </FormModal>

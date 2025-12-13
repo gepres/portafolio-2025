@@ -1,7 +1,9 @@
 import { motion } from 'framer-motion';
 import { ExternalLink, Github, Star } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Card } from '../ui/Card';
 import type { Project } from '../../types';
+import { useLocalizedText } from '../../lib/utils/i18n';
 
 interface ProjectCardProps {
   project: Project;
@@ -9,6 +11,10 @@ interface ProjectCardProps {
 }
 
 export const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
+  const { t } = useTranslation();
+  const title = useLocalizedText(project.title);
+  const description = useLocalizedText(project.description);
+
   return (
     <motion.div
       whileHover={{ y: -8 }}
@@ -22,12 +28,12 @@ export const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
           {project.imageUrl ? (
             <img
               src={project.imageUrl}
-              alt={project.title}
+              alt={title}
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-6xl font-bold text-slate-300 dark:text-white/10">
-              {project.title[0]}
+              {title[0]}
             </div>
           )}
 
@@ -41,7 +47,7 @@ export const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
                   className="p-3 glass-hover rounded-full cursor-hover"
-                  title="Ver Demo"
+                  title={t('home.projects.viewDemo')}
                 >
                   <ExternalLink className="w-5 h-5" />
                 </a>
@@ -53,7 +59,7 @@ export const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
                   className="p-3 glass-hover rounded-full cursor-hover"
-                  title="Ver Código"
+                  title={t('home.projects.viewCode')}
                 >
                   <Github className="w-5 h-5" />
                 </a>
@@ -65,7 +71,7 @@ export const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
           {project.featured && (
             <div className="absolute top-4 right-4 px-3 py-1 bg-accent/90 backdrop-blur-sm rounded-full text-xs font-semibold flex items-center space-x-1">
               <Star className="w-3 h-3 fill-current" />
-              <span>Destacado</span>
+              <span>{t('home.projects.featured')}</span>
             </div>
           )}
 
@@ -77,9 +83,9 @@ export const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
 
         {/* Content */}
         <div className="p-6">
-          <h3 className="text-xl font-bold mb-2 gradient-text line-clamp-1">{project.title}</h3>
+          <h3 className="text-xl font-bold mb-2 gradient-text line-clamp-1">{title}</h3>
           <p className="text-slate-600 dark:text-light/70 text-sm mb-4 line-clamp-2">
-            {project.description}
+            {description}
           </p>
 
           {/* Tech stack */}

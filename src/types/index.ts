@@ -1,10 +1,16 @@
 import { Timestamp } from 'firebase/firestore';
 
+// Bilingual text support
+export interface BilingualText {
+  es: string;
+  en: string;
+}
+
 export interface Project {
   id: string;
-  title: string;
-  description: string;
-  longDescription?: string | null;
+  title: string | BilingualText;
+  description: string | BilingualText;
+  longDescription?: string | BilingualText | null;
   category: ProjectCategory;
   technologies: string[];
   imageUrl?: string | null;
@@ -19,11 +25,11 @@ export interface Experience {
   id: string;
   company: string;
   logo?: string;
-  role: string;
+  role: string | BilingualText;
   startDate: string;
   endDate: string;
-  description: string;
-  achievements?: string[];
+  description: string | BilingualText;
+  achievements?: (string | BilingualText)[];
   technologies: string[];
   current: boolean;
   order?: number;

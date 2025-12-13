@@ -54,7 +54,7 @@ export const Modal = ({ isOpen, onClose, children, title, size = 'md', className
           <div className="fixed inset-0 flex items-center justify-center z-50 p-4 overflow-y-auto">
             <motion.div
               className={cn(
-                'w-full glass rounded-2xl shadow-2xl relative my-8',
+                'w-full glass rounded-2xl shadow-2xl relative my-8 flex flex-col max-h-[90vh]',
                 sizes[size],
                 className
               )}
@@ -83,7 +83,7 @@ export const Modal = ({ isOpen, onClose, children, title, size = 'md', className
                   <X className="w-6 h-6" />
                 </button>
               )}
-              <div className="p-6">{children}</div>
+              <div className="p-6 overflow-y-auto custom-scrollbar">{children}</div>
             </motion.div>
           </div>
         </>

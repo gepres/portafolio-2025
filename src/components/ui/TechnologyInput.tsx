@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { X, Plus } from 'lucide-react';
 import { getSkills } from '../../lib/firebase/firestore';
 import type { Skill, SkillCategory } from '../../types';
@@ -10,26 +11,27 @@ interface TechnologyInputProps {
   required?: boolean;
 }
 
-const categoryLabels: Record<SkillCategory, string> = {
-  frontend: 'Frontend',
-  backend: 'Backend',
-  database: 'Database',
-  cloud_devops: 'Cloud & DevOps',
-  project_management: 'Project Management',
-  design: 'Design',
-  other: 'Otros',
-};
-
 export const TechnologyInput = ({
   value,
   onChange,
-  placeholder = 'Agregar tecnología personalizada...',
+  placeholder,
   required = false,
 }: TechnologyInputProps) => {
+  const { t } = useTranslation();
   const [inputValue, setInputValue] = useState('');
   const [skills, setSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCustomInput, setShowCustomInput] = useState(false);
+
+  const categoryLabels: Record<SkillCategory, string> = {
+    frontend: t('admin.skillForm.categories.frontend'),
+    backend: t('admin.skillForm.categories.backend'),
+    database: t('admin.skillForm.categories.database'),
+    cloud_devops: t('admin.skillForm.categories.cloud_devops'),
+    project_management: t('admin.skillForm.categories.project_management'),
+    design: t('admin.skillForm.categories.design'),
+    other: t('admin.skillForm.categories.other'),
+  };
 
   useEffect(() => {
     const fetchSkills = async () => {
@@ -85,7 +87,9 @@ export const TechnologyInput = ({
       {/* Selected Technologies */}
       {value.length > 0 && (
         <div className="glass rounded-lg p-4">
-          <p className="text-sm font-medium mb-3 text-light/70">Seleccionadas ({value.length})</p>
+          <p className="text-sm font-medium mb-3 text-light/70">
+            {t('admin.technologyInput.selected')} ({value.length})
+          </p>
           <div className="flex flex-wrap gap-2">
             {value.map((tech) => (
               <span
@@ -110,12 +114,12 @@ export const TechnologyInput = ({
       {loading ? (
         <div className="text-center py-8 glass rounded-lg">
           <div className="inline-block w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin mb-2" />
-          <p className="text-light/60 text-sm">Cargando habilidades...</p>
+          <p className="text-light/60 text-sm">{t('admin.technologyInput.loading')}</p>
         </div>
       ) : (
         <div className="glass rounded-lg p-4 max-h-96 overflow-y-auto">
           <p className="text-sm font-medium mb-4 text-light/70">
-            Selecciona de tus habilidades ({skills.length} disponibles)
+            {t('admin.technologyInput.available')} ({skills.length} {t('admin.technologyInput.availableCount')})
           </p>
 
           {Object.entries(groupedSkills).map(([category, categorySkills]) => (
@@ -156,7 +160,7 @@ export const TechnologyInput = ({
             className="w-full flex items-center justify-center space-x-2 py-2 text-sm font-medium text-primary hover:text-primary-light transition-colors"
           >
             <Plus className="w-4 h-4" />
-            <span>Agregar tecnología personalizada</span>
+            <span>{t('admin.technologyInput.addCustom')}</span>
           </button>
         ) : (
           <div className="space-y-2">
@@ -166,7 +170,7 @@ export const TechnologyInput = ({
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder={placeholder}
+                placeholder={placeholder || t('admin.technologyInput.placeholder')}
                 className="flex-1 px-4 py-2 rounded-lg bg-white/5 border border-white/10 focus:border-primary focus:outline-none transition-all"
                 autoFocus
               />
@@ -176,7 +180,7 @@ export const TechnologyInput = ({
                 disabled={!inputValue.trim()}
                 className="px-4 py-2 rounded-lg bg-primary text-white font-medium hover:bg-primary-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Agregar
+                {t('admin.technologyInput.add')}
               </button>
             </div>
             <button
@@ -187,7 +191,7 @@ export const TechnologyInput = ({
               }}
               className="text-xs text-light/30 hover:text-light transition-colors"
             >
-              Cancelar
+              {t('admin.technologyInput.cancel')}
             </button>
           </div>
         )}

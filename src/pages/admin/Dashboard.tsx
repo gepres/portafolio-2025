@@ -22,20 +22,23 @@ import {
   updateSkill,
   deleteSkill,
 } from '../../lib/firebase/firestore';
-import { seedDatabase } from '../../lib/data/seedDatabase';
+
 import { ProjectForm } from '../../components/admin/ProjectForm';
 import { ExperienceForm } from '../../components/admin/ExperienceForm';
 import { SkillForm } from '../../components/admin/SkillForm';
 import type { Experience, Skill, Project } from '../../types';
+import { useTranslation } from 'react-i18next';
+import { getLocalizedText } from '../../lib/utils/i18n';
 
 type Section = 'projects' | 'experience' | 'skills' | 'overview';
 
 export const Dashboard = () => {
+  const { t, i18n } = useTranslation();
+  const currentLang = i18n.language as 'es' | 'en';
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const { projects, refetch: refetchProjects } = useProjects(true);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const [isLoadingSampleData, setIsLoadingSampleData] = useState(false);
   const [activeSection, setActiveSection] = useState<Section>('overview');
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [skills, setSkills] = useState<Skill[]>([]);
@@ -69,11 +72,11 @@ export const Dashboard = () => {
       if (error) {
         toast.error(error);
       } else {
-        toast.success('Sesión cerrada exitosamente');
+        toast.success(t('admin.dashboard.successLogout'));
         navigate('/admin/login');
       }
     } catch (error) {
-      toast.error('Error al cerrar sesión');
+      toast.error(t('admin.dashboard.errorLogout'));
     } finally {
       setIsLoggingOut(false);
     }
@@ -81,24 +84,6 @@ export const Dashboard = () => {
 
   const handleViewPortfolio = () => {
     navigate('/');
-  };
-
-  const handleLoadSampleData = async () => {
-    setIsLoadingSampleData(true);
-    try {
-      const result = await seedDatabase();
-      if (result.success) {
-        toast.success(result.message);
-        await fetchData();
-        if (refetchProjects) refetchProjects();
-      } else {
-        toast.error(result.message);
-      }
-    } catch (error) {
-      toast.error('Error al cargar datos de ejemplo');
-    } finally {
-      setIsLoadingSampleData(false);
-    }
   };
 
   // Project handlers
@@ -118,28 +103,28 @@ export const Dashboard = () => {
     try {
       if (editingProject) {
         await updateProject(editingProject.id, data);
-        toast.success('Proyecto actualizado exitosamente');
+        toast.success(t('admin.dashboard.successUpdateProject'));
       } else {
         await createProject(data);
-        toast.success('Proyecto creado exitosamente');
+        toast.success(t('admin.dashboard.successCreateProject'));
       }
       setProjectFormOpen(false);
       if (refetchProjects) refetchProjects();
     } catch (error) {
-      toast.error('Error al guardar el proyecto');
+      toast.error(t('admin.dashboard.errorSaveProject'));
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleDeleteProject = async (id: string) => {
-    if (window.confirm('¿Estás seguro de eliminar este proyecto?')) {
+    if (window.confirm(t('admin.dashboard.confirmDeleteProject'))) {
       try {
         await deleteProject(id);
-        toast.success('Proyecto eliminado');
+        toast.success(t('admin.dashboard.successDeleteProject'));
         if (refetchProjects) refetchProjects();
       } catch (error) {
-        toast.error('Error al eliminar el proyecto');
+        toast.error(t('admin.dashboard.errorDeleteProject'));
       }
     }
   };
@@ -160,28 +145,28 @@ export const Dashboard = () => {
     try {
       if (editingExperience) {
         await updateExperience(editingExperience.id, data);
-        toast.success('Experiencia actualizada exitosamente');
+        toast.success(t('admin.dashboard.successUpdateExperience'));
       } else {
         await createExperience(data);
-        toast.success('Experiencia creada exitosamente');
+        toast.success(t('admin.dashboard.successCreateExperience'));
       }
       setExperienceFormOpen(false);
       await fetchData();
     } catch (error) {
-      toast.error('Error al guardar la experiencia');
+      toast.error(t('admin.dashboard.errorSaveExperience'));
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleDeleteExperience = async (id: string) => {
-    if (window.confirm('¿Estás seguro de eliminar esta experiencia?')) {
+    if (window.confirm(t('admin.dashboard.confirmDeleteExperience'))) {
       try {
         await deleteExperience(id);
-        toast.success('Experiencia eliminada');
+        toast.success(t('admin.dashboard.successDeleteExperience'));
         await fetchData();
       } catch (error) {
-        toast.error('Error al eliminar la experiencia');
+        toast.error(t('admin.dashboard.errorDeleteExperience'));
       }
     }
   };
@@ -202,36 +187,36 @@ export const Dashboard = () => {
     try {
       if (editingSkill) {
         await updateSkill(editingSkill.id, data);
-        toast.success('Habilidad actualizada exitosamente');
+        toast.success(t('admin.dashboard.successUpdateSkill'));
       } else {
         await createSkill(data);
-        toast.success('Habilidad creada exitosamente');
+        toast.success(t('admin.dashboard.successCreateSkill'));
       }
       setSkillFormOpen(false);
       await fetchData();
     } catch (error) {
-      toast.error('Error al guardar la habilidad');
+      toast.error(t('admin.dashboard.errorSaveSkill'));
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleDeleteSkill = async (id: string) => {
-    if (window.confirm('¿Estás seguro de eliminar esta habilidad?')) {
+    if (window.confirm(t('admin.dashboard.confirmDeleteSkill'))) {
       try {
         await deleteSkill(id);
-        toast.success('Habilidad eliminada');
+        toast.success(t('admin.dashboard.successDeleteSkill'));
         await fetchData();
       } catch (error) {
-        toast.error('Error al eliminar la habilidad');
+        toast.error(t('admin.dashboard.errorDeleteSkill'));
       }
     }
   };
 
   const menuItems = [
-    { id: 'projects' as Section, icon: FolderOpen, label: 'Proyectos', count: projects.length },
-    { id: 'experience' as Section, icon: Briefcase, label: 'Experiencia', count: experiences.length },
-    { id: 'skills' as Section, icon: Code, label: 'Habilidades', count: skills.length },
+    { id: 'projects' as Section, icon: FolderOpen, label: t('admin.dashboard.projects'), count: projects.length },
+    { id: 'experience' as Section, icon: Briefcase, label: t('admin.dashboard.experience'), count: experiences.length },
+    { id: 'skills' as Section, icon: Code, label: t('admin.dashboard.skills'), count: skills.length },
   ];
 
   return (
@@ -245,7 +230,7 @@ export const Dashboard = () => {
                 G
               </div>
               <div>
-                <h1 className="text-lg font-bold gradient-text">Admin Dashboard</h1>
+                <h1 className="text-lg font-bold gradient-text">{t('admin.dashboard.title')}</h1>
                 <p className="text-xs text-slate-600 dark:text-light/60">{user?.email}</p>
               </div>
             </div>
@@ -257,7 +242,7 @@ export const Dashboard = () => {
                 size="sm"
               >
                 <Eye className="w-4 h-4 mr-2" />
-                Ver Portafolio
+                {t('admin.dashboard.viewPortfolio')}
               </Button>
               <Button
                 variant="outline"
@@ -266,7 +251,7 @@ export const Dashboard = () => {
                 size="sm"
               >
                 {!isLoggingOut && <LogOut className="w-4 h-4 mr-2" />}
-                Salir
+                {t('admin.dashboard.logout')}
               </Button>
             </div>
           </div>
@@ -282,10 +267,10 @@ export const Dashboard = () => {
           animate={{ opacity: 1, y: 0 }}
         >
           <h2 className="text-3xl font-bold mb-2">
-            Bienvenido, {user?.displayName || 'Admin'}
+            {t('admin.dashboard.welcome')}, {user?.displayName || 'Admin'}
           </h2>
           <p className="text-slate-600 dark:text-light/70">
-            Gestiona el contenido de tu portafolio desde aquí
+            {t('admin.dashboard.manageContent')}
           </p>
         </motion.div>
 
@@ -326,7 +311,7 @@ export const Dashboard = () => {
                 : 'glass-hover text-light/70'
             }`}
           >
-            Vista General
+            {t('admin.dashboard.overview')}
           </button>
           {menuItems.map((item) => (
             <button
@@ -349,15 +334,15 @@ export const Dashboard = () => {
           <div className="space-y-8">
             {/* Recent Activity */}
             <Card>
-              <h3 className="text-2xl font-bold mb-6">Actividad Reciente</h3>
+              <h3 className="text-2xl font-bold mb-6">{t('admin.dashboard.recentActivity')}</h3>
               <div className="space-y-4">
                 <div className="flex items-center space-x-4 p-4 glass rounded-lg">
                   <div className="w-10 h-10 rounded-full gradient-primary flex items-center justify-center">
                     <FolderOpen className="w-5 h-5" />
                   </div>
                   <div className="flex-1">
-                    <p className="font-medium">Portfolio actualizado</p>
-                    <p className="text-sm text-light/60">Hace 2 horas</p>
+                    <p className="font-medium">{t('admin.dashboard.portfolioUpdated')}</p>
+                    <p className="text-sm text-light/60">{t('admin.dashboard.timeAgo', { time: '2h' })}</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-4 p-4 glass rounded-lg">
@@ -365,8 +350,8 @@ export const Dashboard = () => {
                     <Code className="w-5 h-5" />
                   </div>
                   <div className="flex-1">
-                    <p className="font-medium">Nuevas habilidades agregadas</p>
-                    <p className="text-sm text-light/60">Hace 1 día</p>
+                    <p className="font-medium">{t('admin.dashboard.newSkills')}</p>
+                    <p className="text-sm text-light/60">{t('admin.dashboard.timeAgo', { time: '1d' })}</p>
                   </div>
                 </div>
               </div>
@@ -374,7 +359,7 @@ export const Dashboard = () => {
 
             {/* Quick Actions */}
             <Card>
-              <h3 className="text-2xl font-bold mb-6">Acciones Rápidas</h3>
+              <h3 className="text-2xl font-bold mb-6">{t('admin.dashboard.quickActions')}</h3>
               <div className="grid md:grid-cols-3 gap-4">
                 <Button
                   variant="outline"
@@ -382,7 +367,7 @@ export const Dashboard = () => {
                   onClick={() => setActiveSection('projects')}
                 >
                   <FolderOpen className="w-4 h-4 mr-2" />
-                  Gestionar Proyectos
+                  {t('admin.dashboard.manageProjects')}
                 </Button>
                 <Button
                   variant="outline"
@@ -390,7 +375,7 @@ export const Dashboard = () => {
                   onClick={() => setActiveSection('experience')}
                 >
                   <Briefcase className="w-4 h-4 mr-2" />
-                  Gestionar Experiencia
+                  {t('admin.dashboard.manageExperience')}
                 </Button>
                 <Button
                   variant="outline"
@@ -398,7 +383,7 @@ export const Dashboard = () => {
                   onClick={() => setActiveSection('skills')}
                 >
                   <Code className="w-4 h-4 mr-2" />
-                  Gestionar Habilidades
+                  {t('admin.dashboard.manageSkills')}
                 </Button>
               </div>
             </Card>
@@ -410,11 +395,11 @@ export const Dashboard = () => {
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-2xl font-bold flex items-center">
                 <FolderOpen className="w-6 h-6 mr-2 text-primary" />
-                Proyectos ({projects.length})
+                {t('admin.dashboard.projects')} ({projects.length})
               </h3>
               <Button variant="primary" onClick={handleCreateProject}>
                 <Plus className="w-4 h-4 mr-2" />
-                Nuevo Proyecto
+                {t('admin.dashboard.newProject')}
               </Button>
             </div>
 
@@ -425,13 +410,13 @@ export const Dashboard = () => {
                     {project.imageUrl && (
                       <img
                         src={project.imageUrl}
-                        alt={project.title}
+                        alt={getLocalizedText(project.title, currentLang)}
                         className="w-full h-40 object-cover rounded-lg"
                       />
                     )}
                     <div>
-                      <h4 className="font-bold text-lg mb-2">{project.title}</h4>
-                      <p className="text-sm text-light/70 line-clamp-2">{project.description}</p>
+                      <h4 className="font-bold text-lg mb-2">{getLocalizedText(project.title, currentLang)}</h4>
+                      <p className="text-sm text-light/70 line-clamp-2">{getLocalizedText(project.description, currentLang)}</p>
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {project.technologies.slice(0, 3).map((tech) => (
@@ -451,7 +436,7 @@ export const Dashboard = () => {
                         onClick={() => handleEditProject(project)}
                       >
                         <Edit className="w-3 h-3 mr-1" />
-                        Editar
+                        {t('admin.dashboard.edit')}
                       </Button>
                       <Button
                         variant="outline"
@@ -467,10 +452,10 @@ export const Dashboard = () => {
             ) : (
               <div className="text-center py-12">
                 <FolderOpen className="w-16 h-16 text-light/30 mx-auto mb-4" />
-                <p className="text-light/70">No hay proyectos aún</p>
+                <p className="text-light/70">{t('admin.dashboard.noProjects')}</p>
                 <Button variant="primary" className="mt-4" onClick={handleCreateProject}>
                   <Plus className="w-4 h-4 mr-2" />
-                  Crear Primer Proyecto
+                  {t('admin.dashboard.createFirstProject')}
                 </Button>
               </div>
             )}
@@ -482,11 +467,11 @@ export const Dashboard = () => {
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-2xl font-bold flex items-center">
                 <Briefcase className="w-6 h-6 mr-2 text-primary" />
-                Experiencia ({experiences.length})
+                {t('admin.dashboard.experience')} ({experiences.length})
               </h3>
               <Button variant="primary" onClick={handleCreateExperience}>
                 <Plus className="w-4 h-4 mr-2" />
-                Nueva Experiencia
+                {t('admin.dashboard.newExperience')}
               </Button>
             </div>
 
@@ -496,12 +481,12 @@ export const Dashboard = () => {
                   <div key={exp.id} className="glass rounded-lg p-6">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <h4 className="font-bold text-lg gradient-text">{exp.role}</h4>
+                        <h4 className="font-bold text-lg gradient-text">{getLocalizedText(exp.role, currentLang)}</h4>
                         <p className="text-light/80 mb-2">{exp.company}</p>
                         <p className="text-sm text-light/60 mb-4">
                           {exp.startDate} - {exp.endDate}
                         </p>
-                        <p className="text-light/70 mb-4">{exp.description}</p>
+                        <p className="text-light/70 mb-4">{getLocalizedText(exp.description, currentLang)}</p>
                         <div className="flex flex-wrap gap-2">
                           {exp.technologies.map((tech) => (
                             <span
@@ -536,10 +521,10 @@ export const Dashboard = () => {
             ) : (
               <div className="text-center py-12">
                 <Briefcase className="w-16 h-16 text-light/30 mx-auto mb-4" />
-                <p className="text-light/70">No hay experiencia registrada</p>
+                <p className="text-light/70">{t('admin.dashboard.noExperience')}</p>
                 <Button variant="primary" className="mt-4" onClick={handleCreateExperience}>
                   <Plus className="w-4 h-4 mr-2" />
-                  Agregar Experiencia
+                  {t('admin.dashboard.addExperience')}
                 </Button>
               </div>
             )}
@@ -551,11 +536,11 @@ export const Dashboard = () => {
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-2xl font-bold flex items-center">
                 <Code className="w-6 h-6 mr-2 text-primary" />
-                Habilidades ({skills.length})
+                {t('admin.dashboard.skills')} ({skills.length})
               </h3>
               <Button variant="primary" onClick={handleCreateSkill}>
                 <Plus className="w-4 h-4 mr-2" />
-                Nueva Habilidad
+                {t('admin.dashboard.newSkill')}
               </Button>
             </div>
 
@@ -566,13 +551,13 @@ export const Dashboard = () => {
                   if (categorySkills.length === 0) return null;
 
                   const categoryLabels: Record<string, string> = {
-                    frontend: 'Frontend',
-                    backend: 'Backend',
-                    database: 'Database',
-                    cloud_devops: 'Cloud & DevOps',
-                    project_management: 'Project Management',
-                    design: 'Design',
-                    other: 'Otros',
+                    frontend: t('admin.skillForm.categories.frontend'),
+                    backend: t('admin.skillForm.categories.backend'),
+                    database: t('admin.skillForm.categories.database'),
+                    cloud_devops: t('admin.skillForm.categories.cloud_devops'),
+                    project_management: t('admin.skillForm.categories.project_management'),
+                    design: t('admin.skillForm.categories.design'),
+                    other: t('admin.skillForm.categories.other'),
                   };
 
                   return (
@@ -606,7 +591,7 @@ export const Dashboard = () => {
                                 style={{ width: `${skill.level}%` }}
                               />
                             </div>
-                            <p className="text-sm text-light/60 mt-2">{skill.level}% dominio</p>
+                            <p className="text-sm text-light/60 mt-2">{skill.level}% {t('admin.dashboard.mastery')}</p>
                           </div>
                         ))}
                       </div>
@@ -617,10 +602,10 @@ export const Dashboard = () => {
             ) : (
               <div className="text-center py-12">
                 <Code className="w-16 h-16 text-light/30 mx-auto mb-4" />
-                <p className="text-light/70">No hay habilidades registradas</p>
+                <p className="text-light/70">{t('admin.dashboard.noSkills')}</p>
                 <Button variant="primary" className="mt-4" onClick={handleCreateSkill}>
                   <Plus className="w-4 h-4 mr-2" />
-                  Agregar Habilidad
+                  {t('admin.dashboard.addSkill')}
                 </Button>
               </div>
             )}

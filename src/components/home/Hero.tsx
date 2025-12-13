@@ -2,7 +2,8 @@ import { motion } from 'framer-motion';
 import { Github, Linkedin, Mail, ArrowRight } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { staggerContainer, staggerItem } from '../../lib/utils/animations';
-import { ScrollIndicator } from './ScrollIndicator';
+// import { ScrollIndicator } from './ScrollIndicator';
+import { useTranslation } from 'react-i18next';
 
 const socialLinks = [
   { icon: Github, href: 'https://github.com', label: 'GitHub' },
@@ -11,6 +12,7 @@ const socialLinks = [
 ];
 
 export const Hero = () => {
+  const { t } = useTranslation();
   const scrollToProjects = () => {
     const projectsSection = document.getElementById('projects');
     if (projectsSection) {
@@ -64,7 +66,7 @@ export const Hero = () => {
           variants={staggerItem}
           className="text-primary text-lg md:text-xl mb-4 font-medium"
         >
-          Hola, soy
+          {t('home.hero.greeting')}
         </motion.p>
 
         {/* Name */}
@@ -80,7 +82,7 @@ export const Hero = () => {
           variants={staggerItem}
           className="text-2xl md:text-4xl font-semibold text-slate-700 dark:text-light/90 mb-6"
         >
-          Full Stack Developer
+          {t('home.hero.title')}
         </motion.h2>
 
         {/* Subtitle */}
@@ -88,7 +90,7 @@ export const Hero = () => {
           variants={staggerItem}
           className="text-xl md:text-2xl text-slate-600 dark:text-light/70 mb-8"
         >
-          React & Node.js Specialist
+          {t('home.hero.subtitle')}
         </motion.p>
 
         {/* Description */}
@@ -96,8 +98,7 @@ export const Hero = () => {
           variants={staggerItem}
           className="text-lg text-slate-600 dark:text-light/60 max-w-2xl mx-auto mb-12"
         >
-          Apasionado por crear experiencias web modernas, escalables y de alto rendimiento.
-          Especializado en arquitecturas cloud-native y desarrollo full stack.
+          {t('home.hero.description')}
         </motion.p>
 
         {/* CTA Buttons */}
@@ -111,7 +112,7 @@ export const Hero = () => {
             onClick={scrollToProjects}
             className="group"
           >
-            Ver Proyectos
+            {t('home.hero.viewProjects')}
             <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Button>
           <Button
@@ -119,7 +120,7 @@ export const Hero = () => {
             size="lg"
             onClick={scrollToContact}
           >
-            Contactar
+            {t('home.hero.contact')}
           </Button>
         </motion.div>
 
@@ -143,7 +144,7 @@ export const Hero = () => {
         </motion.div>
       </motion.div>
 
-      <ScrollIndicator />
+      {/* <ScrollIndicator /> */}
     </section>
   );
 };

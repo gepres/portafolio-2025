@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FormModal } from './FormModal';
 import { Input } from '../ui/Input';
 import type { Skill, SkillCategory } from '../../types';
@@ -11,16 +12,6 @@ interface SkillFormProps {
   isLoading?: boolean;
 }
 
-const categories: { value: SkillCategory; label: string }[] = [
-  { value: 'frontend', label: 'Frontend' },
-  { value: 'backend', label: 'Backend' },
-  { value: 'database', label: 'Database' },
-  { value: 'cloud_devops', label: 'Cloud & DevOps' },
-  { value: 'project_management', label: 'Project Management' },
-  { value: 'design', label: 'Design' },
-  { value: 'other', label: 'Otros' },
-];
-
 export const SkillForm = ({
   isOpen,
   onClose,
@@ -28,6 +19,18 @@ export const SkillForm = ({
   skill,
   isLoading = false,
 }: SkillFormProps) => {
+  const { t } = useTranslation();
+  
+  const categories: { value: SkillCategory; label: string }[] = [
+    { value: 'frontend', label: t('admin.skillForm.categories.frontend', { defaultValue: 'Frontend' }) },
+    { value: 'backend', label: t('admin.skillForm.categories.backend', { defaultValue: 'Backend' }) },
+    { value: 'database', label: t('admin.skillForm.categories.database', { defaultValue: 'Database' }) },
+    { value: 'cloud_devops', label: t('admin.skillForm.categories.cloud_devops', { defaultValue: 'Cloud & DevOps' }) },
+    { value: 'project_management', label: t('admin.skillForm.categories.project_management', { defaultValue: 'Project Management' }) },
+    { value: 'design', label: t('admin.skillForm.categories.design', { defaultValue: 'Design' }) },
+    { value: 'other', label: t('admin.skillForm.categories.other', { defaultValue: 'Otro' }) },
+  ];
+
   const [formData, setFormData] = useState({
     name: '',
     level: 50,
@@ -77,27 +80,27 @@ export const SkillForm = ({
     <FormModal
       isOpen={isOpen}
       onClose={onClose}
-      title={skill ? 'Editar Habilidad' : 'Nueva Habilidad'}
+      title={skill ? t('admin.skillForm.editSkill') : t('admin.skillForm.newSkill')}
       onSubmit={handleSubmit}
       isLoading={isLoading}
-      submitText={skill ? 'Actualizar' : 'Crear'}
+      submitText={skill ? t('common.save') : t('common.add')}
     >
       <div>
         <label className="block text-sm font-medium mb-2">
-          Nombre <span className="text-red-400">*</span>
+          {t('admin.skillForm.name')} <span className="text-red-400">*</span>
         </label>
         <Input
           name="name"
           value={formData.name}
           onChange={handleChange}
-          placeholder="Ej: React, Node.js, Docker..."
+          placeholder={t('admin.skillForm.namePlaceholder')}
           required
         />
       </div>
 
       <div>
         <label className="block text-sm font-medium mb-2">
-          Categoría <span className="text-red-400">*</span>
+          {t('admin.skillForm.category')} <span className="text-red-400">*</span>
         </label>
         <select
           name="category"
@@ -116,7 +119,7 @@ export const SkillForm = ({
 
       <div>
         <label className="block text-sm font-medium mb-2">
-          Nivel de Dominio: <span className="text-primary font-bold">{formData.level}%</span>
+          {t('admin.skillForm.level')}: <span className="text-primary font-bold">{formData.level}%</span>
         </label>
         <input
           type="range"
@@ -132,18 +135,18 @@ export const SkillForm = ({
           }}
         />
         <div className="flex justify-between text-xs text-light/30 mt-1">
-          <span>Principiante</span>
-          <span>Intermedio</span>
-          <span>Experto</span>
+          <span>{t('admin.skillForm.beginner')}</span>
+          <span>{t('admin.skillForm.intermediate')}</span>
+          <span>{t('admin.skillForm.expert')}</span>
         </div>
       </div>
 
       {/* Preview */}
       <div className="glass rounded-lg p-4">
-        <p className="text-sm text-light/60 mb-2">Vista Previa:</p>
+        <p className="text-sm text-light/60 mb-2">{t('admin.skillForm.preview')}:</p>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="font-medium">{formData.name || 'Nombre de la habilidad'}</span>
+            <span className="font-medium">{formData.name || t('admin.skillForm.name')}</span>
             <span className="text-sm text-light/60">{formData.level}%</span>
           </div>
           <div className="relative h-2 bg-dark-light rounded-full overflow-hidden">

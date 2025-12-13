@@ -20,6 +20,8 @@ import { getExperiences, getSkills } from '../lib/firebase/firestore';
 import { staggerContainer, staggerItem } from '../lib/utils/animations';
 import { formatDate, calculateDuration, copyToClipboard } from '../lib/utils/helpers';
 import type { Project, ProjectFilterCategory, Experience, Skill, SkillCategory } from '../types';
+import { useTranslation } from 'react-i18next';
+import { getLocalizedText } from '../lib/utils/i18n';
 
 const services = [
   {
@@ -61,6 +63,8 @@ const contactSchema = z.object({
 type ContactFormData = z.infer<typeof contactSchema>;
 
 export const Home = () => {
+  const { t, i18n } = useTranslation();
+  const currentLang = i18n.language as 'es' | 'en';
   const { projects, loading: projectsLoading } = useProjects();
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [skills, setSkills] = useState<Skill[]>([]);
@@ -141,7 +145,7 @@ export const Home = () => {
         <div className="max-w-7xl mx-auto">
           <FadeIn className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold gradient-text mb-4">
-              Sobre Mí
+              {t('home.about.title')}
             </h2>
             <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full" />
           </FadeIn>
@@ -161,36 +165,30 @@ export const Home = () => {
             <SlideIn direction="right">
               <div className="space-y-6 text-slate-600 dark:text-light/90">
                 <p className="text-lg leading-relaxed">
-                  ¡Hola! Soy Genaro, un desarrollador full stack apasionado por crear soluciones
-                  tecnológicas innovadoras y de alto impacto. Con experiencia en el desarrollo de
-                  aplicaciones web modernas y arquitecturas cloud-native.
+                  {t('home.about.bio1')}
                 </p>
                 <p className="text-lg leading-relaxed">
-                  Actualmente trabajo como DevOps Engineer y Full Stack Developer en Izipay (Interbank),
-                  donde me especializo en la gestión de infraestructura Kubernetes, desarrollo de
-                  aplicaciones con Next.js y React, y la implementación de pipelines CI/CD robustos.
+                  {t('home.about.bio2')}
                 </p>
                 <p className="text-lg leading-relaxed">
-                  Mi enfoque está en escribir código limpio, escalable y mantenible, siempre buscando
-                  las mejores prácticas y las tecnologías más actuales para resolver problemas complejos
-                  de manera elegante.
+                  {t('home.about.bio3')}
                 </p>
 
                 <div className="flex items-center space-x-4 pt-4">
                   <div className="text-center">
                     <div className="text-3xl font-bold gradient-text">3+</div>
-                    <div className="text-sm text-slate-500 dark:text-light/60">Años de Experiencia</div>
+                    <div className="text-sm text-slate-500 dark:text-light/60">{t('home.hero.stats.experience')}</div>
                   </div>
                   <div className="w-px h-12 bg-white/20" />
                   <div className="text-center">
                     <div className="text-3xl font-bold gradient-text">20+</div>
-                    <div className="text-sm text-slate-500 dark:text-light/60">Proyectos Completados</div>
+                    <div className="text-sm text-slate-500 dark:text-light/60">{t('home.hero.stats.projects')}</div>
                   </div>
                 </div>
 
                 <Button variant="primary" className="mt-6">
                   <Download className="w-4 h-4 mr-2" />
-                  Descargar CV
+                  {t('home.hero.downloadCV')}
                 </Button>
               </div>
             </SlideIn>
@@ -198,7 +196,7 @@ export const Home = () => {
 
           <FadeIn>
             <h3 className="text-3xl md:text-4xl font-bold text-center mb-12">
-              ¿Qué hago?
+              {t('home.about.whatIDo')}
             </h3>
           </FadeIn>
 
@@ -224,7 +222,7 @@ export const Home = () => {
 
           <FadeIn>
             <h3 className="text-3xl md:text-4xl font-bold text-center mb-8">
-              Intereses
+              {t('home.about.interests')}
             </h3>
             <div className="flex flex-wrap justify-center gap-4">
               {interests.map((interest) => (
@@ -247,10 +245,10 @@ export const Home = () => {
         <div className="max-w-7xl mx-auto">
           <FadeIn className="text-center mb-12">
             <h2 className="text-4xl md:text-6xl font-bold gradient-text mb-4">
-              Proyectos Destacados
+              {t('home.projects.title')}
             </h2>
             <p className="text-xl text-slate-600 dark:text-light/70 max-w-2xl mx-auto">
-              Una selección de mis trabajos más destacados
+              {t('home.projects.subtitle')}
             </p>
             <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full mt-4" />
           </FadeIn>
@@ -299,9 +297,9 @@ export const Home = () => {
         <div className="max-w-5xl mx-auto">
           <FadeIn className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold gradient-text mb-4">
-              Experiencia
+              {t('home.experience.title')}
             </h2>
-            <p className="text-xl text-slate-600 dark:text-light/70">Mi trayectoria profesional</p>
+            <p className="text-xl text-slate-600 dark:text-light/70">{t('home.experience.subtitle')}</p>
             <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full mt-4" />
           </FadeIn>
 
@@ -339,24 +337,24 @@ export const Home = () => {
                         </div>
                       )}
                       <div className="flex-1">
-                        <h3 className="text-xl font-bold gradient-text">{exp.role}</h3>
+                        <h3 className="text-xl font-bold gradient-text">{getLocalizedText(exp.role, currentLang)}</h3>
                         <p className="text-primary font-semibold">{exp.company}</p>
                         <p className="text-slate-500 dark:text-light/60 text-sm">
-                          {formatDate(exp.startDate)} - {exp.endDate === 'present' ? 'Presente' : formatDate(exp.endDate)}
+                          {formatDate(exp.startDate)} - {exp.endDate === 'present' ? t('admin.experienceForm.current') : formatDate(exp.endDate)}
                           {' · '}
                           {calculateDuration(exp.startDate, exp.endDate)}
                         </p>
                       </div>
                     </div>
 
-                    <p className="text-slate-600 dark:text-light/70 mb-4">{exp.description}</p>
+                    <p className="text-slate-600 dark:text-light/70 mb-4">{getLocalizedText(exp.description, currentLang)}</p>
 
                     {exp.achievements && exp.achievements.length > 0 && (
                       <ul className="space-y-2 mb-4">
                         {exp.achievements.map((achievement, i) => (
                           <li key={i} className="flex items-start space-x-2 text-slate-600 dark:text-light/70 text-sm">
                             <span className="text-primary mt-1">•</span>
-                            <span>{achievement}</span>
+                            <span>{getLocalizedText(achievement, currentLang)}</span>
                           </li>
                         ))}
                       </ul>
@@ -395,9 +393,9 @@ export const Home = () => {
         <div className="max-w-7xl mx-auto">
           <FadeIn className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold gradient-text mb-4">
-              Habilidades
+              {t('home.skills.title')}
             </h2>
-            <p className="text-xl text-slate-600 dark:text-light/70">Mi stack tecnológico</p>
+            <p className="text-xl text-slate-600 dark:text-light/70">{t('home.skills.subtitle')}</p>
             <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full mt-4" />
           </FadeIn>
 
@@ -431,7 +429,7 @@ export const Home = () => {
 
                           <div className="mb-3">
                             <div className="flex justify-between text-sm text-slate-500 dark:text-light/60 mb-2">
-                              <span>Nivel</span>
+                              <span>{t('admin.skillForm.level')}</span>
                               <span>{skill.level}%</span>
                             </div>
                             <div className="h-2 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
@@ -481,10 +479,10 @@ export const Home = () => {
         <div className="max-w-5xl mx-auto">
           <FadeIn className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold gradient-text mb-4">
-              Trabajemos Juntos
+              {t('home.contact.title')}
             </h2>
             <p className="text-xl text-slate-600 dark:text-light/70">
-              ¿Tienes un proyecto en mente? ¡Hablemos!
+              {t('home.contact.subtitle')}
             </p>
             <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full mt-4" />
           </FadeIn>
@@ -493,10 +491,9 @@ export const Home = () => {
             <SlideIn direction="left">
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-3xl font-bold mb-6">Información de Contacto</h3>
+                  <h3 className="text-3xl font-bold mb-6">{t('home.contact.info.title')}</h3>
                   <p className="text-slate-600 dark:text-light/70 leading-relaxed mb-8">
-                    Estoy siempre abierto a nuevas oportunidades y colaboraciones.
-                    No dudes en contactarme para discutir tu proyecto o simplemente para saludar.
+                    {t('home.contact.info.description')}
                   </p>
                 </div>
 
@@ -505,7 +502,7 @@ export const Home = () => {
                     <Mail className="w-6 h-6" />
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-semibold mb-1">Email</h4>
+                    <h4 className="font-semibold mb-1">{t('home.contact.info.email')}</h4>
                     <p className="text-slate-600 dark:text-light/70 text-sm flex items-center">
                       contact@example.com
                       <Copy className="w-4 h-4 ml-2 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -518,7 +515,7 @@ export const Home = () => {
                     <MapPin className="w-6 h-6" />
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-1">Ubicación</h4>
+                    <h4 className="font-semibold mb-1">{t('home.contact.info.location')}</h4>
                     <p className="text-slate-600 dark:text-light/70 text-sm">Lima, Perú</p>
                   </div>
                 </Card>
@@ -530,12 +527,12 @@ export const Home = () => {
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                   <div>
                     <label className="block text-sm font-medium mb-2">
-                      Nombre
+                      {t('home.contact.form.name')}
                     </label>
                     <input
                       {...register('name')}
                       className="w-full px-4 py-3 rounded-lg glass border border-white/10 focus:border-primary focus:outline-none transition-all"
-                      placeholder="Tu nombre"
+                      placeholder={t('home.contact.form.namePlaceholder')}
                     />
                     {errors.name && (
                       <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
@@ -544,13 +541,13 @@ export const Home = () => {
 
                   <div>
                     <label className="block text-sm font-medium mb-2">
-                      Email
+                      {t('home.contact.form.email')}
                     </label>
                     <input
                       {...register('email')}
                       type="email"
                       className="w-full px-4 py-3 rounded-lg glass border border-white/10 focus:border-primary focus:outline-none transition-all"
-                      placeholder="tu@email.com"
+                      placeholder={t('home.contact.form.emailPlaceholder')}
                     />
                     {errors.email && (
                       <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
@@ -559,12 +556,12 @@ export const Home = () => {
 
                   <div>
                     <label className="block text-sm font-medium mb-2">
-                      Asunto
+                      {t('home.contact.form.subject')}
                     </label>
                     <input
                       {...register('subject')}
                       className="w-full px-4 py-3 rounded-lg glass border border-white/10 focus:border-primary focus:outline-none transition-all"
-                      placeholder="Asunto del mensaje"
+                      placeholder={t('home.contact.form.subjectPlaceholder')}
                     />
                     {errors.subject && (
                       <p className="text-red-500 text-sm mt-1">{errors.subject.message}</p>
@@ -573,13 +570,13 @@ export const Home = () => {
 
                   <div>
                     <label className="block text-sm font-medium mb-2">
-                      Mensaje
+                      {t('home.contact.form.message')}
                     </label>
                     <textarea
                       {...register('message')}
                       rows={5}
                       className="w-full px-4 py-3 rounded-lg glass border border-white/10 focus:border-primary focus:outline-none transition-all resize-none"
-                      placeholder="Tu mensaje..."
+                      placeholder={t('home.contact.form.messagePlaceholder')}
                     />
                     {errors.message && (
                       <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>
@@ -594,7 +591,7 @@ export const Home = () => {
                     className="w-full"
                   >
                     {!isSubmitting && <Send className="w-4 h-4 mr-2" />}
-                    Enviar Mensaje
+                    {t('home.contact.form.send')}
                   </Button>
                 </form>
               </Card>

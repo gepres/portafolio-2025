@@ -10,6 +10,7 @@ import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { motion } from 'framer-motion';
 import { fadeInUpVariants } from '../../lib/utils/animations';
+import { useTranslation } from 'react-i18next';
 
 const loginSchema = z.object({
   email: z.string().email('Email inválido'),
@@ -19,6 +20,7 @@ const loginSchema = z.object({
 type LoginFormData = z.infer<typeof loginSchema>;
 
 export const Login = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -67,14 +69,14 @@ export const Login = () => {
             <div className="w-16 h-16 mx-auto mb-4 rounded-full gradient-primary flex items-center justify-center text-2xl font-bold">
               G
             </div>
-            <h1 className="text-3xl font-bold gradient-text mb-2">Admin Panel</h1>
-            <p className="text-slate-600 dark:text-light/60">Inicia sesión para continuar</p>
+            <h1 className="text-3xl font-bold gradient-text mb-2">{t('login.title')}</h1>
+            <p className="text-slate-600 dark:text-light/60">{t('login.subtitle')}</p>
           </div>
 
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium mb-2">Email</label>
+              <label className="block text-sm font-medium mb-2">{t('login.email')}</label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-light/30" />
                 <input
@@ -90,7 +92,7 @@ export const Login = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2">Contraseña</label>
+              <label className="block text-sm font-medium mb-2">{t('login.password')}</label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-light/30" />
                 <input
@@ -103,7 +105,7 @@ export const Login = () => {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-light/30 hover:text-primary transition-colors"
-                  aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                  aria-label={showPassword ? t('login.hidePassword') : t('login.showPassword')}
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -121,7 +123,7 @@ export const Login = () => {
               isLoading={isLoading}
             >
               {!isLoading && <LogIn className="w-4 h-4 mr-2" />}
-              Iniciar Sesión
+              {t('login.login')}
             </Button>
           </form>
         </Card>

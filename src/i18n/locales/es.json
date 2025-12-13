@@ -1,0 +1,295 @@
+{
+    "nav": {
+        "home": "Inicio",
+        "about": "Sobre Mí",
+        "projects": "Proyectos",
+        "experience": "Experiencia",
+        "skills": "Habilidades",
+        "contact": "Contacto"
+    },
+    "common": {
+        "loading": "Cargando...",
+        "save": "Guardar",
+        "cancel": "Cancelar",
+        "delete": "Eliminar",
+        "edit": "Editar",
+        "add": "Agregar",
+        "close": "Cerrar",
+        "submit": "Enviar",
+        "back": "Volver",
+        "next": "Siguiente",
+        "previous": "Anterior",
+        "search": "Buscar",
+        "filter": "Filtrar",
+        "all": "Todos",
+        "create": "Crear",
+        "update": "Actualizar",
+        "categories": {
+            "frontend": "Frontend",
+            "backend": "Backend",
+            "fullstack": "Full Stack",
+            "mobile": "Mobile",
+            "database": "Base de Datos",
+            "cloud_devops": "Cloud & DevOps",
+            "project_management": "Gestión de Proyectos",
+            "design": "Diseño",
+            "other": "Otros"
+        }
+    },
+    "home": {
+        "hero": {
+            "greeting": "Hola, soy",
+            "title": "Full Stack Developer",
+            "subtitle": "React & Node.js Specialist",
+            "description": "Apasionado por crear experiencias web modernas, escalables y de alto rendimiento. Especializado en arquitecturas cloud-native y desarrollo full stack.",
+            "viewProjects": "Ver Proyectos",
+            "contact": "Contactar",
+            "stats": {
+                "experience": "Años de Experiencia",
+                "projects": "Proyectos Completados"
+            },
+            "downloadCV": "Descargar CV"
+        },
+        "about": {
+            "title": "Sobre Mí",
+            "whatIDo": "¿Qué hago?",
+            "interests": "Intereses",
+            "bio1": "¡Hola! Soy Genaro, un desarrollador full stack apasionado por crear soluciones tecnológicas innovadoras y de alto impacto. Con experiencia en el desarrollo de aplicaciones web modernas y arquitecturas cloud-native.",
+            "bio2": "Actualmente trabajo como DevOps Engineer y Full Stack Developer en Izipay (Interbank), donde me especializo en la gestión de infraestructura Kubernetes, desarrollo de aplicaciones con Next.js y React, y la implementación de pipelines CI/CD robustos.",
+            "bio3": "Mi enfoque está en escribir código limpio, escalable y mantenible, siempre buscando las mejores prácticas y las tecnologías más actuales para resolver problemas complejos de manera elegante.",
+            "services": {
+                "frontend": {
+                    "title": "Frontend Development",
+                    "description": "Desarrollo de interfaces modernas y responsive con React, Next.js y TypeScript"
+                },
+                "backend": {
+                    "title": "Backend Development",
+                    "description": "APIs robustas y escalables con Node.js, NestJS y bases de datos SQL/NoSQL"
+                },
+                "devops": {
+                    "title": "DevOps & Cloud",
+                    "description": "Infraestructura cloud con AWS, Docker, Kubernetes y CI/CD pipelines"
+                }
+            },
+            "interestsList": {
+                "music": "Música",
+                "literature": "Literatura",
+                "technology": "Tecnología",
+                "travel": "Viajes",
+                "photography": "Fotografía"
+            }
+        },
+        "projects": {
+            "title": "Proyectos Destacados",
+            "subtitle": "Una selección de mis trabajos más destacados",
+            "comingSoonDesc": "Estoy trabajando en proyectos increíbles. Visita el panel de admin para agregar tus proyectos.",
+            "featured": "Destacado",
+            "viewDemo": "Ver Demo",
+            "viewCode": "Ver Código",
+            "description": "Descripción",
+            "details": "Detalles del Proyecto",
+            "viewLiveDemo": "Ver Demo en Vivo",
+            "viewSourceCode": "Ver Código Fuente"
+        },
+        "experience": {
+            "title": "Experiencia",
+            "subtitle": "Mi trayectoria profesional",
+            "present": "Presente",
+            "addExperience": "Agrega tu Experiencia",
+            "addExperienceDesc": "Accede al panel de admin para agregar tu experiencia profesional."
+        },
+        "technologyInput": {
+            "selected": "Seleccionadas",
+            "addCustom": "Agregar tecnología personalizada",
+            "placeholder": "Agregar tecnología personalizada...",
+            "add": "Agregar",
+            "cancel": "Cancelar",
+            "loading": "Cargando habilidades...",
+            "available": "Selecciona de tus habilidades",
+            "availableCount": "disponibles"
+        },
+        "skills": {
+            "title": "Habilidades",
+            "subtitle": "Mi stack tecnológico",
+            "level": "Nivel",
+            "years": "años",
+            "projects": "proyectos",
+            "addSkills": "Agrega tus Habilidades",
+            "addSkillsDesc": "Accede al panel de admin para agregar tus habilidades técnicas."
+        },
+        "contact": {
+            "title": "Trabajemos Juntos",
+            "subtitle": "¿Tienes un proyecto en mente? ¡Hablemos!",
+            "info": {
+                "title": "Información de Contacto",
+                "description": "Estoy siempre abierto a nuevas oportunidades y colaboraciones. No dudes en contactarme para discutir tu proyecto o simplemente para saludar.",
+                "email": "Email",
+                "location": "Ubicación"
+            },
+            "form": {
+                "name": "Nombre",
+                "email": "Email",
+                "subject": "Asunto",
+                "message": "Mensaje",
+                "send": "Enviar Mensaje",
+                "namePlaceholder": "Tu nombre",
+                "emailPlaceholder": "tu@email.com",
+                "subjectPlaceholder": "Asunto del mensaje",
+                "messagePlaceholder": "Tu mensaje..."
+            }
+        },
+        "validation": {
+            "nameMin": "El nombre debe tener al menos 2 caracteres",
+            "emailInvalid": "Email inválido",
+            "subjectMin": "El asunto debe tener al menos 3 caracteres",
+            "messageMin": "El mensaje debe tener al menos 10 caracteres",
+            "success": "¡Mensaje enviado con éxito!",
+            "error": "Error al enviar el mensaje",
+            "emailCopied": "Email copiado al portapapeles"
+        }
+    },
+    "admin": {
+        "dashboard": {
+            "title": "Panel de Administración",
+            "viewPortfolio": "Ver Portfolio",
+            "logout": "Cerrar Sesión",
+            "welcome": "Bienvenido",
+            "manageContent": "Gestiona tu contenido desde aquí",
+            "overview": "Vista General",
+            "projects": "Proyectos",
+            "experience": "Experiencia",
+            "skills": "Habilidades",
+            "recentActivity": "Actividad Reciente",
+            "quickActions": "Acciones Rápidas",
+            "manageProjects": "Gestionar Proyectos",
+            "manageExperience": "Gestionar Experiencia",
+            "manageSkills": "Gestionar Habilidades",
+            "portfolioUpdated": "Portfolio actualizado",
+            "newSkills": "Nuevas habilidades agregadas",
+            "timeAgo": "Hace {{time}}",
+            "newProject": "Nuevo Proyecto",
+            "createFirstProject": "Crear Primer Proyecto",
+            "noProjects": "No hay proyectos aún",
+            "newExperience": "Nueva Experiencia",
+            "addExperience": "Agregar Experiencia",
+            "noExperience": "No hay experiencia registrada",
+            "newSkill": "Nueva Habilidad",
+            "addSkill": "Agregar Habilidad",
+            "noSkills": "No hay habilidades registradas",
+            "edit": "Editar",
+            "delete": "Eliminar",
+            "mastery": "dominio",
+            "confirmDeleteProject": "¿Estás seguro de eliminar este proyecto?",
+            "confirmDeleteExperience": "¿Estás seguro de eliminar esta experiencia?",
+            "confirmDeleteSkill": "¿Estás seguro de eliminar esta habilidad?",
+            "successCreateProject": "Proyecto creado exitosamente",
+            "successUpdateProject": "Proyecto actualizado exitosamente",
+            "successDeleteProject": "Proyecto eliminado",
+            "errorSaveProject": "Error al guardar el proyecto",
+            "errorDeleteProject": "Error al eliminar el proyecto",
+            "successCreateExperience": "Experiencia creada exitosamente",
+            "successUpdateExperience": "Experiencia actualizada exitosamente",
+            "successDeleteExperience": "Experiencia eliminada",
+            "errorSaveExperience": "Error al guardar la experiencia",
+            "errorDeleteExperience": "Error al eliminar la experiencia",
+            "successCreateSkill": "Habilidad creada exitosamente",
+            "successUpdateSkill": "Habilidad actualizada exitosamente",
+            "successDeleteSkill": "Habilidad eliminada",
+            "errorSaveSkill": "Error al guardar la habilidad",
+            "errorDeleteSkill": "Error al eliminar la habilidad",
+            "successLogout": "Sesión cerrada exitosamente",
+            "errorLogout": "Error al cerrar sesión"
+        },
+        "skillForm": {
+            "newSkill": "Nueva Habilidad",
+            "editSkill": "Editar Habilidad",
+            "name": "Nombre",
+            "category": "Categoría",
+            "level": "Nivel de Dominio",
+            "beginner": "Principiante",
+            "intermediate": "Intermedio",
+            "expert": "Experto",
+            "preview": "Vista Previa",
+            "namePlaceholder": "Ej: React, Node.js...",
+            "technologies": "Tecnologías",
+            "categories": {
+                "frontend": "Frontend",
+                "backend": "Backend",
+                "fullstack": "Full Stack",
+                "mobile": "Móvil",
+                "database": "Base de Datos",
+                "cloud_devops": "Cloud & DevOps",
+                "project_management": "Gestión de Proyectos",
+                "design": "Diseño",
+                "other": "Otros"
+            }
+        },
+        "technologyInput": {
+            "selected": "Seleccionadas",
+            "addCustom": "Agregar tecnología personalizada",
+            "placeholder": "Agregar tecnología personalizada...",
+            "add": "Agregar",
+            "cancel": "Cancelar",
+            "loading": "Cargando habilidades...",
+            "available": "Selecciona de tus habilidades",
+            "availableCount": "disponibles"
+        },
+        "projectForm": {
+            "newProject": "Nuevo Proyecto",
+            "editProject": "Editar Proyecto",
+            "image": "URL de Imagen",
+            "demo": "URL Demo",
+            "github": "URL GitHub",
+            "client": "Cliente / Empresa",
+            "clientPlaceholder": "Relaciona este proyecto con una experiencia",
+            "noClient": "Sin asignar",
+            "featured": "Proyecto Destacado",
+            "title": "Título del Proyecto",
+            "shortDescription": "Descripción Corta",
+            "longDescription": "Descripción Detallada (Opcional)",
+            "technologies": "Tecnologías",
+            "titlePlaceholder": "Título del proyecto",
+            "shortDescPlaceholder": "Descripción corta del proyecto",
+            "longDescPlaceholder": "Descripción detallada",
+            "techPlaceholder": "Agregar tecnologías..."
+        },
+        "experienceForm": {
+            "newExperience": "Nueva Experiencia",
+            "editExperience": "Editar Experiencia",
+            "company": "Empresa",
+            "startDate": "Fecha Inicio",
+            "endDate": "Fecha Fin",
+            "current": "Trabajo Actual",
+            "role": "Rol / Cargo",
+            "description": "Descripción",
+            "technologies": "Tecnologías",
+            "companyPlaceholder": "Nombre de la empresa",
+            "rolePlaceholder": "Ej: Desarrollador Full Stack",
+            "startDatePlaceholder": "Ej: Enero 2022",
+            "endDatePlaceholder": "Ej: Diciembre 2023",
+            "descriptionPlaceholder": "Describe tus responsabilidades...",
+            "techPlaceholder": "Escribe o selecciona tecnologías..."
+        }
+    },
+    "login": {
+        "title": "Admin Panel",
+        "subtitle": "Inicia sesión para continuar",
+        "email": "Email",
+        "password": "Contraseña",
+        "login": "Iniciar Sesión",
+        "showPassword": "Mostrar contraseña",
+        "hidePassword": "Ocultar contraseña"
+    },
+    "forms": {
+        "required": "Este campo es requerido",
+        "invalidEmail": "Email inválido",
+        "minLength": "Debe tener al menos {{count}} caracteres",
+        "maxLength": "No puede tener más de {{count}} caracteres"
+    },
+    "footer": {
+        "description": "Full Stack Developer especializado en React y Node.js. Creando experiencias web modernas y escalables.",
+        "quickLinks": "Enlaces Rápidos",
+        "followMe": "Sígueme",
+        "madeWith": "Hecho con ❤️ y React"
+    }
+}

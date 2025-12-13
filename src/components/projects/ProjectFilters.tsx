@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import type { ProjectFilterCategory } from '../../types';
 
 interface ProjectFiltersProps {
@@ -6,15 +7,17 @@ interface ProjectFiltersProps {
   onFilterChange: (filter: ProjectFilterCategory) => void;
 }
 
-const filters: { label: string; value: ProjectFilterCategory }[] = [
-  { label: 'Todos', value: 'all' },
-  { label: 'Frontend', value: 'frontend' },
-  { label: 'Backend', value: 'backend' },
-  { label: 'Full Stack', value: 'fullstack' },
-  { label: 'Mobile', value: 'mobile' },
-];
-
 export const ProjectFilters = ({ activeFilter, onFilterChange }: ProjectFiltersProps) => {
+  const { t } = useTranslation();
+
+  const filters: { label: string; value: ProjectFilterCategory }[] = [
+    { label: t('common.categories.all'), value: 'all' },
+    { label: t('common.categories.frontend'), value: 'frontend' },
+    { label: t('common.categories.backend'), value: 'backend' },
+    { label: t('common.categories.fullstack'), value: 'fullstack' },
+    { label: t('common.categories.mobile'), value: 'mobile' },
+  ];
+
   return (
     <div className="flex flex-wrap justify-center gap-3 mb-12">
       {filters.map((filter) => (

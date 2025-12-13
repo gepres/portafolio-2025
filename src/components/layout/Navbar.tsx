@@ -5,22 +5,25 @@ import { Menu, X, User } from 'lucide-react';
 import { useAuthContext } from '../../context/AuthContext';
 import { cn } from '../../lib/utils/helpers';
 import ThemeToggle from '../ThemeToggle';
+import { LanguageToggle } from '../LanguageToggle';
+import { useTranslation } from 'react-i18next';
 
-
-const navLinks = [
-  { name: 'Home', path: '/', hash: '' },
-  { name: 'About', path: '/', hash: '#about' },
-  { name: 'Projects', path: '/', hash: '#projects' },
-  { name: 'Experience', path: '/', hash: '#experience' },
-  { name: 'Skills', path: '/', hash: '#skills' },
-  { name: 'Contact', path: '/', hash: '#contact' },
-];
 
 export const Navbar = () => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const { isAuthenticated } = useAuthContext();
+
+  const navLinks = [
+    { name: t('nav.home'), path: '/', hash: '' },
+    { name: t('nav.about'), path: '/', hash: '#about' },
+    { name: t('nav.projects'), path: '/', hash: '#projects' },
+    { name: t('nav.experience'), path: '/', hash: '#experience' },
+    { name: t('nav.skills'), path: '/', hash: '#skills' },
+    { name: t('nav.contact'), path: '/', hash: '#contact' },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -111,6 +114,7 @@ export const Navbar = () => {
 
           {/* Admin Button & Theme Toggle */}
           <div className="hidden md:flex items-center space-x-4">
+            <LanguageToggle />
             <ThemeToggle />
             <Link
               to={isAuthenticated ? '/admin/dashboard' : '/admin/login'}

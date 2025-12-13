@@ -4,6 +4,8 @@ import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
 import type { Project, Experience } from '../../types';
 import { getExperiences } from '../../lib/firebase/firestore';
+import { useLocalizedText, getLocalizedText } from '../../lib/utils/i18n';
+import { useTranslation } from 'react-i18next';
 
 interface ProjectModalProps {
   project: Project | null;
@@ -13,6 +15,12 @@ interface ProjectModalProps {
 
 export const ProjectModal = ({ project, isOpen, onClose }: ProjectModalProps) => {
   const [clientExperience, setClientExperience] = useState<Experience | null>(null);
+  const { t, i18n } = useTranslation();
+  const currentLang = i18n.language as 'es' | 'en';
+
+  const title = useLocalizedText(project?.title);
+  const description = useLocalizedText(project?.description);
+  const longDescription = useLocalizedText(project?.longDescription || undefined);
 
   useEffect(() => {
     const fetchClient = async () => {
@@ -30,7 +38,9 @@ export const ProjectModal = ({ project, isOpen, onClose }: ProjectModalProps) =>
 
   if (!project) return null;
 
-  const features = project.longDescription?.split('\n').filter((line) => line.trim()) || [];
+  if (!project) return null;
+
+  const features = longDescription?.split('\n').filter((line) => line.trim()) || [];
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="xl">
@@ -40,12 +50,12 @@ export const ProjectModal = ({ project, isOpen, onClose }: ProjectModalProps) =>
           {project.imageUrl ? (
             <img
               src={project.imageUrl}
-              alt={project.title}
+              alt={title}
               className="w-full h-full object-cover"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-9xl font-bold text-white/10">
-              {project.title[0]}
+              {title[0]}
             </div>
           )}
         </div>
@@ -53,7 +63,7 @@ export const ProjectModal = ({ project, isOpen, onClose }: ProjectModalProps) =>
         {/* Title & Meta */}
         <div>
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-3xl font-bold gradient-text">{project.title}</h2>
+            <h2 className="text-3xl font-bold gradient-text">{title}</h2>
             <span className="px-3 py-1 glass rounded-full text-sm font-semibold capitalize">
               {project.category}
             </span>
@@ -64,7 +74,7 @@ export const ProjectModal = ({ project, isOpen, onClose }: ProjectModalProps) =>
             <div className="flex items-center space-x-2 text-light/60 mb-4">
               <Building2 className="w-4 h-4" />
               <span className="text-sm">
-                {clientExperience.company} · {clientExperience.role}
+                {clientExperience.company} · {getLocalizedText(clientExperience.role, currentLang)}
               </span>
             </div>
           )}
@@ -84,14 +94,14 @@ export const ProjectModal = ({ project, isOpen, onClose }: ProjectModalProps) =>
 
         {/* Description */}
         <div>
-          <h3 className="text-xl font-semibold mb-3">Descripción</h3>
-          <p className="text-light/70 leading-relaxed whitespace-pre-line">{project.description}</p>
+          <h3 className="text-xl font-semibold mb-3">{t('home.projects.description')}</h3>
+          <p className="text-light/70 leading-relaxed whitespace-pre-line">{description}</p>
         </div>
 
         {/* Features/Details */}
         {features.length > 0 && (
           <div>
-            <h3 className="text-xl font-semibold mb-3">Detalles del Proyecto</h3>
+            <h3 className="text-xl font-semibold mb-3">{t('home.projects.details')}</h3>
             <ul className="space-y-2">
               {features.map((feature, index) => (
                 <li key={index} className="flex items-start space-x-2">
@@ -112,7 +122,7 @@ export const ProjectModal = ({ project, isOpen, onClose }: ProjectModalProps) =>
                 onClick={() => window.open(project.demoUrl!, '_blank')}
               >
                 <ExternalLink className="w-4 h-4 mr-2" />
-                Ver Demo en Vivo
+                {t('home.projects.viewLiveDemo')}
               </Button>
             )}
             {project.githubUrl?.trim() && (
@@ -121,7 +131,7 @@ export const ProjectModal = ({ project, isOpen, onClose }: ProjectModalProps) =>
                 onClick={() => window.open(project.githubUrl!, '_blank')}
               >
                 <Github className="w-4 h-4 mr-2" />
-                Ver Código Fuente
+                {t('home.projects.viewSourceCode')}
               </Button>
             )}
           </div>

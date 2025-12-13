@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Download, Code2, Server, Cloud } from 'lucide-react';
 import { PageTransition } from '../components/layout/PageTransition';
@@ -7,27 +8,35 @@ import { FadeIn } from '../components/animations/FadeIn';
 import { SlideIn } from '../components/animations/SlideIn';
 import { staggerContainer, staggerItem } from '../lib/utils/animations';
 
-const services = [
-  {
-    icon: Code2,
-    title: 'Frontend Development',
-    description: 'Desarrollo de interfaces modernas y responsive con React, Next.js y TypeScript',
-  },
-  {
-    icon: Server,
-    title: 'Backend Development',
-    description: 'APIs robustas y escalables con Node.js, NestJS y bases de datos SQL/NoSQL',
-  },
-  {
-    icon: Cloud,
-    title: 'DevOps & Cloud',
-    description: 'Infraestructura cloud con AWS, Docker, Kubernetes y CI/CD pipelines',
-  },
-];
-
-const interests = ['Música', 'Literatura', 'Tecnología', 'Viajes', 'Fotografía'];
-
 export const About = () => {
+  const { t } = useTranslation();
+
+  const services = [
+    {
+      icon: Code2,
+      title: t('about.services.frontend.title'),
+      description: t('about.services.frontend.description'),
+    },
+    {
+      icon: Server,
+      title: t('about.services.backend.title'),
+      description: t('about.services.backend.description'),
+    },
+    {
+      icon: Cloud,
+      title: t('about.services.devops.title'),
+      description: t('about.services.devops.description'),
+    },
+  ];
+
+  const interests = [
+    t('about.interestsList.music'),
+    t('about.interestsList.literature'),
+    t('about.interestsList.technology'),
+    t('about.interestsList.travel'),
+    t('about.interestsList.photography'),
+  ];
+
   return (
     <PageTransition>
       <div className="min-h-screen pt-24 pb-16 px-4">
@@ -35,7 +44,7 @@ export const About = () => {
           {/* Header */}
           <FadeIn className="text-center mb-16">
             <h1 className="text-4xl md:text-6xl font-bold gradient-text mb-4">
-              Sobre Mí
+              {t('about.title')}
             </h1>
             <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full" />
           </FadeIn>
@@ -58,36 +67,30 @@ export const About = () => {
             <SlideIn direction="right">
               <div className="space-y-6 text-light/80">
                 <p className="text-lg leading-relaxed">
-                  ¡Hola! Soy Genaro, un desarrollador full stack apasionado por crear soluciones
-                  tecnológicas innovadoras y de alto impacto. Con experiencia en el desarrollo de
-                  aplicaciones web modernas y arquitecturas cloud-native.
+                  {t('about.bio1')}
                 </p>
                 <p className="text-lg leading-relaxed">
-                  Actualmente trabajo como DevOps Engineer y Full Stack Developer en Izipay (Interbank),
-                  donde me especializo en la gestión de infraestructura Kubernetes, desarrollo de
-                  aplicaciones con Next.js y React, y la implementación de pipelines CI/CD robustos.
+                  {t('about.bio2')}
                 </p>
                 <p className="text-lg leading-relaxed">
-                  Mi enfoque está en escribir código limpio, escalable y mantenible, siempre buscando
-                  las mejores prácticas y las tecnologías más actuales para resolver problemas complejos
-                  de manera elegante.
+                  {t('about.bio3')}
                 </p>
 
                 <div className="flex items-center space-x-4 pt-4">
                   <div className="text-center">
                     <div className="text-3xl font-bold gradient-text">3+</div>
-                    <div className="text-sm text-light/60">Años de Experiencia</div>
+                    <div className="text-sm text-light/60">{t('home.hero.stats.experience')}</div>
                   </div>
                   <div className="w-px h-12 bg-white/20" />
                   <div className="text-center">
                     <div className="text-3xl font-bold gradient-text">20+</div>
-                    <div className="text-sm text-light/60">Proyectos Completados</div>
+                    <div className="text-sm text-light/60">{t('home.hero.stats.projects')}</div>
                   </div>
                 </div>
 
                 <Button variant="primary" className="mt-6">
                   <Download className="w-4 h-4 mr-2" />
-                  Descargar CV
+                  {t('home.hero.downloadCV')}
                 </Button>
               </div>
             </SlideIn>
@@ -96,7 +99,7 @@ export const About = () => {
           {/* Services */}
           <FadeIn>
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-              ¿Qué hago?
+              {t('about.whatIDo')}
             </h2>
           </FadeIn>
 
@@ -123,7 +126,7 @@ export const About = () => {
           {/* Interests */}
           <FadeIn>
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-8">
-              Intereses
+              {t('about.interests')}
             </h2>
             <div className="flex flex-wrap justify-center gap-4">
               {interests.map((interest) => (
