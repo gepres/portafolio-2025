@@ -51,7 +51,7 @@ export const Hero = () => {
         <motion.div variants={staggerItem} className="mb-8 flex justify-center">
           <div className="relative">
             <div className="w-32 h-32 rounded-full overflow-hidden glass border-2 border-transparent bg-gradient-to-r from-primary to-accent p-1">
-              <div className="w-full h-full rounded-full bg-dark-light flex items-center justify-center text-6xl font-bold gradient-text">
+              <div className="w-full h-full rounded-full bg-slate-200 dark:bg-dark-light flex items-center justify-center text-6xl font-bold gradient-text">
                 G
               </div>
             </div>
@@ -78,7 +78,7 @@ export const Hero = () => {
         {/* Title */}
         <motion.h2
           variants={staggerItem}
-          className="text-2xl md:text-4xl font-semibold text-light/90 mb-6"
+          className="text-2xl md:text-4xl font-semibold text-slate-700 dark:text-light/90 mb-6"
         >
           Full Stack Developer
         </motion.h2>
@@ -86,7 +86,7 @@ export const Hero = () => {
         {/* Subtitle */}
         <motion.p
           variants={staggerItem}
-          className="text-xl md:text-2xl text-light/70 mb-8"
+          className="text-xl md:text-2xl text-slate-600 dark:text-light/70 mb-8"
         >
           React & Node.js Specialist
         </motion.p>
@@ -94,7 +94,7 @@ export const Hero = () => {
         {/* Description */}
         <motion.p
           variants={staggerItem}
-          className="text-lg text-light/60 max-w-2xl mx-auto mb-12"
+          className="text-lg text-slate-600 dark:text-light/60 max-w-2xl mx-auto mb-12"
         >
           Apasionado por crear experiencias web modernas, escalables y de alto rendimiento.
           Especializado en arquitecturas cloud-native y desarrollo full stack.

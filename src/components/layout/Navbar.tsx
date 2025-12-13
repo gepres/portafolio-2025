@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, User } from 'lucide-react';
 import { useAuthContext } from '../../context/AuthContext';
 import { cn } from '../../lib/utils/helpers';
+import ThemeToggle from '../ThemeToggle';
 
 
 const navLinks = [
@@ -91,8 +92,8 @@ export const Navbar = () => {
                   className={cn(
                     'px-4 py-2 rounded-lg transition-all duration-300 cursor-hover relative group',
                     isActive
-                      ? 'text-primary'
-                      : 'text-light/80 hover:text-primary'
+                      ? 'text-slate-900 dark:text-primary'
+                      : 'text-slate-600 dark:text-light/80 hover:text-primary'
                   )}
                 >
                   {link.name}
@@ -108,8 +109,9 @@ export const Navbar = () => {
             })}
           </div>
 
-          {/* Admin Button */}
+          {/* Admin Button & Theme Toggle */}
           <div className="hidden md:flex items-center space-x-4">
+            <ThemeToggle />
             <Link
               to={isAuthenticated ? '/admin/dashboard' : '/admin/login'}
               className="px-4 py-2 glass-hover rounded-lg flex items-center space-x-2 cursor-hover"
@@ -154,7 +156,7 @@ export const Navbar = () => {
                       'block px-4 py-3 rounded-lg transition-all duration-300',
                       isActive
                         ? 'bg-primary/20 text-primary'
-                        : 'text-light/80 hover:bg-white/5'
+                        : 'text-slate-600 dark:text-light/80 hover:bg-white/5'
                     )}
                   >
                     {link.name}

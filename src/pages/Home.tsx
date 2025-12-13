@@ -159,7 +159,7 @@ export const Home = () => {
             </SlideIn>
 
             <SlideIn direction="right">
-              <div className="space-y-6 text-light/90">
+              <div className="space-y-6 text-slate-600 dark:text-light/90">
                 <p className="text-lg leading-relaxed">
                   ¡Hola! Soy Genaro, un desarrollador full stack apasionado por crear soluciones
                   tecnológicas innovadoras y de alto impacto. Con experiencia en el desarrollo de
@@ -179,12 +179,12 @@ export const Home = () => {
                 <div className="flex items-center space-x-4 pt-4">
                   <div className="text-center">
                     <div className="text-3xl font-bold gradient-text">3+</div>
-                    <div className="text-sm text-light/60">Años de Experiencia</div>
+                    <div className="text-sm text-slate-500 dark:text-light/60">Años de Experiencia</div>
                   </div>
                   <div className="w-px h-12 bg-white/20" />
                   <div className="text-center">
                     <div className="text-3xl font-bold gradient-text">20+</div>
-                    <div className="text-sm text-light/60">Proyectos Completados</div>
+                    <div className="text-sm text-slate-500 dark:text-light/60">Proyectos Completados</div>
                   </div>
                 </div>
 
@@ -216,7 +216,7 @@ export const Home = () => {
                     <service.icon className="w-8 h-8" />
                   </div>
                   <h4 className="text-xl font-semibold mb-3">{service.title}</h4>
-                  <p className="text-light/70">{service.description}</p>
+                  <p className="text-slate-600 dark:text-light/70">{service.description}</p>
                 </Card>
               </motion.div>
             ))}
@@ -243,13 +243,13 @@ export const Home = () => {
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="relative py-24 px-4 bg-dark-light/50">
+      <section id="projects" className="relative py-24 px-4 bg-slate-100/50 dark:bg-dark-light/50">
         <div className="max-w-7xl mx-auto">
           <FadeIn className="text-center mb-12">
             <h2 className="text-4xl md:text-6xl font-bold gradient-text mb-4">
               Proyectos Destacados
             </h2>
-            <p className="text-xl text-light/70 max-w-2xl mx-auto">
+            <p className="text-xl text-slate-600 dark:text-light/70 max-w-2xl mx-auto">
               Una selección de mis trabajos más destacados
             </p>
             <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full mt-4" />
@@ -285,7 +285,7 @@ export const Home = () => {
             <FadeIn className="text-center py-20">
               <div className="glass rounded-2xl p-12 max-w-md mx-auto">
                 <h3 className="text-2xl font-bold mb-4">¡Próximamente!</h3>
-                <p className="text-light/70">
+                <p className="text-slate-600 dark:text-light/70">
                   Estoy trabajando en proyectos increíbles. Visita el panel de admin para agregar tus proyectos.
                 </p>
               </div>
@@ -301,7 +301,7 @@ export const Home = () => {
             <h2 className="text-4xl md:text-6xl font-bold gradient-text mb-4">
               Experiencia
             </h2>
-            <p className="text-xl text-light/70">Mi trayectoria profesional</p>
+            <p className="text-xl text-slate-600 dark:text-light/70">Mi trayectoria profesional</p>
             <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full mt-4" />
           </FadeIn>
 
@@ -323,7 +323,7 @@ export const Home = () => {
                     index % 2 === 0 ? 'md:pr-1/2 md:text-right' : 'md:pl-1/2 md:ml-auto'
                   }`}
                 >
-                  <div className="absolute left-8 md:left-1/2 w-4 h-4 bg-primary rounded-full transform -translate-x-1/2 z-10 ring-4 ring-slate-900" />
+                  <div className="absolute left-8 md:left-1/2 w-4 h-4 bg-primary rounded-full transform -translate-x-1/2 z-10 ring-4 ring-slate-100 dark:ring-slate-900" />
 
                   <Card className={`ml-16 md:ml-0 ${index % 2 === 0 ? 'md:mr-12' : 'md:ml-12'}`}>
                     <div className="flex items-start space-x-4 mb-4">
@@ -341,7 +341,7 @@ export const Home = () => {
                       <div className="flex-1">
                         <h3 className="text-xl font-bold gradient-text">{exp.role}</h3>
                         <p className="text-primary font-semibold">{exp.company}</p>
-                        <p className="text-light/60 text-sm">
+                        <p className="text-slate-500 dark:text-light/60 text-sm">
                           {formatDate(exp.startDate)} - {exp.endDate === 'present' ? 'Presente' : formatDate(exp.endDate)}
                           {' · '}
                           {calculateDuration(exp.startDate, exp.endDate)}
@@ -349,12 +349,12 @@ export const Home = () => {
                       </div>
                     </div>
 
-                    <p className="text-light/70 mb-4">{exp.description}</p>
+                    <p className="text-slate-600 dark:text-light/70 mb-4">{exp.description}</p>
 
                     {exp.achievements && exp.achievements.length > 0 && (
                       <ul className="space-y-2 mb-4">
                         {exp.achievements.map((achievement, i) => (
-                          <li key={i} className="flex items-start space-x-2 text-light/70 text-sm">
+                          <li key={i} className="flex items-start space-x-2 text-slate-600 dark:text-light/70 text-sm">
                             <span className="text-primary mt-1">•</span>
                             <span>{achievement}</span>
                           </li>
@@ -381,7 +381,7 @@ export const Home = () => {
               <div className="glass rounded-2xl p-12 max-w-md mx-auto">
                 <Briefcase className="w-16 h-16 mx-auto mb-4 text-primary" />
                 <h3 className="text-2xl font-bold mb-4">Agrega tu Experiencia</h3>
-                <p className="text-light/70 mb-6">
+                <p className="text-slate-600 dark:text-light/70 mb-6">
                   Accede al panel de admin para agregar tu experiencia profesional.
                 </p>
               </div>
@@ -391,13 +391,13 @@ export const Home = () => {
       </section>
 
       {/* Skills Section */}
-      <section id="skills" className="relative py-24 px-4 bg-dark-light/50">
+      <section id="skills" className="relative py-24 px-4 bg-slate-100/50 dark:bg-dark-light/50">
         <div className="max-w-7xl mx-auto">
           <FadeIn className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold gradient-text mb-4">
               Habilidades
             </h2>
-            <p className="text-xl text-light/70">Mi stack tecnológico</p>
+            <p className="text-xl text-slate-600 dark:text-light/70">Mi stack tecnológico</p>
             <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full mt-4" />
           </FadeIn>
 
@@ -430,11 +430,11 @@ export const Home = () => {
                           </div>
 
                           <div className="mb-3">
-                            <div className="flex justify-between text-sm text-light/60 mb-2">
+                            <div className="flex justify-between text-sm text-slate-500 dark:text-light/60 mb-2">
                               <span>Nivel</span>
                               <span>{skill.level}%</span>
                             </div>
-                            <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                            <div className="h-2 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
                               <motion.div
                                 className="h-full gradient-primary"
                                 initial={{ width: 0 }}
@@ -446,7 +446,7 @@ export const Home = () => {
                           </div>
 
                           {(skill.yearsOfExperience || skill.projectsCount) && (
-                            <div className="flex justify-between text-sm text-light/60 pt-3 border-t border-white/10">
+                            <div className="flex justify-between text-sm text-slate-500 dark:text-light/60 pt-3 border-t border-white/10">
                               {skill.yearsOfExperience && (
                                 <span>{skill.yearsOfExperience}+ años</span>
                               )}
@@ -467,7 +467,7 @@ export const Home = () => {
               <div className="glass rounded-2xl p-12 max-w-md mx-auto">
                 <Code2 className="w-16 h-16 mx-auto mb-4 text-primary" />
                 <h3 className="text-2xl font-bold mb-4">Agrega tus Habilidades</h3>
-                <p className="text-light/70 mb-6">
+                <p className="text-slate-600 dark:text-light/70 mb-6">
                   Accede al panel de admin para agregar tus habilidades técnicas.
                 </p>
               </div>
@@ -483,7 +483,7 @@ export const Home = () => {
             <h2 className="text-4xl md:text-6xl font-bold gradient-text mb-4">
               Trabajemos Juntos
             </h2>
-            <p className="text-xl text-light/70">
+            <p className="text-xl text-slate-600 dark:text-light/70">
               ¿Tienes un proyecto en mente? ¡Hablemos!
             </p>
             <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full mt-4" />
@@ -494,7 +494,7 @@ export const Home = () => {
               <div className="space-y-6">
                 <div>
                   <h3 className="text-3xl font-bold mb-6">Información de Contacto</h3>
-                  <p className="text-light/70 leading-relaxed mb-8">
+                  <p className="text-slate-600 dark:text-light/70 leading-relaxed mb-8">
                     Estoy siempre abierto a nuevas oportunidades y colaboraciones.
                     No dudes en contactarme para discutir tu proyecto o simplemente para saludar.
                   </p>
@@ -506,7 +506,7 @@ export const Home = () => {
                   </div>
                   <div className="flex-1">
                     <h4 className="font-semibold mb-1">Email</h4>
-                    <p className="text-light/70 text-sm flex items-center">
+                    <p className="text-slate-600 dark:text-light/70 text-sm flex items-center">
                       contact@example.com
                       <Copy className="w-4 h-4 ml-2 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </p>
@@ -519,7 +519,7 @@ export const Home = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold mb-1">Ubicación</h4>
-                    <p className="text-light/70 text-sm">Lima, Perú</p>
+                    <p className="text-slate-600 dark:text-light/70 text-sm">Lima, Perú</p>
                   </div>
                 </Card>
               </div>

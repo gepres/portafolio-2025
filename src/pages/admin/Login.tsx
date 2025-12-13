@@ -68,7 +68,7 @@ export const Login = () => {
     <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
       {/* Animated Background */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-slate-900 to-accent/20 animate-gradient-shift" />
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 dark:from-primary/20 dark:via-slate-900 dark:to-accent/20 animate-gradient-shift" />
       </div>
 
       <motion.div
@@ -84,7 +84,7 @@ export const Login = () => {
               G
             </div>
             <h1 className="text-3xl font-bold gradient-text mb-2">Admin Panel</h1>
-            <p className="text-light/60">Inicia sesión para continuar</p>
+            <p className="text-slate-600 dark:text-light/60">Inicia sesión para continuar</p>
           </div>
 
           {/* Form */}
@@ -92,7 +92,7 @@ export const Login = () => {
             <div>
               <label className="block text-sm font-medium mb-2">Email</label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-light/30" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-light/30" />
                 <input
                   {...register('email')}
                   type="email"
@@ -108,7 +108,7 @@ export const Login = () => {
             <div>
               <label className="block text-sm font-medium mb-2">Contraseña</label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-light/30" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-light/30" />
                 <input
                   {...register('password')}
                   type="password"

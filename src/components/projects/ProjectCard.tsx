@@ -26,7 +26,7 @@ export const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-6xl font-bold text-white/10">
+            <div className="w-full h-full flex items-center justify-center text-6xl font-bold text-slate-300 dark:text-white/10">
               {project.title[0]}
             </div>
           )}
@@ -78,7 +78,7 @@ export const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
         {/* Content */}
         <div className="p-6">
           <h3 className="text-xl font-bold mb-2 gradient-text line-clamp-1">{project.title}</h3>
-          <p className="text-light/70 text-sm mb-4 line-clamp-2">
+          <p className="text-slate-600 dark:text-light/70 text-sm mb-4 line-clamp-2">
             {project.description}
           </p>
 

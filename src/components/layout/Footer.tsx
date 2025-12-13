@@ -46,7 +46,7 @@ export const Footer = () => {
                 Genaro Pretill
               </span>
             </div>
-            <p className="text-light/60 text-sm">
+            <p className="text-slate-600 dark:text-light/60 text-sm">
               Full Stack Developer especializado en React y Node.js. Creando experiencias web modernas y escalables.
             </p>
           </div>
@@ -59,7 +59,7 @@ export const Footer = () => {
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="text-light/60 hover:text-primary transition-colors cursor-hover"
+                    className="text-slate-600 dark:text-light/60 hover:text-primary transition-colors cursor-hover"
                   >
                     {link.name}
                   </Link>
@@ -88,7 +88,7 @@ export const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-8 pt-8 border-t border-white/10 text-center text-light/60 text-sm">
+        <div className="mt-8 pt-8 border-t border-white/10 text-center text-slate-600 dark:text-light/60 text-sm">
           <p>© 2025 Genaro Pretill. Hecho con ❤️ y React</p>
         </div>
       </div>
