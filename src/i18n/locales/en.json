@@ -24,6 +24,8 @@
         "all": "All",
         "create": "Create",
         "update": "Update",
+        "coming_soon": "Coming Soon",
+        "admin_projects_message": "I'm working on amazing projects.",
         "categories": {
             "all": "All",
             "frontend": "Frontend",

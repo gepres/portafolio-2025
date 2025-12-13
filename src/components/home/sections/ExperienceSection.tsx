@@ -54,9 +54,9 @@ export const ExperienceSection = () => {
           <FadeIn className="text-center py-20">
             <div className="glass rounded-2xl p-12 max-w-md mx-auto">
               <Briefcase className="w-16 h-16 mx-auto mb-4 text-primary" />
-              <h3 className="text-2xl font-bold mb-4">Agrega tu Experiencia</h3>
+              <h3 className="text-2xl font-bold mb-4">{t('home.experience.addExperience')}</h3>
               <p className="text-slate-600 dark:text-light/70 mb-6">
-                Accede al panel de admin para agregar tu experiencia profesional.
+                {t('home.experience.addExperienceDesc')}
               </p>
             </div>
           </FadeIn>

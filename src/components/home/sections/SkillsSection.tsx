@@ -71,9 +71,9 @@ export const SkillsSection = () => {
           <FadeIn className="text-center py-20">
             <div className="glass rounded-2xl p-12 max-w-md mx-auto">
               <Code2 className="w-16 h-16 mx-auto mb-4 text-primary" />
-              <h3 className="text-2xl font-bold mb-4">Agrega tus Habilidades</h3>
+              <h3 className="text-2xl font-bold mb-4">{t('home.skills.addSkills')}</h3>
               <p className="text-slate-600 dark:text-light/70 mb-6">
-                Accede al panel de admin para agregar tus habilidades técnicas.
+                {t('home.skills.addSkillsDesc')}
               </p>
             </div>
           </FadeIn>
