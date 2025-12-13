@@ -55,7 +55,7 @@ export const Experience = () => {
               viewport={{ once: true }}
             >
               {/* Timeline line */}
-              <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary to-accent" />
+              <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-transparent via-primary to-accent" />
 
               {experiences.map((exp, index) => (
                 <motion.div
