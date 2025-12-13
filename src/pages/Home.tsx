@@ -424,7 +424,13 @@ export const Home = () => {
                         <Card className="h-full">
                           <div className="flex items-center justify-between mb-4">
                             <h4 className="text-lg font-semibold">{skill.name}</h4>
-                            <span className="text-2xl">{skill.icon}</span>
+                            <span className="text-3xl">
+                              {skill.icon?.includes('devicon-') ? (
+                                <i className={`${skill.icon} colored`}></i>
+                              ) : (
+                                skill.icon
+                              )}
+                            </span>
                           </div>
 
                           <div className="mb-3">

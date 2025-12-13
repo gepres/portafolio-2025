@@ -51,7 +51,7 @@ export const Skills = () => {
           {/* Header */}
           <FadeIn className="text-center mb-16">
             <h1 className="text-4xl md:text-6xl font-bold gradient-text mb-4">
-              Habilidades
+              Habilidades 
             </h1>
             <p className="text-xl text-light/70">Mi stack tecnológico</p>
             <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full mt-4" />

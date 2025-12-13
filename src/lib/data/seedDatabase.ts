@@ -1,4 +1,4 @@
-import { collection, addDoc, getDocs, deleteDoc } from 'firebase/firestore';
+import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { sampleProjects, sampleExperiences, sampleSkills } from './sampleData';
 
@@ -7,12 +7,12 @@ export const seedDatabase = async () => {
     console.log('🌱 Iniciando carga de datos de ejemplo...');
 
     // Clear existing data (opcional)
-    const clearCollection = async (collectionName: string) => {
-      const querySnapshot = await getDocs(collection(db, collectionName));
-      const deletePromises = querySnapshot.docs.map((doc) => deleteDoc(doc.ref));
-      await Promise.all(deletePromises);
-      console.log(`✓ Colección ${collectionName} limpiada`);
-    };
+    // const clearCollection = async (collectionName: string) => {
+    //   const querySnapshot = await getDocs(collection(db, collectionName));
+    //   const deletePromises = querySnapshot.docs.map((doc) => deleteDoc(doc.ref));
+    //   await Promise.all(deletePromises);
+    //   console.log(`✓ Colección ${collectionName} limpiada`);
+    // };
 
     // Limpiar colecciones existentes (opcional - comenta si no quieres borrar datos)
     // await clearCollection('projects');

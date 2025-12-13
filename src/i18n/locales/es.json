@@ -211,6 +211,9 @@
             "expert": "Experto",
             "preview": "Vista Previa",
             "namePlaceholder": "Ej: React, Node.js...",
+            "icon": "Icono (Clase Devicon)",
+            "iconPlaceholder": "Ej: devicon-react-original",
+            "iconHelp": "Busca iconos en devicon.dev (haz clic para abrir)",
             "technologies": "Tecnologías",
             "categories": {
                 "frontend": "Frontend",

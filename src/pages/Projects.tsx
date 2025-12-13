@@ -7,7 +7,6 @@ import { ProjectModal } from '../components/projects/ProjectModal';
 import { ProjectFilters } from '../components/projects/ProjectFilters';
 import { useProjects } from '../hooks/useProjects';
 import type { Project, ProjectFilterCategory } from '../types';
-import { staggerContainer, staggerItem } from '../lib/utils/animations';
 
 export const Projects = () => {
   const { projects, loading } = useProjects();

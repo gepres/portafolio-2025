@@ -6,9 +6,6 @@ import {
   addDoc,
   updateDoc,
   deleteDoc,
-  query,
-  where,
-  orderBy,
   Timestamp,
 } from 'firebase/firestore';
 import { db } from './config';
@@ -25,6 +22,15 @@ const cleanUndefined = <T extends Record<string, any>>(obj: T): T => {
   return cleaned;
 };
 
+// Helper to safely get seconds from Date or Timestamp
+const getDateSeconds = (date: Date | Timestamp | undefined): number => {
+  if (!date) return 0;
+  if ('seconds' in date) {
+    return date.seconds;
+  }
+  return Math.floor(date.getTime() / 1000);
+};
+
 // Projects
 export const getProjects = async () => {
   try {
@@ -35,7 +41,7 @@ export const getProjects = async () => {
         // Primero los destacados, luego por fecha
         if (a.featured && !b.featured) return -1;
         if (!a.featured && b.featured) return 1;
-        return (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0);
+        return getDateSeconds(b.createdAt) - getDateSeconds(a.createdAt);
       });
   } catch (error) {
     console.error('Error fetching projects:', error);
@@ -48,7 +54,7 @@ export const getAllProjects = async () => {
     const snapshot = await getDocs(collection(db, 'projects'));
     return snapshot.docs
       .map(doc => ({ id: doc.id, ...doc.data() } as Project))
-      .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+      .sort((a, b) => getDateSeconds(b.createdAt) - getDateSeconds(a.createdAt));
   } catch (error) {
     console.error('Error fetching all projects:', error);
     return [];
@@ -158,8 +164,16 @@ export const getSkills = async () => {
       .sort((a, b) => {
         // Ordenar por categoría primero, luego por nivel
         if (a.category !== b.category) {
-          const categoryOrder = { Frontend: 0, Backend: 1, DevOps: 2, Other: 3 };
-          return categoryOrder[a.category] - categoryOrder[b.category];
+          const categoryOrder = {
+            frontend: 0,
+            backend: 1,
+            database: 2,
+            cloud_devops: 3,
+            project_management: 4,
+            design: 5,
+            other: 6
+          };
+          return (categoryOrder[a.category] || 99) - (categoryOrder[b.category] || 99);
         }
         return b.level - a.level; // Mayor nivel primero
       });

@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { getLocalizedText } from '../lib/utils/i18n';
 import { motion } from 'framer-motion';
 import { PageTransition } from '../components/layout/PageTransition';
 import { FadeIn } from '../components/animations/FadeIn';
@@ -12,6 +14,8 @@ import { Briefcase } from 'lucide-react';
 export const Experience = () => {
   const [experiences, setExperiences] = useState<ExperienceType[]>([]);
   const [loading, setLoading] = useState(true);
+  const { i18n, t } = useTranslation();
+  const currentLang = i18n.language as 'es' | 'en';
 
   useEffect(() => {
     const fetchExperiences = async () => {
@@ -35,9 +39,9 @@ export const Experience = () => {
           {/* Header */}
           <FadeIn className="text-center mb-16">
             <h1 className="text-4xl md:text-6xl font-bold gradient-text mb-4">
-              Experiencia
+              {t('experience.title')}
             </h1>
-            <p className="text-xl text-light/70">Mi trayectoria profesional</p>
+            <p className="text-xl text-light/70">{t('experience.subtitle')}</p>
             <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full mt-4" />
           </FadeIn>
 
@@ -83,7 +87,7 @@ export const Experience = () => {
                         </div>
                       )}
                       <div className="flex-1">
-                        <h3 className="text-xl font-bold gradient-text">{exp.role}</h3>
+                        <h3 className="text-xl font-bold gradient-text">{getLocalizedText(exp.role, currentLang)}</h3>
                         <p className="text-primary font-semibold">{exp.company}</p>
                         <p className="text-light/60 text-sm">
                           {formatDate(exp.startDate)} - {exp.endDate === 'present' ? 'Presente' : formatDate(exp.endDate)}
@@ -93,14 +97,14 @@ export const Experience = () => {
                       </div>
                     </div>
 
-                    <p className="text-light/70 mb-4">{exp.description}</p>
+                    <p className="text-light/70 mb-4">{getLocalizedText(exp.description, currentLang)}</p>
 
                     {exp.achievements && exp.achievements.length > 0 && (
                       <ul className="space-y-2 mb-4">
                         {exp.achievements.map((achievement, i) => (
                           <li key={i} className="flex items-start space-x-2 text-light/70 text-sm">
                             <span className="text-primary mt-1">•</span>
-                            <span>{achievement}</span>
+                            <span>{getLocalizedText(achievement, currentLang)}</span>
                           </li>
                         ))}
                       </ul>

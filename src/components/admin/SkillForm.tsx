@@ -35,6 +35,7 @@ export const SkillForm = ({
     name: '',
     level: 50,
     category: 'frontend' as SkillCategory,
+    icon: '',
   });
 
   useEffect(() => {
@@ -43,6 +44,7 @@ export const SkillForm = ({
         name: skill.name,
         level: skill.level,
         category: skill.category,
+        icon: skill.icon || '',
       });
     } else {
       // Reset form
@@ -50,6 +52,7 @@ export const SkillForm = ({
         name: '',
         level: 50,
         category: 'frontend',
+        icon: '',
       });
     }
   }, [skill, isOpen]);
@@ -61,7 +64,7 @@ export const SkillForm = ({
       name: formData.name,
       level: formData.level,
       category: formData.category,
-      icon: skill?.icon || '',
+      icon: formData.icon,
       order: skill?.order || 0,
     };
 
@@ -96,6 +99,26 @@ export const SkillForm = ({
           placeholder={t('admin.skillForm.namePlaceholder')}
           required
         />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium mb-2">
+          {t('admin.skillForm.icon')}
+        </label>
+        <Input
+          name="icon"
+          value={formData.icon}
+          onChange={handleChange}
+          placeholder={t('admin.skillForm.iconPlaceholder')}
+        />
+        <a 
+          href="https://devicon.dev/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-xs text-primary hover:text-primary-light mt-1 inline-block transition-colors"
+        >
+          {t('admin.skillForm.iconHelp')}
+        </a>
       </div>
 
       <div>
@@ -146,7 +169,12 @@ export const SkillForm = ({
         <p className="text-sm text-light/60 mb-2">{t('admin.skillForm.preview')}:</p>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="font-medium">{formData.name || t('admin.skillForm.name')}</span>
+            <div className="flex items-center gap-2">
+              <span className="text-xl">
+                 {formData.icon.includes('devicon-') ? <i className={formData.icon}></i> : formData.icon}
+              </span>
+              <span className="font-medium">{formData.name || t('admin.skillForm.name')}</span>
+            </div>
             <span className="text-sm text-light/60">{formData.level}%</span>
           </div>
           <div className="relative h-2 bg-dark-light rounded-full overflow-hidden">
