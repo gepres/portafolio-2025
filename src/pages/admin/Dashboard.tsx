@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import { LogOut, FolderOpen, Briefcase, Code, Plus, Edit, Trash2, Eye } from 'lucide-react';
+import { LogOut, FolderOpen, Briefcase, Code, Plus, Edit, Trash2, Eye, User, Palette, Zap, Heart, Mail } from 'lucide-react';
 import { signOut } from '../../lib/firebase/auth';
 import { useAuthContext } from '../../context/AuthContext';
 import { Card } from '../../components/ui/Card';
@@ -21,16 +21,37 @@ import {
   createSkill,
   updateSkill,
   deleteSkill,
+  getProfileInfo,
+  updateProfileInfo,
+  getServices,
+  createService,
+  updateService,
+  deleteService,
+  getCompetencies,
+  createCompetency,
+  updateCompetency,
+  deleteCompetency,
+  getInterests,
+  createInterest,
+  updateInterest,
+  deleteInterest,
+  getContactInfo,
+  updateContactInfo,
 } from '../../lib/firebase/firestore';
 
 import { ProjectForm } from '../../components/admin/ProjectForm';
 import { ExperienceForm } from '../../components/admin/ExperienceForm';
 import { SkillForm } from '../../components/admin/SkillForm';
-import type { Experience, Skill, Project } from '../../types';
+import { ProfileForm } from '../../components/admin/ProfileForm';
+import { ServiceForm } from '../../components/admin/ServiceForm';
+import { CompetencyForm } from '../../components/admin/CompetencyForm';
+import { InterestForm } from '../../components/admin/InterestForm';
+import { ContactInfoForm } from '../../components/admin/ContactInfoForm';
+import type { Experience, Skill, Project, ProfileInfo, Service, Competency, Interest, ContactInfo } from '../../types';
 import { useTranslation } from 'react-i18next';
 import { getLocalizedText } from '../../lib/utils/i18n';
 
-type Section = 'projects' | 'experience' | 'skills' | 'overview';
+type Section = 'projects' | 'experience' | 'skills' | 'overview' | 'profile' | 'services' | 'competencies' | 'interests' | 'contact';
 
 export const Dashboard = () => {
   const { t, i18n } = useTranslation();
@@ -42,23 +63,46 @@ export const Dashboard = () => {
   const [activeSection, setActiveSection] = useState<Section>('overview');
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [skills, setSkills] = useState<Skill[]>([]);
+  const [profile, setProfile] = useState<ProfileInfo | null>(null);
+  const [services, setServices] = useState<Service[]>([]);
+  const [competencies, setCompetencies] = useState<Competency[]>([]);
+  const [interests, setInterests] = useState<Interest[]>([]);
+  const [contactInfo, setContactInfo] = useState<ContactInfo | null>(null);
 
   // Modal states
   const [projectFormOpen, setProjectFormOpen] = useState(false);
   const [experienceFormOpen, setExperienceFormOpen] = useState(false);
   const [skillFormOpen, setSkillFormOpen] = useState(false);
+  const [profileFormOpen, setProfileFormOpen] = useState(false);
+  const [serviceFormOpen, setServiceFormOpen] = useState(false);
+  const [competencyFormOpen, setCompetencyFormOpen] = useState(false);
+  const [interestFormOpen, setInterestFormOpen] = useState(false);
+  const [contactInfoFormOpen, setContactInfoFormOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | undefined>();
   const [editingExperience, setEditingExperience] = useState<Experience | undefined>();
   const [editingSkill, setEditingSkill] = useState<Skill | undefined>();
+  const [editingService, setEditingService] = useState<Service | undefined>();
+  const [editingCompetency, setEditingCompetency] = useState<Competency | undefined>();
+  const [editingInterest, setEditingInterest] = useState<Interest | undefined>();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const fetchData = async () => {
-    const [expData, skillsData] = await Promise.all([
+    const [expData, skillsData, profileData, servicesData, competenciesData, interestsData, contactData] = await Promise.all([
       getExperiences(),
       getSkills(),
+      getProfileInfo(),
+      getServices(),
+      getCompetencies(),
+      getInterests(),
+      getContactInfo(),
     ]);
     setExperiences(expData);
     setSkills(skillsData);
+    setProfile(profileData);
+    setServices(servicesData);
+    setCompetencies(competenciesData);
+    setInterests(interestsData);
+    setContactInfo(contactData);
   };
 
   useEffect(() => {
@@ -213,10 +257,179 @@ export const Dashboard = () => {
     }
   };
 
+  // Profile handlers
+  const handleEditProfile = () => {
+    setProfileFormOpen(true);
+  };
+
+  const handleSubmitProfile = async (data: Partial<ProfileInfo>) => {
+    setIsSubmitting(true);
+    try {
+      await updateProfileInfo(data);
+      toast.success(t('admin.dashboard.successUpdateProfile'));
+      setProfileFormOpen(false);
+      await fetchData();
+    } catch (error) {
+      toast.error(t('admin.dashboard.errorSaveProfile'));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Service handlers
+  const handleCreateService = () => {
+    setEditingService(undefined);
+    setServiceFormOpen(true);
+  };
+
+  const handleEditService = (service: Service) => {
+    setEditingService(service);
+    setServiceFormOpen(true);
+  };
+
+  const handleSubmitService = async (data: Omit<Service, 'id'>) => {
+    setIsSubmitting(true);
+    try {
+      if (editingService) {
+        await updateService(editingService.id, data);
+        toast.success(t('admin.dashboard.successUpdateService'));
+      } else {
+        await createService(data);
+        toast.success(t('admin.dashboard.successCreateService'));
+      }
+      setServiceFormOpen(false);
+      await fetchData();
+    } catch (error) {
+      toast.error(t('admin.dashboard.errorSaveService'));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDeleteService = async (id: string) => {
+    if (window.confirm(t('admin.dashboard.confirmDeleteService'))) {
+      try {
+        await deleteService(id);
+        toast.success(t('admin.dashboard.successDeleteService'));
+        await fetchData();
+      } catch (error) {
+        toast.error(t('admin.dashboard.errorDeleteService'));
+      }
+    }
+  };
+
+  // Competency handlers
+  const handleCreateCompetency = () => {
+    setEditingCompetency(undefined);
+    setCompetencyFormOpen(true);
+  };
+
+  const handleEditCompetency = (competency: Competency) => {
+    setEditingCompetency(competency);
+    setCompetencyFormOpen(true);
+  };
+
+  const handleSubmitCompetency = async (data: Omit<Competency, 'id'>) => {
+    setIsSubmitting(true);
+    try {
+      if (editingCompetency) {
+        await updateCompetency(editingCompetency.id, data);
+        toast.success(t('admin.dashboard.successUpdateCompetency'));
+      } else {
+        await createCompetency(data);
+        toast.success(t('admin.dashboard.successCreateCompetency'));
+      }
+      setCompetencyFormOpen(false);
+      await fetchData();
+    } catch (error) {
+      toast.error(t('admin.dashboard.errorSaveCompetency'));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDeleteCompetency = async (id: string) => {
+    if (window.confirm(t('admin.dashboard.confirmDeleteCompetency'))) {
+      try {
+        await deleteCompetency(id);
+        toast.success(t('admin.dashboard.successDeleteCompetency'));
+        await fetchData();
+      } catch (error) {
+        toast.error(t('admin.dashboard.errorDeleteCompetency'));
+      }
+    }
+  };
+
+  // Interest handlers
+  const handleCreateInterest = () => {
+    setEditingInterest(undefined);
+    setInterestFormOpen(true);
+  };
+
+  const handleEditInterest = (interest: Interest) => {
+    setEditingInterest(interest);
+    setInterestFormOpen(true);
+  };
+
+  const handleSubmitInterest = async (data: Omit<Interest, 'id'>) => {
+    setIsSubmitting(true);
+    try {
+      if (editingInterest) {
+        await updateInterest(editingInterest.id, data);
+        toast.success(t('admin.dashboard.successUpdateInterest'));
+      } else {
+        await createInterest(data);
+        toast.success(t('admin.dashboard.successCreateInterest'));
+      }
+      setInterestFormOpen(false);
+      await fetchData();
+    } catch (error) {
+      toast.error(t('admin.dashboard.errorSaveInterest'));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDeleteInterest = async (id: string) => {
+    if (window.confirm(t('admin.dashboard.confirmDeleteInterest'))) {
+      try {
+        await deleteInterest(id);
+        toast.success(t('admin.dashboard.successDeleteInterest'));
+        await fetchData();
+      } catch (error) {
+        toast.error(t('admin.dashboard.errorDeleteInterest'));
+      }
+    }
+  };
+
+  // Contact Info handlers
+  const handleEditContactInfo = () => {
+    setContactInfoFormOpen(true);
+  };
+
+  const handleSubmitContactInfo = async (data: Partial<ContactInfo>) => {
+    setIsSubmitting(true);
+    try {
+      await updateContactInfo(data);
+      toast.success(t('admin.dashboard.successUpdateContactInfo'));
+      setContactInfoFormOpen(false);
+      await fetchData();
+    } catch (error) {
+      toast.error(t('admin.dashboard.errorSaveContactInfo'));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const menuItems = [
+    { id: 'profile' as Section, icon: User, label: t('admin.dashboard.profile'), count: profile ? 1 : 0 },
     { id: 'projects' as Section, icon: FolderOpen, label: t('admin.dashboard.projects'), count: projects.length },
     { id: 'experience' as Section, icon: Briefcase, label: t('admin.dashboard.experience'), count: experiences.length },
     { id: 'skills' as Section, icon: Code, label: t('admin.dashboard.skills'), count: skills.length },
+    { id: 'services' as Section, icon: Palette, label: t('admin.dashboard.services'), count: services.length },
+    { id: 'competencies' as Section, icon: Zap, label: t('admin.dashboard.competencies'), count: competencies.length },
+    { id: 'interests' as Section, icon: Heart, label: t('admin.dashboard.interests'), count: interests.length },
+    { id: 'contact' as Section, icon: Mail, label: t('admin.dashboard.contact'), count: contactInfo ? 1 : 0 },
   ];
 
   return (
@@ -611,6 +824,245 @@ export const Dashboard = () => {
             )}
           </Card>
         )}
+
+        {/* Profile Section */}
+        {activeSection === 'profile' && (
+          <Card>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold flex items-center">
+                <User className="w-6 h-6 mr-2 text-primary" />
+                {t('admin.dashboard.profile')}
+              </h3>
+              <Button variant="primary" onClick={handleEditProfile}>
+                <Edit className="w-4 h-4 mr-2" />
+                {t('admin.dashboard.editProfile')}
+              </Button>
+            </div>
+
+            {profile ? (
+              <div className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="glass rounded-lg p-4">
+                    <h4 className="font-semibold text-sm text-light/60 mb-2">{t('admin.profileForm.fullName')}</h4>
+                    <p>{getLocalizedText(profile.fullName, currentLang)}</p>
+                  </div>
+                  <div className="glass rounded-lg p-4">
+                    <h4 className="font-semibold text-sm text-light/60 mb-2">{t('admin.profileForm.title')}</h4>
+                    <p>{getLocalizedText(profile.title, currentLang)}</p>
+                  </div>
+                </div>
+                <div className="glass rounded-lg p-4">
+                  <h4 className="font-semibold text-sm text-light/60 mb-2">{t('admin.profileForm.description')}</h4>
+                  <p>{getLocalizedText(profile.description, currentLang)}</p>
+                </div>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="glass rounded-lg p-4">
+                    <h4 className="font-semibold text-sm text-light/60 mb-2">{t('admin.profileForm.yearsOfExperience')}</h4>
+                    <p className="text-2xl font-bold gradient-text">{profile.stats.yearsOfExperience}+</p>
+                  </div>
+                  <div className="glass rounded-lg p-4">
+                    <h4 className="font-semibold text-sm text-light/60 mb-2">{t('admin.profileForm.projectsCompleted')}</h4>
+                    <p className="text-2xl font-bold gradient-text">{profile.stats.projectsCompleted}+</p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <User className="w-16 h-16 text-light/30 mx-auto mb-4" />
+                <p className="text-light/70">{t('admin.dashboard.noProfile')}</p>
+                <Button variant="primary" className="mt-4" onClick={handleEditProfile}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  {t('admin.dashboard.createProfile')}
+                </Button>
+              </div>
+            )}
+          </Card>
+        )}
+
+        {/* Services Section */}
+        {activeSection === 'services' && (
+          <Card>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold flex items-center">
+                <Palette className="w-6 h-6 mr-2 text-primary" />
+                {t('admin.dashboard.services')} ({services.length})
+              </h3>
+              <Button variant="primary" onClick={handleCreateService}>
+                <Plus className="w-4 h-4 mr-2" />
+                {t('admin.dashboard.newService')}
+              </Button>
+            </div>
+
+            {services.length > 0 ? (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {services.map((service) => (
+                  <div key={service.id} className="glass rounded-lg p-4">
+                    <div className="flex items-start justify-between mb-3">
+                      <span className="text-3xl">{service.icon}</span>
+                      <div className="flex space-x-2">
+                        <Button variant="outline" size="sm" onClick={() => handleEditService(service)}>
+                          <Edit className="w-3 h-3" />
+                        </Button>
+                        <Button variant="outline" size="sm" onClick={() => handleDeleteService(service.id)}>
+                          <Trash2 className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    </div>
+                    <h4 className="font-bold mb-2">{getLocalizedText(service.title, currentLang)}</h4>
+                    <p className="text-sm text-light/70">{getLocalizedText(service.description, currentLang)}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <Palette className="w-16 h-16 text-light/30 mx-auto mb-4" />
+                <p className="text-light/70">{t('admin.dashboard.noServices')}</p>
+                <Button variant="primary" className="mt-4" onClick={handleCreateService}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  {t('admin.dashboard.addService')}
+                </Button>
+              </div>
+            )}
+          </Card>
+        )}
+
+        {/* Competencies Section */}
+        {activeSection === 'competencies' && (
+          <Card>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold flex items-center">
+                <Zap className="w-6 h-6 mr-2 text-primary" />
+                {t('admin.dashboard.competencies')} ({competencies.length})
+              </h3>
+              <Button variant="primary" onClick={handleCreateCompetency}>
+                <Plus className="w-4 h-4 mr-2" />
+                {t('admin.dashboard.newCompetency')}
+              </Button>
+            </div>
+
+            {competencies.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {competencies.map((competency) => (
+                  <div key={competency.id} className="glass rounded-lg p-4 flex items-center justify-between space-x-3">
+                    <span className="font-medium">{getLocalizedText(competency.name, currentLang)}</span>
+                    <div className="flex space-x-2">
+                      <Button variant="outline" size="sm" onClick={() => handleEditCompetency(competency)}>
+                        <Edit className="w-3 h-3" />
+                      </Button>
+                      <Button variant="outline" size="sm" onClick={() => handleDeleteCompetency(competency.id)}>
+                        <Trash2 className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <Zap className="w-16 h-16 text-light/30 mx-auto mb-4" />
+                <p className="text-light/70">{t('admin.dashboard.noCompetencies')}</p>
+                <Button variant="primary" className="mt-4" onClick={handleCreateCompetency}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  {t('admin.dashboard.addCompetency')}
+                </Button>
+              </div>
+            )}
+          </Card>
+        )}
+
+        {/* Interests Section */}
+        {activeSection === 'interests' && (
+          <Card>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold flex items-center">
+                <Heart className="w-6 h-6 mr-2 text-primary" />
+                {t('admin.dashboard.interests')} ({interests.length})
+              </h3>
+              <Button variant="primary" onClick={handleCreateInterest}>
+                <Plus className="w-4 h-4 mr-2" />
+                {t('admin.dashboard.newInterest')}
+              </Button>
+            </div>
+
+            {interests.length > 0 ? (
+              <div className="flex flex-wrap gap-4">
+                {interests.map((interest) => (
+                  <div key={interest.id} className="glass rounded-lg p-4 flex items-center space-x-3">
+                    <span className="font-medium">{getLocalizedText(interest.name, currentLang)}</span>
+                    <div className="flex space-x-2">
+                      <Button variant="outline" size="sm" onClick={() => handleEditInterest(interest)}>
+                        <Edit className="w-3 h-3" />
+                      </Button>
+                      <Button variant="outline" size="sm" onClick={() => handleDeleteInterest(interest.id)}>
+                        <Trash2 className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <Heart className="w-16 h-16 text-light/30 mx-auto mb-4" />
+                <p className="text-light/70">{t('admin.dashboard.noInterests')}</p>
+                <Button variant="primary" className="mt-4" onClick={handleCreateInterest}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  {t('admin.dashboard.addInterest')}
+                </Button>
+              </div>
+            )}
+          </Card>
+        )}
+
+        {/* Contact Info Section */}
+        {activeSection === 'contact' && (
+          <Card>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold flex items-center">
+                <Mail className="w-6 h-6 mr-2 text-primary" />
+                {t('admin.dashboard.contact')}
+              </h3>
+              <Button variant="primary" onClick={handleEditContactInfo}>
+                <Edit className="w-4 h-4 mr-2" />
+                {t('admin.dashboard.editContact')}
+              </Button>
+            </div>
+
+            {contactInfo ? (
+              <div className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="glass rounded-lg p-4">
+                    <h4 className="font-semibold text-sm text-light/60 mb-2">{t('admin.contactInfoForm.email')}</h4>
+                    <p>{contactInfo.email}</p>
+                  </div>
+                  <div className="glass rounded-lg p-4">
+                    <h4 className="font-semibold text-sm text-light/60 mb-2">{t('admin.contactInfoForm.location')}</h4>
+                    <p>{getLocalizedText(contactInfo.location, currentLang)}</p>
+                  </div>
+                  {contactInfo.phone && (
+                    <div className="glass rounded-lg p-4">
+                      <h4 className="font-semibold text-sm text-light/60 mb-2">{t('admin.contactInfoForm.phone')}</h4>
+                      <p>{contactInfo.phone}</p>
+                    </div>
+                  )}
+                  {contactInfo.whatsapp && (
+                    <div className="glass rounded-lg p-4">
+                      <h4 className="font-semibold text-sm text-light/60 mb-2">{t('admin.contactInfoForm.whatsapp')}</h4>
+                      <p>{contactInfo.whatsapp}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <Mail className="w-16 h-16 text-light/30 mx-auto mb-4" />
+                <p className="text-light/70">{t('admin.dashboard.noContact')}</p>
+                <Button variant="primary" className="mt-4" onClick={handleEditContactInfo}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  {t('admin.dashboard.createContact')}
+                </Button>
+              </div>
+            )}
+          </Card>
+        )}
       </main>
 
       {/* Modals */}
@@ -633,6 +1085,41 @@ export const Dashboard = () => {
         onClose={() => setSkillFormOpen(false)}
         onSubmit={handleSubmitSkill}
         skill={editingSkill}
+        isLoading={isSubmitting}
+      />
+      <ProfileForm
+        isOpen={profileFormOpen}
+        onClose={() => setProfileFormOpen(false)}
+        onSubmit={handleSubmitProfile}
+        profile={profile}
+        isLoading={isSubmitting}
+      />
+      <ServiceForm
+        isOpen={serviceFormOpen}
+        onClose={() => setServiceFormOpen(false)}
+        onSubmit={handleSubmitService}
+        service={editingService}
+        isLoading={isSubmitting}
+      />
+      <CompetencyForm
+        isOpen={competencyFormOpen}
+        onClose={() => setCompetencyFormOpen(false)}
+        onSubmit={handleSubmitCompetency}
+        competency={editingCompetency}
+        isLoading={isSubmitting}
+      />
+      <InterestForm
+        isOpen={interestFormOpen}
+        onClose={() => setInterestFormOpen(false)}
+        onSubmit={handleSubmitInterest}
+        interest={editingInterest}
+        isLoading={isSubmitting}
+      />
+      <ContactInfoForm
+        isOpen={contactInfoFormOpen}
+        onClose={() => setContactInfoFormOpen(false)}
+        onSubmit={handleSubmitContactInfo}
+        contactInfo={contactInfo}
         isLoading={isSubmitting}
       />
     </div>

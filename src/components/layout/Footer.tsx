@@ -1,18 +1,19 @@
 import { Link } from 'react-router-dom';
-import { Github, Linkedin, Mail, ArrowUp } from 'lucide-react';
+import { Github, Linkedin, Mail, ArrowUp, Twitter } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-
-const socialLinks = [
-  { icon: Github, href: 'https://github.com', label: 'GitHub' },
-  { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
-  { icon: Mail, href: 'mailto:contact@example.com', label: 'Email' },
-];
+import { useProfile } from '../../hooks/useCMS';
+import { getLocalizedText } from '../../lib/utils/i18n';
 
 export const Footer = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const currentLang = i18n.language as 'es' | 'en';
+  const { profile } = useProfile();
   const [showScrollTop, setShowScrollTop] = useState(false);
+
+  const fullName = profile ? getLocalizedText(profile.fullName, currentLang) : 'Your Name';
+  const avatarInitial = profile?.avatarInitial || 'G';
 
   const footerLinks = [
     { name: t('nav.home'), path: '/' },
@@ -20,6 +21,13 @@ export const Footer = () => {
     { name: t('nav.projects'), path: '/projects' },
     { name: t('nav.contact'), path: '/contact' },
   ];
+
+  const socialLinks = [
+    { icon: Github, href: profile?.socialLinks?.github || '', label: 'GitHub', show: !!profile?.socialLinks?.github },
+    { icon: Linkedin, href: profile?.socialLinks?.linkedin || '', label: 'LinkedIn', show: !!profile?.socialLinks?.linkedin },
+    { icon: Twitter, href: profile?.socialLinks?.twitter || '', label: 'Twitter', show: !!profile?.socialLinks?.twitter },
+    { icon: Mail, href: profile?.socialLinks?.email || 'mailto:contact@example.com', label: 'Email', show: !!profile?.socialLinks?.email },
+  ].filter(link => link.show);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,10 +50,10 @@ export const Footer = () => {
           <div>
             <div className="flex items-center space-x-2 mb-4">
               <div className="w-10 h-10 rounded-full gradient-primary flex items-center justify-center font-bold text-xl">
-                G
+                {avatarInitial}
               </div>
               <span className="font-bold text-xl gradient-text">
-                Genaro Pretill
+                {fullName}
               </span>
             </div>
             <p className="text-slate-600 dark:text-light/60 text-sm">
@@ -73,20 +81,26 @@ export const Footer = () => {
           {/* Social */}
           <div>
             <h3 className="font-semibold text-lg mb-4">{t('footer.followMe')}</h3>
-            <div className="flex space-x-4">
-              {socialLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 glass-hover rounded-lg flex items-center justify-center cursor-hover transition-transform hover:scale-110"
-                  aria-label={link.label}
-                >
-                  <link.icon className="w-5 h-5" />
-                </a>
-              ))}
-            </div>
+            {socialLinks.length > 0 ? (
+              <div className="flex space-x-4">
+                {socialLinks.map((link) => (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 glass-hover rounded-lg flex items-center justify-center cursor-hover transition-transform hover:scale-110"
+                    aria-label={link.label}
+                  >
+                    <link.icon className="w-5 h-5" />
+                  </a>
+                ))}
+              </div>
+            ) : (
+              <p className="text-slate-600 dark:text-light/60 text-sm">
+                {t('footer.noSocialLinks')}
+              </p>
+            )}
           </div>
         </div>
 

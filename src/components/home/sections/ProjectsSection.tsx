@@ -66,9 +66,9 @@ export const ProjectsSection = () => {
           ) : (
             <FadeIn className="text-center py-20">
               <div className="glass rounded-2xl p-12 max-w-md mx-auto">
-                <h3 className="text-2xl font-bold mb-4">{t('common.comingSoon')}</h3>
+                <h3 className="text-2xl font-bold mb-4">{t('common.coming_soon')}</h3>
                 <p className="text-slate-600 dark:text-light/70">
-                  {t('common.adminProjectsMessage')}
+                  {t('common.admin_projects_message')}
                 </p>
               </div>
             </FadeIn>

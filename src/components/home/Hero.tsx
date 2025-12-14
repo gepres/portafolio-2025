@@ -4,15 +4,14 @@ import { Button } from '../ui/Button';
 import { staggerContainer, staggerItem } from '../../lib/utils/animations';
 // import { ScrollIndicator } from './ScrollIndicator';
 import { useTranslation } from 'react-i18next';
-
-const socialLinks = [
-  { icon: Github, href: 'https://github.com', label: 'GitHub' },
-  { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
-  { icon: Mail, href: 'mailto:contact@example.com', label: 'Email' },
-];
+import { useProfile } from '../../hooks/useCMS';
+import { getLocalizedText } from '../../lib/utils/i18n';
 
 export const Hero = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const currentLang = i18n.language as 'es' | 'en';
+  const { profile } = useProfile();
+
   const scrollToProjects = () => {
     const projectsSection = document.getElementById('projects');
     if (projectsSection) {
@@ -41,6 +40,18 @@ export const Hero = () => {
     }
   };
 
+  const socialLinks = [
+    { icon: Github, href: profile?.socialLinks?.github || '#', label: 'GitHub', show: !!profile?.socialLinks?.github },
+    { icon: Linkedin, href: profile?.socialLinks?.linkedin || '#', label: 'LinkedIn', show: !!profile?.socialLinks?.linkedin },
+    { icon: Mail, href: profile?.socialLinks?.email || 'mailto:contact@example.com', label: 'Email', show: !!profile?.socialLinks?.email },
+  ].filter(link => link.show);
+
+  const fullName = profile ? getLocalizedText(profile.fullName, currentLang) : 'Your Name';
+  const title = profile ? getLocalizedText(profile.title, currentLang) : t('home.hero.title');
+  const subtitle = profile ? getLocalizedText(profile.subtitle, currentLang) : t('home.hero.subtitle');
+  const description = profile ? getLocalizedText(profile.description, currentLang) : t('home.hero.description');
+  const avatarInitial = profile?.avatarInitial || 'G';
+
   return (
     <section className="relative min-h-screen flex items-center justify-center px-4 pt-16">
       <motion.div
@@ -53,9 +64,17 @@ export const Hero = () => {
         <motion.div variants={staggerItem} className="mb-8 flex justify-center">
           <div className="relative">
             <div className="w-32 h-32 rounded-full overflow-hidden glass border-2 border-transparent bg-gradient-to-r from-primary to-accent p-1">
-              <div className="w-full h-full rounded-full bg-slate-200 dark:bg-dark-light flex items-center justify-center text-6xl font-bold gradient-text">
-                G
-              </div>
+              {profile?.avatarHero ? (
+                <img
+                  src={profile.avatarHero}
+                  alt={fullName}
+                  className="w-full h-full rounded-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full rounded-full bg-slate-200 dark:bg-dark-light flex items-center justify-center text-6xl font-bold gradient-text">
+                  {avatarInitial}
+                </div>
+              )}
             </div>
             <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary to-accent blur-xl opacity-50 animate-pulse-glow" />
           </div>
@@ -74,7 +93,7 @@ export const Hero = () => {
           variants={staggerItem}
           className="text-5xl md:text-7xl font-bold mb-4 gradient-text"
         >
-          Genaro Pretill
+          {fullName}
         </motion.h1>
 
         {/* Title */}
@@ -82,7 +101,7 @@ export const Hero = () => {
           variants={staggerItem}
           className="text-2xl md:text-4xl font-semibold text-slate-700 dark:text-light/90 mb-6"
         >
-          {t('home.hero.title')}
+          {title}
         </motion.h2>
 
         {/* Subtitle */}
@@ -90,7 +109,7 @@ export const Hero = () => {
           variants={staggerItem}
           className="text-xl md:text-2xl text-slate-600 dark:text-light/70 mb-8"
         >
-          {t('home.hero.subtitle')}
+          {subtitle}
         </motion.p>
 
         {/* Description */}
@@ -98,7 +117,7 @@ export const Hero = () => {
           variants={staggerItem}
           className="text-lg text-slate-600 dark:text-light/60 max-w-2xl mx-auto mb-12"
         >
-          {t('home.hero.description')}
+          {description}
         </motion.p>
 
         {/* CTA Buttons */}
@@ -125,23 +144,25 @@ export const Hero = () => {
         </motion.div>
 
         {/* Social Links */}
-        <motion.div
-          variants={staggerItem}
-          className="flex justify-center space-x-6"
-        >
-          {socialLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-12 h-12 glass-hover rounded-full flex items-center justify-center cursor-hover transition-all hover:scale-110 hover:glow"
-              aria-label={link.label}
-            >
-              <link.icon className="w-5 h-5" />
-            </a>
-          ))}
-        </motion.div>
+        {socialLinks.length > 0 && (
+          <motion.div
+            variants={staggerItem}
+            className="flex justify-center space-x-6"
+          >
+            {socialLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-12 h-12 glass-hover rounded-full flex items-center justify-center cursor-hover transition-all hover:scale-110 hover:glow"
+                aria-label={link.label}
+              >
+                <link.icon className="w-5 h-5" />
+              </a>
+            ))}
+          </motion.div>
+        )}
       </motion.div>
 
       {/* <ScrollIndicator /> */}

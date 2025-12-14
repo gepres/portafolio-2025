@@ -47,6 +47,72 @@ export interface Skill {
   order: number;
 }
 
+// Profile Information
+export interface ProfileInfo {
+  id: 'main';
+  fullName: string | BilingualText;
+  avatarHero?: string; // Avatar para la sección Hero (circular pequeño)
+  avatarAbout?: string; // Avatar para la sección About (cuadrado grande)
+  avatarInitial?: string; // Letra inicial como fallback
+  title: string | BilingualText;
+  subtitle: string | BilingualText;
+  description: string | BilingualText;
+  bio: {
+    paragraph1: string | BilingualText;
+    paragraph2: string | BilingualText;
+    paragraph3: string | BilingualText;
+  };
+  stats: {
+    yearsOfExperience: number;
+    projectsCompleted: number;
+  };
+  socialLinks: {
+    github?: string;
+    linkedin?: string;
+    twitter?: string;
+    email?: string;
+    whatsapp?: string;
+  };
+  cvUrl?: string;
+  updatedAt?: Timestamp;
+}
+
+// Service Offered
+export interface Service {
+  id: string;
+  icon: string; // devicon class or emoji
+  title: string | BilingualText;
+  description: string | BilingualText;
+  order: number;
+  active: boolean;
+}
+
+// Interest
+export interface Interest {
+  id: string;
+  name: string | BilingualText;
+  order: number;
+  active: boolean;
+}
+
+// Competency (Soft Skills)
+export interface Competency {
+  id: string;
+  name: string | BilingualText;
+  order: number;
+  active: boolean;
+}
+
+// Contact Information
+export interface ContactInfo {
+  id: 'main';
+  email: string;
+  location: string | BilingualText;
+  phone?: string;
+  whatsapp?: string;
+  updatedAt?: Timestamp;
+}
+
 export interface SiteSettings {
   id: 'main';
   siteTitle: string;

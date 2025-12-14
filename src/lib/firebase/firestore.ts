@@ -6,10 +6,21 @@ import {
   addDoc,
   updateDoc,
   deleteDoc,
+  setDoc,
   Timestamp,
 } from 'firebase/firestore';
 import { db } from './config';
-import type { Project, Experience, Skill, SiteSettings } from '../../types';
+import type {
+  Project,
+  Experience,
+  Skill,
+  SiteSettings,
+  ProfileInfo,
+  Service,
+  Interest,
+  Competency,
+  ContactInfo
+} from '../../types';
 
 // Helper function to clean undefined values (Firebase doesn't accept undefined)
 const cleanUndefined = <T extends Record<string, any>>(obj: T): T => {
@@ -210,4 +221,152 @@ export const updateSettings = async (data: Partial<SiteSettings>) => {
     ...data,
     updatedAt: Timestamp.now(),
   });
+};
+
+// Profile Information
+export const getProfileInfo = async (): Promise<ProfileInfo | null> => {
+  try {
+    const docRef = doc(db, 'profile', 'main');
+    const docSnap = await getDoc(docRef);
+    return docSnap.exists() ? (docSnap.data() as ProfileInfo) : null;
+  } catch (error) {
+    console.error('Error fetching profile info:', error);
+    return null;
+  }
+};
+
+export const updateProfileInfo = async (data: Partial<ProfileInfo>) => {
+  const docRef = doc(db, 'profile', 'main');
+  const cleanedData = cleanUndefined({
+    ...data,
+    updatedAt: Timestamp.now(),
+  });
+
+  try {
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      await updateDoc(docRef, cleanedData);
+    } else {
+      await setDoc(docRef, { id: 'main', ...cleanedData } as ProfileInfo);
+    }
+  } catch (error) {
+    console.error('Error updating profile info:', error);
+    throw error;
+  }
+};
+
+// Services
+export const getServices = async (): Promise<Service[]> => {
+  try {
+    const snapshot = await getDocs(collection(db, 'services'));
+    return snapshot.docs
+      .map(doc => ({ id: doc.id, ...doc.data() } as Service))
+      .filter(service => service.active)
+      .sort((a, b) => a.order - b.order);
+  } catch (error) {
+    console.error('Error fetching services:', error);
+    return [];
+  }
+};
+
+export const createService = async (service: Omit<Service, 'id'>) => {
+  const docRef = await addDoc(collection(db, 'services'), service);
+  return docRef.id;
+};
+
+export const updateService = async (id: string, data: Partial<Service>) => {
+  const docRef = doc(db, 'services', id);
+  await updateDoc(docRef, data);
+};
+
+export const deleteService = async (id: string) => {
+  await deleteDoc(doc(db, 'services', id));
+};
+
+// Interests
+export const getInterests = async (): Promise<Interest[]> => {
+  try {
+    const snapshot = await getDocs(collection(db, 'interests'));
+    return snapshot.docs
+      .map(doc => ({ id: doc.id, ...doc.data() } as Interest))
+      .filter(interest => interest.active)
+      .sort((a, b) => a.order - b.order);
+  } catch (error) {
+    console.error('Error fetching interests:', error);
+    return [];
+  }
+};
+
+export const createInterest = async (interest: Omit<Interest, 'id'>) => {
+  const docRef = await addDoc(collection(db, 'interests'), interest);
+  return docRef.id;
+};
+
+export const updateInterest = async (id: string, data: Partial<Interest>) => {
+  const docRef = doc(db, 'interests', id);
+  await updateDoc(docRef, data);
+};
+
+export const deleteInterest = async (id: string) => {
+  await deleteDoc(doc(db, 'interests', id));
+};
+
+// Competencies (Soft Skills)
+export const getCompetencies = async (): Promise<Competency[]> => {
+  try {
+    const snapshot = await getDocs(collection(db, 'competencies'));
+    return snapshot.docs
+      .map(doc => ({ id: doc.id, ...doc.data() } as Competency))
+      .filter(competency => competency.active)
+      .sort((a, b) => a.order - b.order);
+  } catch (error) {
+    console.error('Error fetching competencies:', error);
+    return [];
+  }
+};
+
+export const createCompetency = async (competency: Omit<Competency, 'id'>) => {
+  const docRef = await addDoc(collection(db, 'competencies'), competency);
+  return docRef.id;
+};
+
+export const updateCompetency = async (id: string, data: Partial<Competency>) => {
+  const docRef = doc(db, 'competencies', id);
+  await updateDoc(docRef, data);
+};
+
+export const deleteCompetency = async (id: string) => {
+  await deleteDoc(doc(db, 'competencies', id));
+};
+
+// Contact Information
+export const getContactInfo = async (): Promise<ContactInfo | null> => {
+  try {
+    const docRef = doc(db, 'contact', 'main');
+    const docSnap = await getDoc(docRef);
+    return docSnap.exists() ? (docSnap.data() as ContactInfo) : null;
+  } catch (error) {
+    console.error('Error fetching contact info:', error);
+    return null;
+  }
+};
+
+export const updateContactInfo = async (data: Partial<ContactInfo>) => {
+  const docRef = doc(db, 'contact', 'main');
+  const cleanedData = cleanUndefined({
+    ...data,
+    updatedAt: Timestamp.now(),
+  });
+
+  try {
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      await updateDoc(docRef, cleanedData);
+    } else {
+      await setDoc(docRef, { id: 'main', ...cleanedData } as ContactInfo);
+    }
+  } catch (error) {
+    console.error('Error updating contact info:', error);
+    throw error;
+  }
 };
