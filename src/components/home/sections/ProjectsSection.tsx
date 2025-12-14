@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { ChevronDown } from 'lucide-react';
 import { FadeIn } from '../../animations/FadeIn';
 import { ProjectCard } from '../../projects/ProjectCard';
 import { ProjectModal } from '../../projects/ProjectModal';
 import { ProjectFilters } from '../../projects/ProjectFilters';
+import { Button } from '../../ui/Button';
 import { useProjects } from '../../../hooks/useProjects';
 import type { Project, ProjectFilterCategory } from '../../../types';
 import { useTranslation } from 'react-i18next';
@@ -14,14 +16,22 @@ export const ProjectsSection = () => {
   const [activeFilter, setActiveFilter] = useState<ProjectFilterCategory>('all');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showAll, setShowAll] = useState(false);
 
   const filteredProjects = activeFilter === 'all'
-    ? projects.slice(0, 6)
+    ? (showAll ? projects : projects.slice(0, 6))
     : projects.filter((p) => p.category === activeFilter);
+
+  const hasMoreProjects = activeFilter === 'all' && projects.length > 6 && !showAll;
 
   const handleProjectClick = (project: Project) => {
     setSelectedProject(project);
     setIsModalOpen(true);
+  };
+
+  const handleFilterChange = (filter: ProjectFilterCategory) => {
+    setActiveFilter(filter);
+    setShowAll(false); // Reset showAll when changing filter
   };
 
   return (
@@ -40,7 +50,7 @@ export const ProjectsSection = () => {
 
           <ProjectFilters
             activeFilter={activeFilter}
-            onFilterChange={setActiveFilter}
+            onFilterChange={handleFilterChange}
           />
 
           {projectsLoading ? (
@@ -48,21 +58,42 @@ export const ProjectsSection = () => {
               <div className="inline-block w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
             </div>
           ) : filteredProjects.length > 0 ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredProjects.map((project, index) => (
+            <>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {filteredProjects.map((project, index) => (
+                  <motion.div
+                    key={project.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                  >
+                    <ProjectCard
+                      project={project}
+                      onClick={() => handleProjectClick(project)}
+                    />
+                  </motion.div>
+                ))}
+              </div>
+
+              {hasMoreProjects && (
                 <motion.div
-                  key={project.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                  transition={{ duration: 0.3, delay: 0.6 }}
+                  className="text-center mt-12"
                 >
-                  <ProjectCard
-                    project={project}
-                    onClick={() => handleProjectClick(project)}
-                  />
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    onClick={() => setShowAll(true)}
+                    className="group"
+                  >
+                    {t('home.projects.seeMore')}
+                    <ChevronDown className="w-5 h-5 ml-2 group-hover:translate-y-1 transition-transform" />
+                  </Button>
                 </motion.div>
-              ))}
-            </div>
+              )}
+            </>
           ) : (
             <FadeIn className="text-center py-20">
               <div className="glass rounded-2xl p-12 max-w-md mx-auto">

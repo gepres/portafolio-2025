@@ -34,14 +34,14 @@ export const Loader = () => {
         </motion.div>
 
         {/* Loading text */}
-        <motion.p
+        {/* <motion.p
           className="absolute -bottom-12 left-1/2 -translate-x-1/2 text-slate-600 dark:text-light/60 font-medium whitespace-nowrap"
           initial={{ opacity: 0 }}
           animate={{ opacity: [0, 1, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
         >
           Cargando...
-        </motion.p>
+        </motion.p> */}
       </div>
     </div>
   );

@@ -93,7 +93,8 @@
             "description": "Descripción",
             "details": "Detalles del Proyecto",
             "viewLiveDemo": "Ver Demo en Vivo",
-            "viewSourceCode": "Ver Código Fuente"
+            "viewSourceCode": "Ver Código Fuente",
+            "seeMore": "Ver más proyectos"
         },
         "experience": {
             "title": "Experiencia",

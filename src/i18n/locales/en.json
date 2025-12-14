@@ -93,7 +93,8 @@
             "description": "Description",
             "details": "Project Details",
             "viewLiveDemo": "View Live Demo",
-            "viewSourceCode": "View Source Code"
+            "viewSourceCode": "View Source Code",
+            "seeMore": "See more projects"
         },
         "experience": {
             "title": "Experience",

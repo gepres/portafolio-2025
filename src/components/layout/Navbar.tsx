@@ -17,20 +17,40 @@ export const Navbar = () => {
   const { isAuthenticated } = useAuthContext();
 
   const navLinks = [
-    { name: t('nav.home'), path: '/', hash: '' },
-    { name: t('nav.about'), path: '/', hash: '#about' },
-    { name: t('nav.projects'), path: '/', hash: '#projects' },
-    { name: t('nav.experience'), path: '/', hash: '#experience' },
-    { name: t('nav.skills'), path: '/', hash: '#skills' },
-    { name: t('nav.contact'), path: '/', hash: '#contact' },
+    { name: t('nav.about'), path: '/', hash: '#about', id: 'about' },
+    { name: t('nav.projects'), path: '/', hash: '#projects', id: 'projects' },
+    { name: t('nav.experience'), path: '/', hash: '#experience', id: 'experience' },
+    { name: t('nav.skills'), path: '/', hash: '#skills', id: 'skills' },
+    { name: t('nav.contact'), path: '/', hash: '#contact', id: 'contact' },
   ];
+
+  const [activeSection, setActiveSection] = useState<string>('');
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
+
+      // Scroll spy para activar la sección actual
+      const sections = navLinks.map(link => link.id);
+      let currentSection = '';
+
+      for (const sectionId of sections) {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          // Si la sección está visible en el viewport (considerando el offset del navbar)
+          if (rect.top <= 100 && rect.bottom >= 100) {
+            currentSection = sectionId;
+            break;
+          }
+        }
+      }
+
+      setActiveSection(currentSection);
     };
 
     window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Call once on mount
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -60,6 +80,17 @@ export const Navbar = () => {
     }
   };
 
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (location.pathname === '/') {
+      e.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+      setActiveSection(''); // Reset active section
+    }
+  };
+
   return (
     <nav
       className={cn(
@@ -70,10 +101,14 @@ export const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2 cursor-hover">
-            <div className="w-10 h-10 rounded-full gradient-primary flex items-center justify-center font-bold text-xl">
+          <Link to="/" onClick={handleLogoClick} className="flex items-center space-x-2 cursor-hover">
+            {/* <div className="w-10 h-10 rounded-full gradient-primary flex items-center justify-center font-bold text-xl">
               G
             </div>
+            <span className="font-bold text-xl gradient-text hidden sm:block">
+              Genaro Pretill
+            </span> */}
+            <img src="/images/logo.svg" alt="Genaro Pretill Logo" className="w-10 h-10" />
             <span className="font-bold text-xl gradient-text hidden sm:block">
               Genaro Pretill
             </span>
@@ -82,10 +117,7 @@ export const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
             {navLinks.map((link) => {
-              const isActive = location.pathname === '/' && (
-                (link.hash === '' && location.hash === '') ||
-                (link.hash !== '' && location.hash === link.hash)
-              );
+              const isActive = activeSection === link.id;
 
               return (
                 <a
@@ -146,10 +178,7 @@ export const Navbar = () => {
           >
             <div className="px-4 py-6 space-y-2">
               {navLinks.map((link) => {
-                const isActive = location.pathname === '/' && (
-                  (link.hash === '' && location.hash === '') ||
-                  (link.hash !== '' && location.hash === link.hash)
-                );
+                const isActive = activeSection === link.id;
 
                 return (
                   <a
@@ -167,13 +196,20 @@ export const Navbar = () => {
                   </a>
                 );
               })}
+
+              {/* Theme and Language Toggles */}
+              <div className="flex items-center justify-center space-x-4 pt-4 pb-2 border-t border-white/10 mt-4">
+                <LanguageToggle />
+                <ThemeToggle />
+              </div>
+
               <Link
                 to={isAuthenticated ? '/admin/dashboard' : '/admin/login'}
                 className="block px-4 py-3 rounded-lg bg-primary/20 text-primary text-center"
               >
                 {isAuthenticated ? 'Dashboard' : 'Admin'}
               </Link>
-              </div>
+            </div>
 
           </motion.div>
         )}
