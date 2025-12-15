@@ -75,6 +75,8 @@ export default {
         'float': 'float 6s ease-in-out infinite',
         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'pulse-glow': 'pulse-glow 4s ease-in-out infinite',
+        'hueRotate': 'hueRotate 6s ease-in-out infinite',
+        'spin3d': 'spin3d 8s linear infinite',
       },
       keyframes: {
         gradient: {
@@ -111,6 +113,31 @@ export default {
           '50%': {
             opacity: '0.8',
             'box-shadow': '0 0 40px rgba(99, 102, 241, 0.6)',
+          },
+        },
+        hueRotate: {
+          '0%': {
+            filter: 'hue-rotate(0deg) drop-shadow(0 4px 6px rgba(0,0,0,0.2))',
+          },
+          '25%': {
+            filter: 'hue-rotate(90deg) drop-shadow(0 4px 6px rgba(0,0,0,0.2))',
+          },
+          '50%': {
+            filter: 'hue-rotate(180deg) drop-shadow(0 4px 6px rgba(0,0,0,0.2))',
+          },
+          '75%': {
+            filter: 'hue-rotate(270deg) drop-shadow(0 4px 6px rgba(0,0,0,0.2))',
+          },
+          '100%': {
+            filter: 'hue-rotate(360deg) drop-shadow(0 4px 6px rgba(0,0,0,0.2))',
+          },
+        },
+        spin3d: {
+          '0%': {
+            transform: 'rotateY(0deg)',
+          },
+          '100%': {
+            transform: 'rotateY(360deg)',
           },
         },
       },

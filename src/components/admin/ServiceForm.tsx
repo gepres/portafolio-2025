@@ -100,8 +100,7 @@ export const ServiceForm = ({
             label={t('admin.serviceForm.description')}
             value={formData.description as BilingualText}
             onChange={(value) => setFormData(prev => ({ ...prev, description: value }))}
-            multiline
-            rows={4}
+            type='textarea'
             required
           />
 

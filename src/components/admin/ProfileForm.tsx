@@ -180,8 +180,7 @@ export const ProfileForm = ({
               label={t('admin.profileForm.description')}
               value={formData.description as BilingualText}
               onChange={(value) => updateBilingualField('description', value)}
-              multiline
-              rows={3}
+              type='textarea'
             />
           </div>
 
@@ -193,24 +192,21 @@ export const ProfileForm = ({
               label={t('admin.profileForm.paragraph1')}
               value={formData.bio?.paragraph1 as BilingualText}
               onChange={(value) => updateBioParagraph('paragraph1', value)}
-              multiline
-              rows={3}
+              type='textarea'
             />
 
             <BilingualInput
               label={t('admin.profileForm.paragraph2')}
               value={formData.bio?.paragraph2 as BilingualText}
               onChange={(value) => updateBioParagraph('paragraph2', value)}
-              multiline
-              rows={3}
+              type='textarea'
             />
 
             <BilingualInput
               label={t('admin.profileForm.paragraph3')}
               value={formData.bio?.paragraph3 as BilingualText}
               onChange={(value) => updateBioParagraph('paragraph3', value)}
-              multiline
-              rows={3}
+              type='textarea'
             />
           </div>
 

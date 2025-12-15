@@ -14,12 +14,12 @@ import { getExperiences, getSkills } from '../lib/firebase/firestore';
 
 export const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const { profile, loading: profileLoading } = useProfile();
-  const { services, loading: servicesLoading } = useServices();
-  const { competencies, loading: competenciesLoading } = useCompetencies();
-  const { interests, loading: interestsLoading } = useInterests();
-  const { contactInfo, loading: contactLoading } = useContactInfo();
-  const { projects, loading: projectsLoading } = useProjects();
+  const { loading: profileLoading } = useProfile();
+  const { loading: servicesLoading } = useServices();
+  const { loading: competenciesLoading } = useCompetencies();
+  const { loading: interestsLoading } = useInterests();
+  const { loading: contactLoading } = useContactInfo();
+  const { loading: projectsLoading } = useProjects();
   const [experiencesLoading, setExperiencesLoading] = useState(true);
   const [skillsLoading, setSkillsLoading] = useState(true);
 

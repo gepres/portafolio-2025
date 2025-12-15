@@ -50,7 +50,7 @@ export const Hero = () => {
   const title = profile ? getLocalizedText(profile.title, currentLang) : t('home.hero.title');
   const subtitle = profile ? getLocalizedText(profile.subtitle, currentLang) : t('home.hero.subtitle');
   const description = profile ? getLocalizedText(profile.description, currentLang) : t('home.hero.description');
-  const avatarInitial = profile?.avatarInitial || 'G';
+  // const avatarInitial = profile?.avatarInitial || 'G';
 
   return (
     <section className="relative min-h-screen flex items-center justify-center px-4 pt-16">
@@ -72,22 +72,19 @@ export const Hero = () => {
                 />
               ) : (
                 <div
-                  className="w-full h-full rounded-full bg-slate-200 dark:bg-dark-light flex items-center justify-center text-6xl font-bold gradient-text
-                    shadow-[0_10px_30px_rgba(0,0,0,0.3),0_20px_60px_rgba(0,0,0,0.2),inset_0_-5px_10px_rgba(0,0,0,0.1)]
-                    hover:shadow-[0_15px_40px_rgba(0,0,0,0.4),0_25px_70px_rgba(0,0,0,0.3),inset_0_-8px_15px_rgba(0,0,0,0.15)]
-                    transition-all duration-500
-                    [transform:perspective(1000px)_rotateX(8deg)_rotateY(-8deg)]
-                    hover:[transform:perspective(1000px)_rotateX(-8deg)_rotateY(8deg)_scale(1.05)]"
-                  style={{
-                    transformStyle: 'preserve-3d',
-                    textShadow: '2px 2px 4px rgba(0,0,0,0.2), 4px 4px 8px rgba(0,0,0,0.1), -2px -2px 4px rgba(255,255,255,0.1)'
-                  }}
+                  className="w-full h-full rounded-full bg-slate-200 dark:bg-dark-light flex items-center justify-center overflow-hidden"
+                  style={{ perspective: '1000px' }}
                 >
-                  {avatarInitial}
+                  <img
+                    src="/images/logo.svg"
+                    alt="Logo"
+                    className="w-20 h-20 animate-spin3d"
+                    style={{ transformStyle: 'preserve-3d' }}
+                  />
                 </div>
               )}
             </div>
-            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary to-accent blur-xl opacity-50 animate-pulse-glow" />
+            {/* <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary to-accent blur-xl opacity-50 animate-pulse-glow" /> */}
           </div>
         </motion.div>
 
