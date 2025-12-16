@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import { LogOut, FolderOpen, Briefcase, Code, Plus, Edit, Trash2, Eye, User, Palette, Zap, Heart, Mail } from 'lucide-react';
+import { LogOut, FolderOpen, Briefcase, Code, Plus, Edit, Trash2, Eye, User, Palette, Zap, Heart, Mail, FileText } from 'lucide-react';
 import { signOut } from '../../lib/firebase/auth';
 import { useAuthContext } from '../../context/AuthContext';
 import { Card } from '../../components/ui/Card';
@@ -521,7 +521,7 @@ export const Dashboard = () => {
             className={`px-6 py-3 rounded-lg font-medium transition-all whitespace-nowrap ${
               activeSection === 'overview'
                 ? 'gradient-primary text-white'
-                : 'glass-hover text-light/70'
+                : 'glass-hover text-slate-700 dark:text-light/70 hover:text-slate-900 dark:hover:text-light'
             }`}
           >
             {t('admin.dashboard.overview')}
@@ -533,7 +533,7 @@ export const Dashboard = () => {
               className={`px-6 py-3 rounded-lg font-medium transition-all whitespace-nowrap flex items-center space-x-2 ${
                 activeSection === item.id
                   ? 'gradient-primary text-white'
-                  : 'glass-hover text-light/70'
+                  : 'glass-hover text-slate-700 dark:text-light/70 hover:text-slate-900 dark:hover:text-light'
               }`}
             >
               <item.icon className="w-4 h-4" />
@@ -574,6 +574,14 @@ export const Dashboard = () => {
             <Card>
               <h3 className="text-2xl font-bold mb-6">{t('admin.dashboard.quickActions')}</h3>
               <div className="grid md:grid-cols-3 gap-4">
+                <Button
+                  variant="outline"
+                  className="justify-start"
+                  onClick={() => window.open('/cv', '_blank')}
+                >
+                  <FileText className="w-4 h-4 mr-2" />
+                  {t('admin.dashboard.viewCV', 'Ver/Descargar CV')}
+                </Button>
                 <Button
                   variant="outline"
                   className="justify-start"

@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuthContext } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 
 import { CustomCursor } from '../components/animations/CustomCursor';
 import { Navbar } from '../components/layout/Navbar';
@@ -8,6 +9,8 @@ import { Footer } from '../components/layout/Footer';
 
 // Pages
 import { Home } from '../pages/Home';
+import { CVPage } from '../pages/CVPage';
+import { SeedCVPage } from '../pages/SeedCVPage';
 import { Login } from '../pages/admin/Login';
 import { Dashboard } from '../pages/admin/Dashboard';
 
@@ -38,6 +41,8 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
 };
 
 function AppContent() {
+  const { theme } = useTheme();
+
   return (
     <BrowserRouter>
       <CustomCursor />
@@ -51,6 +56,10 @@ function AppContent() {
               </MainLayout>
             }
           />
+
+          {/* CV Routes */}
+          <Route path="/cv" element={<CVPage />} />
+          <Route path="/seed-cv" element={<SeedCVPage />} />
 
           {/* Admin Routes without main layout */}
           <Route path="/admin/login" element={<Login />} />
@@ -72,21 +81,25 @@ function AppContent() {
           toastOptions={{
             duration: 4000,
             style: {
-              background: 'rgba(255, 255, 255, 0.05)',
+              background: theme === 'dark'
+                ? 'rgba(255, 255, 255, 0.05)'
+                : 'rgba(255, 255, 255, 0.95)',
               backdropFilter: 'blur(10px)',
-              color: '#f8fafc',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
+              color: theme === 'dark' ? '#f8fafc' : '#1e293b',
+              border: theme === 'dark'
+                ? '1px solid rgba(255, 255, 255, 0.1)'
+                : '1px solid rgba(0, 0, 0, 0.1)',
             },
             success: {
               iconTheme: {
                 primary: '#6366f1',
-                secondary: '#f8fafc',
+                secondary: theme === 'dark' ? '#f8fafc' : '#ffffff',
               },
             },
             error: {
               iconTheme: {
                 primary: '#ef4444',
-                secondary: '#f8fafc',
+                secondary: theme === 'dark' ? '#f8fafc' : '#ffffff',
               },
             },
           }}

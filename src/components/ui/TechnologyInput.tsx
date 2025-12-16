@@ -87,7 +87,7 @@ export const TechnologyInput = ({
       {/* Selected Technologies */}
       {value.length > 0 && (
         <div className="glass rounded-lg p-4">
-          <p className="text-sm font-medium mb-3 text-light/70">
+          <p className="text-sm font-medium mb-3 text-slate-600 dark:text-light/70">
             {t('admin.technologyInput.selected')} ({value.length})
           </p>
           <div className="flex flex-wrap gap-2">
@@ -114,17 +114,17 @@ export const TechnologyInput = ({
       {loading ? (
         <div className="text-center py-8 glass rounded-lg">
           <div className="inline-block w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin mb-2" />
-          <p className="text-light/60 text-sm">{t('admin.technologyInput.loading')}</p>
+          <p className="text-slate-600 dark:text-light/60 text-sm">{t('admin.technologyInput.loading')}</p>
         </div>
       ) : (
         <div className="glass rounded-lg p-4 max-h-96 overflow-y-auto">
-          <p className="text-sm font-medium mb-4 text-light/70">
+          <p className="text-sm font-medium mb-4 text-slate-600 dark:text-light/70">
             {t('admin.technologyInput.available')} ({skills.length} {t('admin.technologyInput.availableCount')})
           </p>
 
           {Object.entries(groupedSkills).map(([category, categorySkills]) => (
             <div key={category} className="mb-6 last:mb-0">
-              <h4 className="text-xs font-semibold uppercase text-light/30 mb-3">
+              <h4 className="text-xs font-semibold uppercase text-slate-500 dark:text-light/30 mb-3">
                 {categoryLabels[category as SkillCategory]}
               </h4>
               <div className="flex flex-wrap gap-2">
@@ -137,8 +137,8 @@ export const TechnologyInput = ({
                       onClick={() => handleToggleTechnology(skill.name)}
                       className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
                         isSelected
-                          ? 'bg-primary text-white ring-2 ring-primary ring-offset-2 ring-offset-dark'
-                          : 'bg-white/5 text-light/70 hover:bg-white/10 hover:text-light'
+                          ? 'bg-primary text-white ring-2 ring-primary ring-offset-2 ring-offset-slate-50 dark:ring-offset-dark'
+                          : 'bg-slate-200 dark:bg-white/5 text-slate-700 dark:text-light/70 hover:bg-slate-300 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-light'
                       }`}
                     >
                       {skill.name}
@@ -171,7 +171,7 @@ export const TechnologyInput = ({
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder={placeholder || t('admin.technologyInput.placeholder')}
-                className="flex-1 px-4 py-2 rounded-lg bg-white/5 border border-white/10 focus:border-primary focus:outline-none transition-all"
+                className="flex-1 px-4 py-2 rounded-lg bg-slate-100 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white focus:border-primary focus:outline-none transition-all"
                 autoFocus
               />
               <button
@@ -189,7 +189,7 @@ export const TechnologyInput = ({
                 setShowCustomInput(false);
                 setInputValue('');
               }}
-              className="text-xs text-light/30 hover:text-light transition-colors"
+              className="text-xs text-slate-500 dark:text-light/30 hover:text-slate-700 dark:hover:text-light transition-colors"
             >
               {t('admin.technologyInput.cancel')}
             </button>

@@ -69,6 +69,7 @@ export interface ProfileInfo {
   socialLinks: {
     github?: string;
     linkedin?: string;
+    website?: string;
     twitter?: string;
     email?: string;
     whatsapp?: string;
@@ -151,3 +152,69 @@ export type ProjectCategory = 'frontend' | 'backend' | 'fullstack' | 'mobile';
 export type ProjectFilterCategory = 'all' | ProjectCategory;
 
 export type SkillCategory = 'frontend' | 'backend' | 'database' | 'cloud_devops' | 'project_management' | 'design' | 'other';
+
+// CV Data Types
+export interface CVEducation {
+  id: string;
+  degree: string | BilingualText;
+  institution: string | BilingualText;
+  startDate: string;
+  endDate: string;
+  order: number;
+}
+
+export interface CVLanguage {
+  id: string;
+  language: string | BilingualText;
+  level: string | BilingualText;
+  order: number;
+}
+
+export interface CVSoftSkill {
+  id: string;
+  name: string | BilingualText;
+  order: number;
+}
+
+export interface CVTechnicalSkill {
+  id: string;
+  name: string;
+  level: number; // 0-100
+  category: 'frontend' | 'backend' | 'tools' | 'cloud' | 'design';
+  order: number;
+}
+
+export interface CVExperience {
+  id: string;
+  position: string | BilingualText;
+  company: string;
+  startDate: string; // e.g., "Nov 20"
+  endDate: string; // e.g., "Hoy" or "Feb 22"
+  description: string | BilingualText;
+  technologies: string[];
+  current: boolean;
+  order: number;
+}
+
+export interface CVPersonalInfo {
+  id: 'main';
+  fullName: string;
+  title: string | BilingualText;
+  summary: string | BilingualText;
+  email: string;
+  phone: string;
+  location: string | BilingualText;
+  website?: string;
+  linkedin?: string;
+  github?: string;
+  updatedAt?: Timestamp;
+}
+
+export interface CVData {
+  personalInfo: CVPersonalInfo;
+  education: CVEducation[];
+  softSkills: CVSoftSkill[];
+  technicalSkills: CVTechnicalSkill[];
+  languages: CVLanguage[];
+  experience: CVExperience[];
+}
