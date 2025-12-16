@@ -66,9 +66,10 @@ export const Login = () => {
         <Card className="p-8">
           {/* Logo */}
           <div className="text-center mb-8">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full gradient-primary flex items-center justify-center text-2xl font-bold">
+            {/* <div className="w-16 h-16 mx-auto mb-4 rounded-full gradient-primary flex items-center justify-center text-2xl font-bold">
               G
-            </div>
+            </div> */}
+            <img src="/images/logo.svg" alt="Genaro Pretill Logo" className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center" />
             <h1 className="text-3xl font-bold gradient-text mb-2">{t('login.title')}</h1>
             <p className="text-slate-600 dark:text-light/60">{t('login.subtitle')}</p>
           </div>

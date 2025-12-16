@@ -115,7 +115,7 @@ export const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-1">
+          <div className="hidden lg:flex items-center space-x-1">
             {navLinks.map((link) => {
               const isActive = activeSection === link.id;
 
@@ -145,7 +145,7 @@ export const Navbar = () => {
           </div>
 
           {/* Admin Button & Theme Toggle */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden lg:flex items-center space-x-4">
             <LanguageToggle />
             <ThemeToggle />
             <Link
@@ -160,7 +160,7 @@ export const Navbar = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg glass-hover cursor-hover"
+            className="lg:hidden p-2 rounded-lg glass-hover cursor-hover"
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -174,7 +174,7 @@ export const Navbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass border-t border-white/10"
+            className="lg:hidden glass border-t border-white/10"
           >
             <div className="px-4 py-6 space-y-2">
               {navLinks.map((link) => {

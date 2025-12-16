@@ -22,13 +22,13 @@ export const CVExperience = ({ experience }: CVExperienceProps) => {
       </h3>
       <div className="space-y-6">
         {experience.map((exp) => (
-          <div key={exp.id} className="border-l-4 border-gray-600 dark:border-gray-300 pl-4">
-            <div className="flex items-start justify-between mb-2">
+          <div key={exp.id} className="border-l-2 border-gray-600 dark:border-gray-300 pl-4">
+            <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-2 gap-1 md:gap-0">
               <div>
                 <h4 className="font-bold text-base uppercase">{getText(exp.position)}</h4>
                 <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">{exp.company}</p>
               </div>
-              <p className="text-xs text-gray-600 dark:text-gray-400 whitespace-nowrap ml-4">
+              <p className="text-xs text-gray-600 dark:text-gray-400 md:whitespace-nowrap md:ml-4">
                 {exp.startDate} - {exp.endDate}
               </p>
             </div>
@@ -40,18 +40,20 @@ export const CVExperience = ({ experience }: CVExperienceProps) => {
                 {exp.technologies.map((tech, idx) => (
                   <span
                     key={idx}
-                    className="inline-block text-xs bg-gray-200 dark:bg-gray-700 rounded text-gray-700 dark:text-gray-300"
+                    className="text-xs inline-flex text-center bg-gray-200 dark:bg-gray-700 rounded text-gray-700 dark:text-gray-300"
                     style={{
-                      padding: '4px 10px',
+                      padding: '2px 8px',
                       lineHeight: '1.2',
                       verticalAlign: 'middle',
-                      display: 'inline-flex',
+                      display: '',
                       alignItems: 'center',
                       justifyContent: 'center',
                       minHeight: '24px'
                     }}
                   >
-                    {tech}
+                    <span className="m-auto">
+                      {tech}
+                    </span>
                   </span>
                 ))}
               </div>

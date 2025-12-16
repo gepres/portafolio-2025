@@ -21,9 +21,9 @@ export const CVTemplate = ({ cvData }: CVTemplateProps) => {
     <div className="w-full max-w-[210mm] mx-auto bg-white shadow-2xl">
       {/* Header */}
       <div className="bg-white dark:bg-gray-800 p-8 border-b border-gray-300">
-        <div className="flex items-start justify-between gap-8">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 md:gap-8">
           {/* Name and Title - 60% */}
-          <div className="flex-[0.6]">
+          <div className="md:flex-[0.6]">
             <h1 className="text-4xl font-bold uppercase tracking-wider text-gray-900 dark:text-white">
               {cvData.personalInfo.fullName}
             </h1>
@@ -33,7 +33,7 @@ export const CVTemplate = ({ cvData }: CVTemplateProps) => {
           </div>
 
           {/* Contact Info - 40% */}
-          <div className="flex-[0.4] text-right text-sm ">
+          <div className="md:flex-[0.4] md:text-right text-sm">
             <p className="text-gray-600 dark:text-gray-300">{getText(cvData.personalInfo.location)}</p>
             <p className="text-gray-600 mt-1 dark:text-gray-300">{cvData.personalInfo.phone}</p>
             <p className="text-gray-600 mt-1 dark:text-gray-300">{cvData.personalInfo.email}</p>

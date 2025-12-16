@@ -67,7 +67,7 @@ export const CVPage = () => {
           position: 'fixed',
           left: '-9999px',
           top: '0',
-          width: '900px',
+          width: '795px',
           backgroundColor: '#ffffff',
           zIndex: -1,
           visibility: 'hidden',
