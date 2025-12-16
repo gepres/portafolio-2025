@@ -1,28 +1,28 @@
 {
   "indexes": [
-    {
-      "collectionGroup": "projects",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "status", "order": "ASCENDING" },
-        { "fieldPath": "order", "order": "ASCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "experience",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "order", "order": "ASCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "skills",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "category", "order": "ASCENDING" },
-        { "fieldPath": "order", "order": "ASCENDING" }
-      ]
-    }
+    // {
+    //   "collectionGroup": "projects",
+    //   "queryScope": "COLLECTION",
+    //   "fields": [
+    //     { "fieldPath": "status", "order": "ASCENDING" },
+    //     { "fieldPath": "order", "order": "ASCENDING" }
+    //   ]
+    // },
+    // {
+    //   "collectionGroup": "experience",
+    //   "queryScope": "COLLECTION",
+    //   "fields": [
+    //     { "fieldPath": "order", "order": "ASCENDING" }
+    //   ]
+    // },
+    // {
+    //   "collectionGroup": "skills",
+    //   "queryScope": "COLLECTION",
+    //   "fields": [
+    //     { "fieldPath": "category", "order": "ASCENDING" },
+    //     { "fieldPath": "order", "order": "ASCENDING" }
+    //   ]
+    // }
   ],
   "fieldOverrides": []
 }

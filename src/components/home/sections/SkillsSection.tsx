@@ -34,6 +34,16 @@ export const SkillsSection = () => {
     return acc;
   }, {} as Record<SkillCategory, Skill[]>);
 
+  const categoryOrder: SkillCategory[] = [
+    'frontend',
+    'backend',
+    'database',
+    'cloud_devops',
+    'project_management'
+  ];
+
+  const orderedCategories = categoryOrder.filter(category => groupedSkills[category]);
+
   return (
     <section id="skills" className="relative py-24 px-4 bg-slate-100/50 dark:bg-dark-light/50">
       <div className="max-w-7xl mx-auto">
@@ -47,7 +57,7 @@ export const SkillsSection = () => {
 
         {Object.keys(groupedSkills).length > 0 ? (
           <div className="space-y-16">
-            {Object.entries(groupedSkills).map(([category, categorySkills]) => (
+            {orderedCategories.map((category) => (
               <FadeIn key={category}>
                 <h3 className="text-3xl font-bold mb-8 text-center">
                   {categoryNames[category as SkillCategory]}
@@ -60,7 +70,7 @@ export const SkillsSection = () => {
                   whileInView="visible"
                   viewport={{ once: true }}
                 >
-                  {categorySkills.map((skill) => (
+                  {groupedSkills[category].map((skill) => (
                     <SkillCard key={skill.id} skill={skill} />
                   ))}
                 </motion.div>
