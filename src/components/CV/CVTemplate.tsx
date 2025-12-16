@@ -47,7 +47,7 @@ export const CVTemplate = ({ cvData }: CVTemplateProps) => {
       {/* Bio */}
 
       <div className="bg-white dark:bg-gray-800 p-8 border-b border-gray-300">
-        <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed text-justify">
+        <p className="text-base text-gray-600 dark:text-gray-300 leading-relaxed text-justify">
           {getText(cvData.personalInfo.summary)}
         </p>
       </div>

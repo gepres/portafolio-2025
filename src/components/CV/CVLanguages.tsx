@@ -74,7 +74,7 @@ export const CVLanguages = ({ languages }: CVLanguagesProps) => {
                     cy={center}
                     r={normalizedRadius}
                     fill="none"
-                    stroke="#d1d5db"
+                    className="stroke-gray-300 dark:stroke-gray-600"
                     strokeWidth={strokeWidth}
                   />
                   {/* Progress circle */}
@@ -83,7 +83,7 @@ export const CVLanguages = ({ languages }: CVLanguagesProps) => {
                     cy={center}
                     r={normalizedRadius}
                     fill="none"
-                    stroke="#4b5563"
+                    className="stroke-gray-700 dark:stroke-gray-300"
                     strokeWidth={strokeWidth}
                     strokeDasharray={`${circumference} ${circumference}`}
                     strokeDashoffset={strokeDashoffset}
@@ -92,7 +92,7 @@ export const CVLanguages = ({ languages }: CVLanguagesProps) => {
                 </svg>
                 {/* Text - centered with flex */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-xs font-semibold uppercase leading-none">{getText(lang.language)}</span>
+                  <span className="text-xs font-semibold uppercase leading-none text-gray-900 dark:text-white">{getText(lang.language)}</span>
                 </div>
               </div>
               <p className="text-xs text-gray-600 dark:text-gray-300 uppercase">{getText(lang.level)}</p>

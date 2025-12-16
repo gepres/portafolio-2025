@@ -62,29 +62,107 @@ export const Hero = () => {
       >
         {/* Avatar */}
         <motion.div variants={staggerItem} className="mb-8 flex justify-center">
-          <div className="relative">
-            <div className="w-32 h-32 rounded-full overflow-hidden glass border-2 border-transparent bg-gradient-to-r from-primary to-accent p-1">
-              {profile?.avatarHero ? (
+          <div className="relative w-40 h-40">
+            {profile?.avatarHero ? (
+              <div className="w-full h-full rounded-full overflow-hidden glass border-2 border-transparent bg-gradient-to-r from-primary to-accent p-1">
                 <img
                   src={profile.avatarHero}
                   alt={fullName}
                   className="w-full h-full rounded-full object-cover"
                 />
-              ) : (
-                <div
-                  className="w-full h-full rounded-full bg-slate-200 dark:bg-dark-light flex items-center justify-center overflow-hidden"
+              </div>
+            ) : (
+              <>
+                {/* Glow effect background */}
+                <motion.div
+                  className="absolute inset-0 rounded-full bg-gradient-to-r from-primary via-accent to-primary blur-2xl opacity-40"
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.4, 0.6, 0.4],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
+
+                {/* Outer rotating ring */}
+                <motion.div
+                  className="absolute inset-0"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                >
+                  <div className="absolute top-0 left-1/2 w-3 h-3 bg-primary rounded-full -translate-x-1/2 shadow-lg shadow-primary/50" />
+                  <div className="absolute bottom-0 left-1/2 w-3 h-3 bg-accent rounded-full -translate-x-1/2 shadow-lg shadow-accent/50" />
+                  <div className="absolute left-0 top-1/2 w-2 h-2 bg-primary rounded-full -translate-y-1/2 shadow-md shadow-primary/50" />
+                  <div className="absolute right-0 top-1/2 w-2 h-2 bg-accent rounded-full -translate-y-1/2 shadow-md shadow-accent/50" />
+                </motion.div>
+
+                {/* Inner counter-rotating ring */}
+                <motion.div
+                  className="absolute inset-4"
+                  animate={{ rotate: -360 }}
+                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                >
+                  <div className="absolute top-0 left-1/2 w-2 h-2 bg-accent/70 rounded-full -translate-x-1/2" />
+                  <div className="absolute bottom-0 left-1/2 w-2 h-2 bg-primary/70 rounded-full -translate-x-1/2" />
+                </motion.div>
+
+                {/* Code symbol container */}
+                <motion.div
+                  className="absolute inset-0 flex items-center justify-center"
                   style={{ perspective: '1000px' }}
                 >
-                  <img
-                    src="/images/logo.svg"
-                    alt="Logo"
-                    className="w-20 h-20 animate-spin3d"
+                  <motion.div
+                    className="text-6xl font-bold gradient-text"
                     style={{ transformStyle: 'preserve-3d' }}
+                    animate={{
+                      rotateY: [0, 360],
+                      scale: [1, 1.1, 1],
+                    }}
+                    transition={{
+                      rotateY: {
+                        duration: 8,
+                        repeat: Infinity,
+                        ease: "linear"
+                      },
+                      scale: {
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }
+                    }}
+                  >
+                    &lt;/&gt;
+                  </motion.div>
+                </motion.div>
+
+                {/* Floating particles */}
+                {[...Array(6)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className="absolute w-1 h-1 bg-primary/60 rounded-full"
+                    style={{
+                      left: '50%',
+                      top: '50%',
+                    }}
+                    animate={{
+                      x: [0, Math.cos(i * 60 * Math.PI / 180) * 80, 0],
+                      y: [0, Math.sin(i * 60 * Math.PI / 180) * 80, 0],
+                      opacity: [0, 1, 0],
+                      scale: [0, 1.5, 0],
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      delay: i * 0.5,
+                      ease: "easeInOut"
+                    }}
                   />
-                </div>
-              )}
-            </div>
-            {/* <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary to-accent blur-xl opacity-50 animate-pulse-glow" /> */}
+                ))}
+              </>
+            )}
           </div>
         </motion.div>
 

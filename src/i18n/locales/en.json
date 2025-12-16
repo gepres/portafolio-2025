@@ -56,6 +56,7 @@
         "about": {
             "title": "About Me",
             "whatIDo": "What I Do?",
+            "myKnowledge": "My Knowledge",
             "competencies": "My Skills",
             "interests": "Interests",
             "bio1": "Hi! I'm Genaro, a full stack developer passionate about creating innovative and high-impact technological solutions. With experience in developing modern web applications and cloud-native architectures.",
@@ -114,7 +115,7 @@
             "availableCount": "available"
         },
         "skills": {
-            "title": "Skills",
+            "title": "Technology Stack",
             "subtitle": "My tech stack",
             "level": "Level",
             "years": "years",

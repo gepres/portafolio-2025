@@ -101,7 +101,7 @@ export const AboutSection = () => {
           <>
             <FadeIn>
               <h3 className="text-3xl md:text-4xl font-bold text-center mb-12">
-                {t('home.about.whatIDo')}
+                {t('home.about.myKnowledge')}
               </h3>
             </FadeIn>
 

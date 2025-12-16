@@ -51,7 +51,7 @@ export const SkillsSection = () => {
           <h2 className="text-4xl md:text-6xl font-bold gradient-text mb-4">
             {t('home.skills.title')}
           </h2>
-          <p className="text-xl text-slate-600 dark:text-light/70">{t('home.skills.subtitle')}</p>
+          {/* <p className="text-xl text-slate-600 dark:text-light/70">{t('home.skills.subtitle')}</p> */}
           <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full mt-4" />
         </FadeIn>
 
