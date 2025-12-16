@@ -9,8 +9,10 @@ export const CVExperience = ({ experience }: CVExperienceProps) => {
   const { i18n } = useTranslation();
   const currentLang = i18n.language as 'es' | 'en';
 
-  const getText = (text: string | { es: string; en: string }) => {
-    return typeof text === 'string' ? text : text[currentLang];
+  const getText = (text: string | { es: string; en: string } | undefined): string => {
+    if (!text) return '';
+    if (typeof text === 'string') return text;
+    return text[currentLang] || text.es || text.en || '';
   };
 
   return (

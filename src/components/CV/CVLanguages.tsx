@@ -9,21 +9,30 @@ export const CVLanguages = ({ languages }: CVLanguagesProps) => {
   const { i18n } = useTranslation();
   const currentLang = i18n.language as 'es' | 'en';
 
-  const getText = (text: string | { es: string; en: string }) => {
-    return typeof text === 'string' ? text : text[currentLang];
+  const getText = (text: string | { es: string; en: string } | undefined): string => {
+    if (!text) return '';
+    if (typeof text === 'string') return text;
+    return text[currentLang] || text.es || text.en || '';
   };
 
   // Determinar el porcentaje de relleno según el nivel
   const getLevelPercentage = (level: string | { es: string; en: string }): number => {
-    const levelText = getText(level).toLowerCase();
+    const levelText = getText(level);
 
-    if (levelText.includes('nativo') || levelText.includes('native')) {
+    // Validar que levelText no sea undefined o null
+    if (!levelText) {
+      return 50; // Default si no hay nivel
+    }
+
+    const levelLower = levelText.toLowerCase();
+
+    if (levelLower.includes('nativo') || levelLower.includes('native')) {
       return 100;
-    } else if (levelText.includes('intermedio') || levelText.includes('intermediate')) {
+    } else if (levelLower.includes('intermedio') || levelLower.includes('intermediate')) {
       return 50;
-    } else if (levelText.includes('básico') || levelText.includes('basic')) {
+    } else if (levelLower.includes('básico') || levelLower.includes('basic')) {
       return 25;
-    } else if (levelText.includes('avanzado') || levelText.includes('advanced')) {
+    } else if (levelLower.includes('avanzado') || levelLower.includes('advanced')) {
       return 75;
     }
 
