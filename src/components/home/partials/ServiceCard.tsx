@@ -23,7 +23,7 @@ export const ServiceCard = ({ service }: ServiceCardProps) => {
   return (
     <motion.div variants={staggerItem}>
       <Card className="h-full group hover:scale-105 transition-transform duration-300">
-        <div className="w-16 h-16 rounded-lg gradient-primary flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+        <div className="w-16 h-16 rounded-lg gradient-primary flex items-center justify-center mb-4 group-hover:scale-110 transition-transform text-white">
           <IconComponent className="w-8 h-8" />
         </div>
         <h4 className="text-xl font-semibold mb-3">{title}</h4>

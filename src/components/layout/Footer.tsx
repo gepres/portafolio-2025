@@ -49,9 +49,10 @@ export const Footer = () => {
           {/* Brand */}
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-10 h-10 rounded-full gradient-primary flex items-center justify-center font-bold text-xl">
+              {/* <div className="w-10 h-10 rounded-full gradient-primary flex items-center justify-center font-bold text-xl">
                 {avatarInitial}
-              </div>
+              </div> */}
+              <img src="/images/logo.svg" alt="Genaro Pretill Logo" className="w-10 h-10" />
               <span className="font-bold text-xl gradient-text">
                 {fullName}
               </span>

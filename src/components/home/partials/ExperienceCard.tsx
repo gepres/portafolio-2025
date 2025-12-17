@@ -34,7 +34,7 @@ export const ExperienceCard = ({ experience, index }: ExperienceCardProps) => {
               className="w-12 h-12 rounded-full object-cover"
             />
           ) : (
-            <div className="w-12 h-12 rounded-full gradient-primary flex items-center justify-center">
+            <div className="w-12 h-12 rounded-full gradient-primary flex items-center justify-center text-white">
               <Briefcase className="w-6 h-6" />
             </div>
           )}
