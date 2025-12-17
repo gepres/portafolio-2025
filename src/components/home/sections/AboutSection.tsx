@@ -37,7 +37,7 @@ export const AboutSection = () => {
   const avatarInitial = profile?.avatarInitial || 'G';
 
   return (
-    <section id="about" className="relative py-24 px-4">
+    <section id="about" className="relative py-24 px-4 overflow-x-hidden">
       <div className="max-w-7xl mx-auto">
         <FadeIn className="text-center mb-16">
           <h2 className="text-4xl md:text-6xl font-bold gradient-text mb-4">
@@ -83,15 +83,16 @@ export const AboutSection = () => {
                   <div className="text-sm text-slate-500 dark:text-light/60">{t('home.hero.stats.projects')}</div>
                 </div>
               </div>
-
-              <Button
-                variant="primary"
-                className="mt-6"
-                onClick={() => navigate('/cv')}
-              >
-                <Download className="w-4 h-4 mr-2" />
-                {t('home.hero.downloadCV')}
-              </Button>
+                <div className='flex justify-center lg:justify-start'>
+                  <Button
+                    variant="primary"
+                    className="mt-6"
+                    onClick={() => navigate('/cv')}
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    {t('home.hero.downloadCV')}
+                  </Button>
+                </div>
             </div>
           </SlideIn>
         </div>

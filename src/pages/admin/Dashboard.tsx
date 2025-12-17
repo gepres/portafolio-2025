@@ -637,7 +637,7 @@ export const Dashboard = () => {
                     )}
                     <div>
                       <h4 className="font-bold text-lg mb-2">{getLocalizedText(project.title, currentLang)}</h4>
-                      <p className="text-sm text-light/70 line-clamp-2">{getLocalizedText(project.description, currentLang)}</p>
+                      <p className="text-sm dark:text-light/70 text-black line-clamp-2">{getLocalizedText(project.description, currentLang)}</p>
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {project.technologies.slice(0, 3).map((tech) => (
@@ -702,12 +702,12 @@ export const Dashboard = () => {
                   <div key={exp.id} className="glass rounded-lg p-6">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <h4 className="font-bold text-lg gradient-text">{getLocalizedText(exp.role, currentLang)}</h4>
-                        <p className="text-light/80 mb-2">{exp.company}</p>
-                        <p className="text-sm text-light/60 mb-4">
+                        <h4 className="font-bold text-lg dark:text-light/80 text-black gradient-text">{getLocalizedText(exp.role, currentLang)}</h4>
+                        <p className="dark:text-light/80 text-black mb-2">{exp.company}</p>
+                        <p className="text-sm dark:text-light/60 text-black mb-4">
                           {exp.startDate} - {exp.endDate}
                         </p>
-                        <p className="text-light/70 mb-4">{getLocalizedText(exp.description, currentLang)}</p>
+                        <p className="dark:text-light/70 text-black mb-4">{getLocalizedText(exp.description, currentLang)}</p>
                         <div className="flex flex-wrap gap-2">
                           {exp.technologies.map((tech) => (
                             <span
@@ -812,7 +812,7 @@ export const Dashboard = () => {
                                 style={{ width: `${skill.level}%` }}
                               />
                             </div>
-                            <p className="text-sm text-light/60 mt-2">{skill.level}% {t('admin.dashboard.mastery')}</p>
+                            <p className="text-sm dark:text-light/60 text-black mt-2">{skill.level}% {t('admin.dashboard.mastery')}</p>
                           </div>
                         ))}
                       </div>
@@ -917,7 +917,7 @@ export const Dashboard = () => {
                       </div>
                     </div>
                     <h4 className="font-bold mb-2">{getLocalizedText(service.title, currentLang)}</h4>
-                    <p className="text-sm text-light/70">{getLocalizedText(service.description, currentLang)}</p>
+                    <p className="text-sm dark:text-light/70 text-black">{getLocalizedText(service.description, currentLang)}</p>
                   </div>
                 ))}
               </div>

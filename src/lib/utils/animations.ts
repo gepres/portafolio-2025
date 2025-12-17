@@ -98,7 +98,7 @@ export const scaleVariants: Variants = {
 export const slideInLeftVariants: Variants = {
   hidden: {
     opacity: 0,
-    x: -50,
+    x: typeof window !== 'undefined' && window.innerWidth < 390 ? -20 : -50,
   },
   visible: {
     opacity: 1,
@@ -114,7 +114,7 @@ export const slideInLeftVariants: Variants = {
 export const slideInRightVariants: Variants = {
   hidden: {
     opacity: 0,
-    x: 50,
+    x: typeof window !== 'undefined' && window.innerWidth < 390 ? 20 : 50,
   },
   visible: {
     opacity: 1,

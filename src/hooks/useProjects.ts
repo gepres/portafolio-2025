@@ -11,8 +11,6 @@ export const useProjects = (isAdmin = false) => {
     try {
       setLoading(true);
       const data = isAdmin ? await getAllProjects() : await getProjects();
-      console.log('data', data);
-      
       setProjects(data);
       setError(null);
     } catch (err) {

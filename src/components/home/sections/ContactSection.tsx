@@ -8,7 +8,7 @@ export const ContactSection = () => {
   const { t } = useTranslation();
 
   return (
-    <section id="contact" className="relative py-24 px-4">
+    <section id="contact" className="relative py-24 px-4 overflow-x-hidden">
       <div className="max-w-5xl mx-auto">
         <FadeIn className="text-center mb-16">
           <h2 className="text-4xl md:text-6xl font-bold gradient-text mb-4">
