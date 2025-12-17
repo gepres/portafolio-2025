@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Download } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { FadeIn } from '../../animations/FadeIn';
 import { SlideIn } from '../../animations/SlideIn';
 import { Button } from '../../ui/Button';
@@ -14,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 export const AboutSection = () => {
   const { t, i18n } = useTranslation();
   const currentLang = i18n.language as 'es' | 'en';
+  const navigate = useNavigate();
   const { profile } = useProfile();
   const { services } = useServices();
   const { competencies } = useCompetencies();
@@ -83,16 +85,14 @@ export const AboutSection = () => {
                 </div>
               </div>
 
-              {cvUrl && (
-                <Button
-                  variant="primary"
-                  className="mt-6"
-                  onClick={() => window.open(cvUrl, '_blank')}
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  {t('home.hero.downloadCV')}
-                </Button>
-              )}
+              <Button
+                variant="primary"
+                className="mt-6"
+                onClick={() => navigate('/cv')}
+              >
+                <Download className="w-4 h-4 mr-2" />
+                {t('home.hero.downloadCV')}
+              </Button>
             </div>
           </SlideIn>
         </div>
