@@ -35,7 +35,6 @@ export const AboutSection = () => {
   const yearsOfExperience = profile?.stats?.yearsOfExperience || 3;
   const projectsCompleted = profile?.stats?.projectsCompleted || 20;
   const avatarInitial = profile?.avatarInitial || 'G';
-  const cvUrl = profile?.cvUrl;
 
   return (
     <section id="about" className="relative py-24 px-4">
