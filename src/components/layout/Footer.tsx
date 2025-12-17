@@ -13,7 +13,6 @@ export const Footer = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   const fullName = profile ? getLocalizedText(profile.fullName, currentLang) : 'Your Name';
-  const avatarInitial = profile?.avatarInitial || 'G';
 
   const footerLinks = [
     { name: t('nav.home'), path: '/' },
