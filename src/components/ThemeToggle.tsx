@@ -6,11 +6,15 @@ import { motion } from 'framer-motion';
 const ThemeToggle: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
 
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    toggleTheme(e);
+  };
+
   return (
     <motion.button
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
-      onClick={toggleTheme}
+      onClick={handleClick}
       className="p-2 rounded-full glass hover:bg-white/10 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500"
       aria-label="Toggle theme"
     >

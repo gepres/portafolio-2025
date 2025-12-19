@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Github, Linkedin, Mail, ArrowRight } from 'lucide-react';
+import { TypeAnimation } from 'react-type-animation';
 import { Button } from '../ui/Button';
 import { staggerContainer, staggerItem } from '../../lib/utils/animations';
 // import { ScrollIndicator } from './ScrollIndicator';
@@ -191,12 +192,24 @@ export const Hero = () => {
         </motion.h2>
 
         {/* Subtitle */}
-        <motion.p
+        <motion.div
           variants={staggerItem}
-          className="text-xl md:text-2xl text-slate-600 dark:text-light/70 mb-8"
+          className="text-xl md:text-2xl text-slate-600 dark:text-light/70 mb-8 min-h-[2rem] md:min-h-[2.5rem]"
         >
-          {subtitle}
-        </motion.p>
+          <TypeAnimation
+            key={subtitle}
+            sequence={[
+              500, // Delay inicial
+              subtitle,
+              2000, // Pausa de 2 segundos después de escribir
+            ]}
+            wrapper="span"
+            speed={50}
+            cursor={true}
+            repeat={5}
+            style={{ display: 'inline-block' }}
+          />
+        </motion.div>
 
         {/* Description */}
         <motion.p
