@@ -2,9 +2,10 @@ import type { CVTechnicalSkill } from '../../types';
 
 interface CVSkillsProps {
   technicalSkills: CVTechnicalSkill[];
+  isPdf?: boolean;
 }
 
-export const CVSkills = ({ technicalSkills }: CVSkillsProps) => {
+export const CVSkills = ({ technicalSkills, isPdf }: CVSkillsProps) => {
   // Orden de categorías
   const categoryOrder = ['frontend', 'backend', 'database', 'cloud_devops', 'project_management', 'tools', 'cloud', 'design'];
 
@@ -42,7 +43,7 @@ export const CVSkills = ({ technicalSkills }: CVSkillsProps) => {
       <div className="space-y-3">
         {sortedSkills.map((skill) => (
           <div key={skill.id}>
-            <div className="flex justify-between mb-1">
+            <div className={`flex justify-between mb-1 ${isPdf ? 'mb-3' : ''}`}>
               <span className="text-sm font-medium">{skill.name}</span>
             </div>
             <div className="w-full bg-gray-300 dark:bg-gray-600 rounded-full h-2">

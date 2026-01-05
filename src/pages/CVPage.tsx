@@ -73,7 +73,7 @@ export const CVPage = () => {
           visibility: 'hidden',
         }}
       >
-        <CVTemplate cvData={cvData} />
+        <CVTemplate cvData={cvData} isPdf />
       </div>
     </>
   );

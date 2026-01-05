@@ -3,9 +3,10 @@ import type { CVExperience as CVExperienceType } from '../../types';
 
 interface CVExperienceProps {
   experience: CVExperienceType[];
+  isPdf?: boolean;
 }
 
-export const CVExperience = ({ experience }: CVExperienceProps) => {
+export const CVExperience = ({ experience, isPdf }: CVExperienceProps) => {
   const { i18n } = useTranslation();
   const currentLang = i18n.language as 'es' | 'en';
 
@@ -35,26 +36,23 @@ export const CVExperience = ({ experience }: CVExperienceProps) => {
             <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed text-justify">
               {getText(exp.description)}
             </p>
+
             {exp.technologies && exp.technologies.length > 0 && (
               <div className="mt-2 flex flex-wrap gap-2">
                 {exp.technologies.map((tech, idx) => (
-                  <span
+                  <div
                     key={idx}
-                    className="text-xs inline-flex text-center bg-gray-200 dark:bg-gray-700 rounded text-gray-700 dark:text-gray-300"
+                    className="text-xs rounded bg-gray-200 dark:bg-gray-700 h-6 text-gray-700 dark:text-gray-300"
                     style={{
-                      padding: '2px 8px',
-                      lineHeight: '1.2',
-                      verticalAlign: 'middle',
-                      display: '',
+                      display: isPdf ? '' : 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      minHeight: '24px'
+                      padding: '0 8px',
+                      lineHeight: '1',
                     }}
                   >
-                    <span className="m-auto">
-                      {tech}
-                    </span>
-                  </span>
+                    {tech}
+                  </div>
                 ))}
               </div>
             )}

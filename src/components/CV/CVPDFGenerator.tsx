@@ -46,7 +46,7 @@ export const CVPDFGenerator = ({ fullName }: CVPDFGeneratorProps) => {
         windowWidth: element.scrollWidth,
         windowHeight: element.scrollHeight,
       });
-
+      
       // Ancho estándar A4 en mm
       const pdfWidth = 210;
 

@@ -5,9 +5,10 @@ import type { CVData } from '../../types';
 
 interface CVTemplateProps {
   cvData: CVData;
+  isPdf?: boolean;
 }
 
-export const CVTemplate = ({ cvData }: CVTemplateProps) => {
+export const CVTemplate = ({ cvData, isPdf }: CVTemplateProps) => {
   const { i18n } = useTranslation();
   const currentLang = i18n.language as 'es' | 'en';
 
@@ -54,8 +55,8 @@ export const CVTemplate = ({ cvData }: CVTemplateProps) => {
 
       {/* Two Column Layout */}
       <div className="grid grid-cols-1 md:grid-cols-[35%_65%]">
-        <CVLeftColumn cvData={cvData} />
-        <CVRightColumn cvData={cvData} />
+        <CVLeftColumn cvData={cvData} isPdf={isPdf} />
+        <CVRightColumn cvData={cvData} isPdf={isPdf} />
       </div>
     </div>
   );
