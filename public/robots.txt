@@ -1,7 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /admin/
-Disallow: /seed-cv
 
 # AI Crawlers — permitir indexacion para AI search visibility
 User-agent: GPTBot

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { SEOHead } from '../../components/SEOHead';
 import { toast } from 'react-hot-toast';
 import { LogOut, FolderOpen, Briefcase, Code, Plus, Edit, Trash2, Eye, User, Palette, Zap, Heart, Mail, FileText } from 'lucide-react';
 import { signOut } from '../../lib/firebase/auth';
@@ -433,6 +434,13 @@ export const Dashboard = () => {
   ];
 
   return (
+    <>
+    <SEOHead
+      title="Dashboard | Admin"
+      description="Admin dashboard."
+      canonical="https://genaropretill.com/admin/dashboard"
+      noindex={true}
+    />
     <div className="min-h-screen bg-slate-50 dark:bg-dark">
       {/* Header */}
       <header className="glass border-b border-white/10 sticky top-0 z-40">
@@ -1131,5 +1139,6 @@ export const Dashboard = () => {
         isLoading={isSubmitting}
       />
     </div>
+    </>
   );
 };

@@ -2,13 +2,15 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Public read for portfolio data
+    // Colecciones publicas del portfolio
+
     match /projects/{project} {
       allow read: if true;
       allow write: if request.auth != null;
     }
 
-    match /experience/{exp} {
+    // Coleccion real es experiences (no experience)
+    match /experiences/{exp} {
       allow read: if true;
       allow write: if request.auth != null;
     }
@@ -18,9 +20,51 @@ service cloud.firestore {
       allow write: if request.auth != null;
     }
 
+    match /services/{service} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /interests/{interest} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /competencies/{competency} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Documentos unicos (singleton)
+
+    match /profile/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /contact/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
     match /settings/{doc} {
       allow read: if true;
       allow write: if request.auth != null;
+    }
+
+    // CV - solo autenticado
+
+    match /cv_education/{doc} {
+      allow read, write: if request.auth != null;
+    }
+
+    match /cv_languages/{doc} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Denegar todo lo no declarado
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

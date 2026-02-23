@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { SEOHead } from '../../components/SEOHead';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -51,6 +52,13 @@ export const Login = () => {
   };
 
   return (
+    <>
+    <SEOHead
+      title="Admin Login | Genaro Pretill"
+      description="Admin login."
+      canonical="https://genaropretill.com/admin/login"
+      noindex={true}
+    />
     <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
       {/* Animated Background */}
       <div className="absolute inset-0 -z-10">
@@ -130,5 +138,6 @@ export const Login = () => {
         </Card>
       </motion.div>
     </div>
+    </>
   );
 };

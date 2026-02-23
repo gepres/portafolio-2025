@@ -11,7 +11,6 @@ import { Footer } from '../components/layout/Footer';
 // Pages
 import { Home } from '../pages/Home';
 import { CVPage } from '../pages/CVPage';
-import { SeedCVPage } from '../pages/SeedCVPage';
 import { PrivacyPolicy } from '../pages/PrivacyPolicy';
 import { Login } from '../pages/admin/Login';
 import { Dashboard } from '../pages/admin/Dashboard';
@@ -61,7 +60,6 @@ function AppContent() {
 
           {/* CV Routes */}
           <Route path="/cv" element={<CVPage />} />
-          <Route path="/seed-cv" element={<SeedCVPage />} />
 
           {/* Legal */}
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
