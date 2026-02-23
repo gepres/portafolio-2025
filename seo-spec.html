@@ -1,0 +1,1661 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Implementation Spec — genaropretill.com</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #21262d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --yellow: #d29922;
+      --orange: #f0883e;
+      --red: #f85149;
+      --purple: #bc8cff;
+      --radius: 8px;
+      --radius-sm: 6px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    /* ── Header ── */
+    .header {
+      border-bottom: 1px solid var(--border);
+      padding: 32px 0 24px;
+      background: var(--surface);
+    }
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .header h1 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .header .sub { font-size: 13px; color: var(--text-muted); }
+    .meta-chips { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+    .chip {
+      font-size: 11px; padding: 3px 10px; border-radius: 20px;
+      border: 1px solid var(--border); color: var(--text-muted);
+      background: var(--surface2);
+    }
+
+    /* ── Layout ── */
+    .main { max-width: 960px; margin: 0 auto; padding: 32px 24px 60px; }
+
+    /* ── TOC ── */
+    .toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 32px;
+    }
+    .toc h2 { font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 12px; }
+    .toc ol { padding-left: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 24px; }
+    @media (max-width:600px) { .toc ol { grid-template-columns: 1fr; } }
+    .toc a { color: var(--accent); text-decoration: none; font-size: 13px; }
+    .toc a:hover { text-decoration: underline; }
+
+    /* ── Phase header ── */
+    .phase {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 16px; border-radius: var(--radius);
+      margin: 32px 0 16px; font-size: 14px; font-weight: 700;
+      border: 1px solid;
+    }
+    .phase-bug    { background: rgba(248,81,73,.1);  border-color: rgba(248,81,73,.3);  color: #f85149; }
+    .phase-crit   { background: rgba(240,136,62,.08); border-color: rgba(240,136,62,.3);  color: #f0883e; }
+    .phase-high   { background: rgba(210,153,34,.08); border-color: rgba(210,153,34,.3);  color: #d29922; }
+    .phase-medium { background: rgba(63,185,80,.08);  border-color: rgba(63,185,80,.3);   color: #3fb950; }
+    .phase-low    { background: rgba(88,166,255,.08); border-color: rgba(88,166,255,.3);  color: #58a6ff; }
+
+    /* ── Task card ── */
+    .task {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .task-header {
+      padding: 14px 18px;
+      display: flex; align-items: flex-start; gap: 12px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+    }
+    .task-id {
+      flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+      font-size: 12px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 1px;
+    }
+    .id-bug    { background: rgba(248,81,73,.25);  color: #f85149; }
+    .id-crit   { background: rgba(240,136,62,.25); color: #f0883e; }
+    .id-high   { background: rgba(210,153,34,.25); color: #d29922; }
+    .id-medium { background: rgba(63,185,80,.25);  color: #3fb950; }
+    .id-low    { background: rgba(88,166,255,.25); color: #58a6ff; }
+    .task-title { font-size: 14px; font-weight: 600; flex: 1; }
+    .task-meta { display: flex; gap: 8px; margin-top: 4px; flex-wrap: wrap; }
+    .badge {
+      font-size: 11px; padding: 1px 7px; border-radius: 4px;
+      border: 1px solid; font-weight: 600;
+    }
+    .b-effort  { border-color: rgba(88,166,255,.3); color: #58a6ff; background: rgba(88,166,255,.1); }
+    .b-file    { border-color: rgba(188,140,255,.3); color: #bc8cff; background: rgba(188,140,255,.1); }
+    .b-why     { border-color: rgba(63,185,80,.3);   color: #3fb950; background: rgba(63,185,80,.1); }
+
+    .task-body { padding: 16px 18px; }
+    .task-section { margin-bottom: 14px; }
+    .task-section:last-child { margin-bottom: 0; }
+    .task-section h4 {
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
+      color: var(--text-muted); margin-bottom: 8px;
+    }
+    .task-section p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+    /* ── Code ── */
+    pre, code {
+      font-family: 'Cascadia Code', 'Fira Code', 'SF Mono', monospace;
+    }
+    code {
+      background: var(--surface2); padding: 1px 5px; border-radius: 3px;
+      font-size: 12px; color: #79c0ff; border: 1px solid var(--border);
+    }
+    pre {
+      background: #010409;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      font-size: 12px;
+      overflow-x: auto;
+      color: #c9d1d9;
+      line-height: 1.6;
+      margin-top: 8px;
+    }
+    pre .kw  { color: #ff7b72; }
+    pre .str { color: #a5d6ff; }
+    pre .cm  { color: #8b949e; font-style: italic; }
+    pre .fn  { color: #d2a8ff; }
+    pre .num { color: #79c0ff; }
+    pre .tag { color: #7ee787; }
+
+    /* ── AC list ── */
+    .ac-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+    .ac-list li {
+      display: flex; gap: 8px; align-items: flex-start;
+      font-size: 13px; color: var(--text-muted);
+    }
+    .ac-list li::before {
+      content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; margin-top: 1px;
+    }
+
+    /* ── File paths ── */
+    .file-list { display: flex; flex-direction: column; gap: 4px; }
+    .file-item {
+      display: flex; gap: 8px; align-items: center;
+      font-size: 12px; font-family: monospace;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 5px 10px;
+    }
+    .file-action { color: var(--yellow); font-weight: 700; font-size: 10px; flex-shrink: 0; }
+    .file-path { color: var(--purple); }
+
+    /* ── Divider ── */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+
+    /* ── Footer ── */
+    .footer { text-align: center; padding: 24px; font-size: 12px; color: var(--text-muted); border-top: 1px solid var(--border); }
+
+    a { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <h1>Implementation Spec — genaropretill.com</h1>
+    <div class="sub">Basado en SEO Audit completo · 6 agentes especializados · Score actual: 49/100</div>
+    <div class="meta-chips">
+      <span class="chip">📅 23 febrero 2026</span>
+      <span class="chip">⚙️ React + Vite + Firebase + Tailwind</span>
+      <span class="chip">🎯 Score objetivo: 80+/100</span>
+      <span class="chip">🐛 3 bugs de producción</span>
+      <span class="chip">📋 35 tasks</span>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- TOC -->
+  <div class="toc">
+    <h2>Índice</h2>
+    <ol>
+      <li><a href="#bug-1">H1 mobile = "Your Name"</a></li>
+      <li><a href="#bug-2">Menú hamburger 0×0px</a></li>
+      <li><a href="#bug-3">Proyectos solo spinner</a></li>
+      <li><a href="#c-1">Crear public/sitemap.xml</a></li>
+      <li><a href="#c-2">Crear public/robots.txt</a></li>
+      <li><a href="#c-3">Formulario de contacto real</a></li>
+      <li><a href="#c-4">Página /privacy-policy</a></li>
+      <li><a href="#c-5">Ocultar admin link del navbar</a></li>
+      <li><a href="#c-6">Preload hero image (LCP)</a></li>
+      <li><a href="#c-7">react-helmet-async por ruta</a></li>
+      <li><a href="#h-1">Redirect www → apex (301)</a></li>
+      <li><a href="#h-2">Security headers</a></li>
+      <li><a href="#h-3">Cache-Control assets (1 año)</a></li>
+      <li><a href="#h-4">Code splitting Firebase/GSAP/i18n</a></li>
+      <li><a href="#h-5">React.lazy() rutas pesadas</a></li>
+      <li><a href="#h-6">noindex rutas /admin y /seed-cv</a></li>
+      <li><a href="#h-7">Devicon non-blocking / SVGs</a></li>
+      <li><a href="#h-8">Google Fonts @import → &lt;link&gt;</a></li>
+      <li><a href="#h-9">Schema fix: LinkedIn, image, @id</a></li>
+      <li><a href="#h-10">WebSite + ProfilePage schema</a></li>
+      <li><a href="#h-11">CTAs above fold en laptop</a></li>
+      <li><a href="#h-12">Fix imagen de perfil broken</a></li>
+      <li><a href="#h-13">public/llms.txt</a></li>
+      <li><a href="#m-1">Rutas /projects/:slug</a></li>
+      <li><a href="#m-2">Contraste WCAG AA</a></li>
+      <li><a href="#m-3">Tap targets ≥ 48px</a></li>
+      <li><a href="#m-4">hreflang self-referencing</a></li>
+      <li><a href="#m-5">HSTS includeSubDomains + preload</a></li>
+      <li><a href="#m-6">OG image con Cloudinary transforms</a></li>
+      <li><a href="#m-7">Testimonios en /about</a></li>
+      <li><a href="#m-8">SoftwareApplication schema por proyecto</a></li>
+      <li><a href="#m-9">Poblar Firestore con contenido real</a></li>
+      <li><a href="#l-1">SSG/SSR (Astro / Next.js)</a></li>
+      <li><a href="#l-2">Blog técnico /blog</a></li>
+      <li><a href="#l-3">Eliminar meta tags obsoletos</a></li>
+    </ol>
+  </div>
+
+  <!-- ═══════ BUGS ═══════ -->
+  <div class="phase phase-bug" id="bugs">
+    🚨 Bugs de Producción — Corregir Inmediatamente
+  </div>
+
+  <!-- BUG-1 -->
+  <div class="task" id="bug-1">
+    <div class="task-header">
+      <div class="task-id id-bug">B1</div>
+      <div style="flex:1">
+        <div class="task-title">H1 en mobile renderiza "Your Name" — placeholder sin reemplazar</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 15 min</span>
+          <span class="badge b-why">🔴 Google mobile-first indexing</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Problema</h4>
+        <p>El componente Hero tiene dos implementaciones del H1: una para desktop y otra para mobile. El H1 del layout mobile mantiene el valor por defecto del template (<code>"Your Name"</code>). Como Google usa mobile-first indexing, esto es el texto que aparece como heading principal en el índice de Google.</p>
+      </div>
+      <div class="task-section">
+        <h4>Archivos</h4>
+        <div class="file-list">
+          <div class="file-item"><span class="file-action">EDIT</span><span class="file-path">src/components/home/HeroSection.tsx</span></div>
+        </div>
+      </div>
+      <div class="task-section">
+        <h4>Implementación</h4>
+        <p>Eliminar el H1 duplicado para mobile. Usar un único <code>&lt;h1&gt;</code> con clases responsive de Tailwind:</p>
+        <pre><span class="cm">// ANTES — dos H1 separados (incorrecto)</span>
+<span class="tag">&lt;h1</span> className=<span class="str">"hidden md:block text-5xl font-bold"</span><span class="tag">&gt;</span>
+  {profile?.name || <span class="str">"Genaro Pretill Escobar"</span>}
+<span class="tag">&lt;/h1&gt;</span>
+<span class="tag">&lt;h1</span> className=<span class="str">"md:hidden text-4xl font-bold"</span><span class="tag">&gt;</span>
+  Your Name  <span class="cm">// ← BUG: no usa la variable de datos</span>
+<span class="tag">&lt;/h1&gt;</span>
+
+<span class="cm">// DESPUÉS — un único H1 responsive (correcto)</span>
+<span class="tag">&lt;h1</span> className=<span class="str">"text-4xl md:text-5xl font-bold gradient-text"</span><span class="tag">&gt;</span>
+  {profile?.name || <span class="str">"Genaro Pretill Escobar"</span>}
+<span class="tag">&lt;/h1&gt;</span></pre>
+      </div>
+      <div class="task-section">
+        <h4>Criterios de Aceptación</h4>
+        <ul class="ac-list">
+          <li>El DOM en viewport 375px contiene el nombre real del desarrollador en el H1</li>
+          <li>No existe más de un elemento H1 por ruta</li>
+          <li>El H1 es idéntico en desktop y mobile</li>
+          <li>Validar con DevTools → device emulation → inspeccionar H1</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUG-2 -->
+  <div class="task" id="bug-2">
+    <div class="task-header">
+      <div class="task-id id-bug">B2</div>
+      <div style="flex:1">
+        <div class="task-title">Menú hamburger mobile — nav links con dimensiones 0×0px, inaccesibles</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 30–60 min</span>
+          <span class="badge b-file">Navbar.tsx</span>
+          <span class="badge b-why">🔴 Usuarios mobile no pueden navegar</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Problema</h4>
+        <p>Los 5 links de navegación (Sobre Mí, Proyectos, Experiencia, Habilidades, Contacto) tienen <code>width: 0, height: 0</code> en mobile. El botón hamburger está visualmente presente pero su click handler no expone el menú de forma funcional, o el panel se renderiza fuera del viewport. Además carece de <code>aria-label</code>.</p>
+      </div>
+      <div class="task-section">
+        <h4>Archivos</h4>
+        <div class="file-list">
+          <div class="file-item"><span class="file-action">EDIT</span><span class="file-path">src/components/layout/Navbar.tsx</span></div>
+          <div class="file-item"><span class="file-action">CHECK</span><span class="file-path">src/styles/index.css (o Tailwind config)</span></div>
+        </div>
+      </div>
+      <div class="task-section">
+        <h4>Implementación</h4>
+        <pre><span class="cm">// 1. Verificar el estado del menú y el toggle</span>
+<span class="kw">const</span> [menuOpen, setMenuOpen] = <span class="fn">useState</span>(<span class="kw">false</span>);
+
+<span class="cm">// 2. Botón hamburger con aria-label</span>
+<span class="tag">&lt;button</span>
+  aria-label=<span class="str">"Abrir menú de navegación"</span>
+  aria-expanded={menuOpen}
+  onClick={() =&gt; setMenuOpen(!menuOpen)}
+  className=<span class="str">"md:hidden p-2"</span>
+<span class="tag">&gt;</span>
+  {menuOpen ? <span class="tag">&lt;XIcon /&gt;</span> : <span class="tag">&lt;MenuIcon /&gt;</span>}
+<span class="tag">&lt;/button&gt;</span>
+
+<span class="cm">// 3. Panel mobile con visibilidad condicional</span>
+<span class="tag">&lt;div</span> className={`
+  md:hidden fixed inset-0 top-[64px] z-50
+  bg-gray-900/95 backdrop-blur-sm
+  transition-transform duration-300
+  ${menuOpen ? <span class="str">"translate-x-0"</span> : <span class="str">"-translate-x-full"</span>}
+`}<span class="tag">&gt;</span>
+  {navLinks.<span class="fn">map</span>(link =&gt; (
+    <span class="tag">&lt;a</span>
+      key={link.href}
+      href={link.href}
+      className=<span class="str">"block px-6 py-4 text-lg border-b border-gray-800 min-h-[48px]"</span>
+      onClick={() =&gt; setMenuOpen(<span class="kw">false</span>)}
+    <span class="tag">&gt;</span>
+      {link.label}
+    <span class="tag">&lt;/a&gt;</span>
+  ))}
+<span class="tag">&lt;/div&gt;</span></pre>
+      </div>
+      <div class="task-section">
+        <h4>Criterios de Aceptación</h4>
+        <ul class="ac-list">
+          <li>En viewport 375px, al tap del hamburger se abre el menú con todos los links visibles</li>
+          <li>Cada link del menú tiene height ≥ 48px (tap target mínimo de Google)</li>
+          <li>Al hacer tap en un link, el menú se cierra y navega a la sección</li>
+          <li>El botón hamburger tiene <code>aria-label</code> y <code>aria-expanded</code></li>
+          <li>El menú se cierra con el botón X o al hacer tap fuera del panel</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUG-3 -->
+  <div class="task" id="bug-3">
+    <div class="task-header">
+      <div class="task-id id-bug">B3</div>
+      <div style="flex:1">
+        <div class="task-title">Sección de Proyectos muestra solo spinner — Firestore no retorna datos</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 1–2h diagnóstico</span>
+          <span class="badge b-why">🔴 Función core del portfolio rota</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Problema</h4>
+        <p>El screenshot en todos los viewpoints (desktop, laptop, tablet, mobile) muestra únicamente el spinner de carga en la sección "Proyectos Destacados". Ninguna project card carga. Solo 3 <code>&lt;img&gt;</code> detectadas en toda la página (logo y foto de perfil con naturalWidth: 0). La colección de proyectos en Firestore puede estar vacía, o existe un error silenciado en el listener.</p>
+      </div>
+      <div class="task-section">
+        <h4>Archivos a Investigar</h4>
+        <div class="file-list">
+          <div class="file-item"><span class="file-action">DEBUG</span><span class="file-path">src/hooks/useProjects.ts (o similar)</span></div>
+          <div class="file-item"><span class="file-action">DEBUG</span><span class="file-path">src/services/firestore.ts (o similar)</span></div>
+          <div class="file-item"><span class="file-action">CHECK</span><span class="file-path">Firebase Console → Firestore → colección "projects"</span></div>
+          <div class="file-item"><span class="file-action">EDIT</span><span class="file-path">src/components/home/ProjectsSection.tsx</span></div>
+        </div>
+      </div>
+      <div class="task-section">
+        <h4>Pasos de Diagnóstico</h4>
+        <pre><span class="cm">// 1. Verificar en Firebase Console que la colección existe y tiene documentos
+// 2. Revisar las Firestore Security Rules — ¿permite lectura sin auth?
+// 3. Agregar error boundary con mensaje visible:</span>
+
+<span class="kw">const</span> ProjectsSection = () =&gt; {
+  <span class="kw">const</span> { projects, loading, error } = <span class="fn">useProjects</span>();
+
+  <span class="kw">if</span> (loading) <span class="kw">return</span> <span class="tag">&lt;LoadingSpinner /&gt;</span>;
+
+  <span class="kw">if</span> (error) <span class="kw">return</span> (  <span class="cm">// Agregar este bloque</span>
+    <span class="tag">&lt;div</span> className=<span class="str">"text-center py-12 text-red-400"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;p&gt;</span>No se pudieron cargar los proyectos.<span class="tag">&lt;/p&gt;</span>
+      <span class="tag">&lt;p</span> className=<span class="str">"text-sm opacity-60 mt-2"</span><span class="tag">&gt;</span>{error.message}<span class="tag">&lt;/p&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+  );
+
+  <span class="kw">if</span> (!projects.length) <span class="kw">return</span> (  <span class="cm">// Agregar estado vacío explícito</span>
+    <span class="tag">&lt;p</span> className=<span class="str">"text-center text-muted"</span><span class="tag">&gt;</span>
+      No hay proyectos publicados aún.
+    <span class="tag">&lt;/p&gt;</span>
+  );
+
+  <span class="kw">return</span> <span class="tag">&lt;ProjectGrid</span> projects={projects} <span class="tag">/&gt;</span>;
+};</pre>
+      </div>
+      <div class="task-section">
+        <h4>Criterios de Aceptación</h4>
+        <ul class="ac-list">
+          <li>La sección de proyectos muestra al menos 3 project cards reales</li>
+          <li>Si ocurre un error de Firestore, se muestra un mensaje de error legible (no spinner infinito)</li>
+          <li>Si la colección está vacía, se muestra un estado vacío explícito</li>
+          <li>Las Firestore Rules permiten lectura pública de la colección <code>projects</code></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ CRÍTICO ═══════ -->
+  <div class="phase phase-crit" id="criticos">
+    🔴 Críticos — Esta semana
+  </div>
+
+  <!-- C-1 -->
+  <div class="task" id="c-1">
+    <div class="task-header">
+      <div class="task-id id-crit">C1</div>
+      <div style="flex:1">
+        <div class="task-title">Crear <code>public/sitemap.xml</code> con las 5 rutas públicas</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 5 min</span>
+          <span class="badge b-file">public/sitemap.xml</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Contexto</h4>
+        <p><code>GET /sitemap.xml</code> actualmente retorna el HTML shell de React (SPA catch-all). Colocar el archivo en <code>/public</code> hace que Vite lo sirva como estático antes del catch-all.</p>
+      </div>
+      <div class="task-section">
+        <h4>Archivo a Crear</h4>
+        <div class="file-list">
+          <div class="file-item"><span class="file-action">CREATE</span><span class="file-path">public/sitemap.xml</span></div>
+        </div>
+      </div>
+      <div class="task-section">
+        <h4>Contenido</h4>
+        <pre><span class="tag">&lt;?xml</span> version=<span class="str">"1.0"</span> encoding=<span class="str">"UTF-8"</span><span class="tag">?&gt;</span>
+<span class="tag">&lt;urlset</span> xmlns=<span class="str">"http://www.sitemaps.org/schemas/sitemap/0.9"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;url&gt;&lt;loc&gt;</span>https://genaropretill.com/<span class="tag">&lt;/loc&gt;&lt;lastmod&gt;</span>2026-01-05<span class="tag">&lt;/lastmod&gt;&lt;/url&gt;</span>
+  <span class="tag">&lt;url&gt;&lt;loc&gt;</span>https://genaropretill.com/about<span class="tag">&lt;/loc&gt;&lt;lastmod&gt;</span>2026-01-05<span class="tag">&lt;/lastmod&gt;&lt;/url&gt;</span>
+  <span class="tag">&lt;url&gt;&lt;loc&gt;</span>https://genaropretill.com/projects<span class="tag">&lt;/loc&gt;&lt;lastmod&gt;</span>2026-01-05<span class="tag">&lt;/lastmod&gt;&lt;/url&gt;</span>
+  <span class="tag">&lt;url&gt;&lt;loc&gt;</span>https://genaropretill.com/contact<span class="tag">&lt;/loc&gt;&lt;lastmod&gt;</span>2026-01-05<span class="tag">&lt;/lastmod&gt;&lt;/url&gt;</span>
+  <span class="tag">&lt;url&gt;&lt;loc&gt;</span>https://genaropretill.com/cv<span class="tag">&lt;/loc&gt;&lt;lastmod&gt;</span>2026-01-05<span class="tag">&lt;/lastmod&gt;&lt;/url&gt;</span>
+<span class="tag">&lt;/urlset&gt;</span></pre>
+        <p style="margin-top:8px; font-size:12px; color:var(--text-muted);">Nota: Actualizar <code>lastmod</code> en cada deploy con cambios de contenido. Omitir <code>priority</code> y <code>changefreq</code> — Google los ignora.</p>
+      </div>
+      <div class="task-section">
+        <h4>Criterios de Aceptación</h4>
+        <ul class="ac-list">
+          <li><code>GET https://genaropretill.com/sitemap.xml</code> retorna <code>Content-Type: application/xml</code></li>
+          <li>El XML es válido (validar en sitechecker.pro/sitemap-validator)</li>
+          <li>Declarar en Google Search Console → Sitemaps</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- C-2 -->
+  <div class="task" id="c-2">
+    <div class="task-header">
+      <div class="task-id id-crit">C2</div>
+      <div style="flex:1">
+        <div class="task-title">Crear <code>public/robots.txt</code> con Disallow para admin y declaración del sitemap</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 5 min</span>
+          <span class="badge b-file">public/robots.txt</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Contenido</h4>
+        <pre>User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /seed-cv
+
+<span class="cm"># AI Crawlers — allow indexing for AI search visibility</span>
+User-agent: GPTBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://genaropretill.com/sitemap.xml</pre>
+      </div>
+      <div class="task-section">
+        <h4>Criterios de Aceptación</h4>
+        <ul class="ac-list">
+          <li><code>GET /robots.txt</code> retorna <code>Content-Type: text/plain</code></li>
+          <li>Validar en Google Search Console → robots.txt tester</li>
+          <li>Confirmar que /admin/ y /seed-cv quedan bloqueados del crawl</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- C-3 -->
+  <div class="task" id="c-3">
+    <div class="task-header">
+      <div class="task-id id-crit">C3</div>
+      <div style="flex:1">
+        <div class="task-title">Conectar el formulario de contacto a un backend real — reemplazar <code>setTimeout()</code></div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 45–60 min</span>
+          <span class="badge b-file">ContactForm.tsx:32</span>
+          <span class="badge b-why">🔴 Trust crítico E-E-A-T</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Problema</h4>
+        <p>La línea 32 de <code>ContactForm.tsx</code> usa <code>await new Promise(resolve =&gt; setTimeout(resolve, 2000))</code> para simular el envío. No se llama a ningún API. Los mensajes de los usuarios se pierden. Esto es un patrón engañoso que Google penaliza bajo las Quality Rater Guidelines.</p>
+      </div>
+      <div class="task-section">
+        <h4>Opciones de Implementación</h4>
+        <pre><span class="cm">// OPCIÓN A: EmailJS (más fácil, gratis hasta 200 emails/mes)</span>
+<span class="kw">import</span> emailjs from <span class="str">'@emailjs/browser'</span>;
+
+<span class="kw">const</span> <span class="fn">handleSubmit</span> = <span class="kw">async</span> (data) =&gt; {
+  <span class="kw">await</span> emailjs.<span class="fn">send</span>(
+    <span class="str">'SERVICE_ID'</span>,      <span class="cm">// desde EmailJS dashboard</span>
+    <span class="str">'TEMPLATE_ID'</span>,     <span class="cm">// template creado en EmailJS</span>
+    { name: data.name, email: data.email, message: data.message },
+    <span class="str">'PUBLIC_KEY'</span>
+  );
+};
+
+<span class="cm">// OPCIÓN B: Resend (moderno, buen DX)</span>
+<span class="cm">// Requiere Firebase Cloud Function o backend propio</span>
+<span class="kw">const</span> res = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'/api/contact'</span>, {
+  method: <span class="str">'POST'</span>,
+  headers: { <span class="str">'Content-Type'</span>: <span class="str">'application/json'</span> },
+  body: <span class="fn">JSON.stringify</span>(data)
+});
+
+<span class="cm">// OPCIÓN C: Formspree (sin backend, plug-and-play)</span>
+<span class="tag">&lt;form</span> action=<span class="str">"https://formspree.io/f/YOUR_FORM_ID"</span> method=<span class="str">"POST"</span><span class="tag">&gt;</span></pre>
+      </div>
+      <div class="task-section">
+        <h4>Criterios de Aceptación</h4>
+        <ul class="ac-list">
+          <li>Enviar un mensaje de prueba y recibir el email en la bandeja de entrada</li>
+          <li>El formulario muestra un mensaje de éxito real (no simulado)</li>
+          <li>En caso de error de red, se muestra un mensaje de error claro</li>
+          <li>El campo de email tiene validación de formato</li>
+          <li>Implementar rate limiting básico (Formspree y EmailJS lo incluyen)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- C-4 -->
+  <div class="task" id="c-4">
+    <div class="task-header">
+      <div class="task-id id-crit">C4</div>
+      <div style="flex:1">
+        <div class="task-title">Crear página <code>/privacy-policy</code></div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 15–20 min</span>
+          <span class="badge b-why">🔴 Requisito legal + QRG Trust</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Archivos</h4>
+        <div class="file-list">
+          <div class="file-item"><span class="file-action">CREATE</span><span class="file-path">src/pages/PrivacyPolicy.tsx</span></div>
+          <div class="file-item"><span class="file-action">EDIT</span><span class="file-path">src/app/App.tsx (agregar ruta /privacy-policy)</span></div>
+          <div class="file-item"><span class="file-action">EDIT</span><span class="file-path">src/components/layout/Footer.tsx (agregar link)</span></div>
+        </div>
+      </div>
+      <div class="task-section">
+        <h4>Contenido Mínimo Requerido</h4>
+        <ul class="ac-list">
+          <li>Qué datos se recopilan (nombre, email, mensaje del formulario)</li>
+          <li>Para qué se usan (responder consultas de trabajo/contacto)</li>
+          <li>No se venden ni comparten con terceros</li>
+          <li>Cómo contactar para solicitar eliminación de datos</li>
+          <li>Fecha de última actualización</li>
+        </ul>
+        <p style="margin-top:8px; font-size:12px; color:var(--text-muted);">Usar <a href="https://privacypolicygenerator.info" target="_blank">privacypolicygenerator.info</a> para generar el texto base en 5 minutos.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- C-5 -->
+  <div class="task" id="c-5">
+    <div class="task-header">
+      <div class="task-id id-crit">C5</div>
+      <div style="flex:1">
+        <div class="task-title">Ocultar link "Admin" del navbar — mostrar solo si autenticado</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 5–10 min</span>
+          <span class="badge b-file">Navbar.tsx:151-158</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Implementación</h4>
+        <pre><span class="cm">// Navbar.tsx — líneas 151-158</span>
+<span class="cm">// ANTES</span>
+<span class="tag">&lt;Link</span> to=<span class="str">"/admin/login"</span><span class="tag">&gt;</span>Admin<span class="tag">&lt;/Link&gt;</span>
+
+<span class="cm">// DESPUÉS — solo visible si el usuario está autenticado</span>
+<span class="kw">const</span> { user } = <span class="fn">useAuth</span>();
+
+{user?.isAdmin &amp;&amp; (
+  <span class="tag">&lt;Link</span> to=<span class="str">"/admin/dashboard"</span><span class="tag">&gt;</span>Admin<span class="tag">&lt;/Link&gt;</span>
+)}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- C-6 -->
+  <div class="task" id="c-6">
+    <div class="task-header">
+      <div class="task-id id-crit">C6</div>
+      <div style="flex:1">
+        <div class="task-title">Agregar <code>preload</code> para la hero image — fix inmediato de LCP</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 5–10 min</span>
+          <span class="badge b-file">index.html</span>
+          <span class="badge b-why">LCP -300–500ms</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Implementación</h4>
+        <pre><span class="cm">&lt;!-- Agregar en index.html dentro del &lt;head&gt;, antes del &lt;link&gt; al CSS --&gt;</span>
+<span class="tag">&lt;link</span> rel=<span class="str">"preconnect"</span> href=<span class="str">"https://fonts.googleapis.com"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;link</span> rel=<span class="str">"preconnect"</span> href=<span class="str">"https://fonts.gstatic.com"</span> crossorigin<span class="tag">&gt;</span>
+<span class="tag">&lt;link</span> rel=<span class="str">"preconnect"</span> href=<span class="str">"https://res.cloudinary.com"</span><span class="tag">&gt;</span>
+
+<span class="cm">&lt;!-- Reemplazar URL con el avatar real del developer --&gt;</span>
+<span class="tag">&lt;link</span>
+  rel=<span class="str">"preload"</span>
+  as=<span class="str">"image"</span>
+  href=<span class="str">"https://res.cloudinary.com/gepres/image/upload/f_webp,q_auto,w_400/[tu-avatar]"</span>
+  fetchpriority=<span class="str">"high"</span>
+<span class="tag">&gt;</span></pre>
+        <p style="margin-top:8px; font-size:12px; color:var(--text-muted);">Si el avatar viene de Firestore (dinámico), hacer el preload en el componente Hero con <code>useEffect</code> + <code>document.createElement('link')</code>.</p>
+      </div>
+      <div class="task-section">
+        <h4>También: agregar <code>fetchpriority</code> en el JSX del Hero</h4>
+        <pre><span class="tag">&lt;img</span>
+  src={avatarUrl}
+  fetchpriority=<span class="str">"high"</span>
+  width={<span class="num">400</span>}
+  height={<span class="num">400</span>}
+  alt=<span class="str">"Genaro Pretill Escobar"</span>
+  className=<span class="str">"rounded-full"</span>
+<span class="tag">/&gt;</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- C-7 -->
+  <div class="task" id="c-7">
+    <div class="task-header">
+      <div class="task-id id-crit">C7</div>
+      <div style="flex:1">
+        <div class="task-title">Instalar <code>react-helmet-async</code> — títulos, metas y canonicals únicos por ruta</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 45–90 min</span>
+          <span class="badge b-file">App.tsx · index.html · todas las páginas</span>
+          <span class="badge b-why">Crítico para indexación de páginas internas</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Instalación</h4>
+        <pre>npm install react-helmet-async</pre>
+      </div>
+      <div class="task-section">
+        <h4>Setup en App.tsx</h4>
+        <pre><span class="kw">import</span> { HelmetProvider } from <span class="str">'react-helmet-async'</span>;
+
+<span class="kw">export default function</span> <span class="fn">App</span>() {
+  <span class="kw">return</span> (
+    <span class="tag">&lt;HelmetProvider&gt;</span>
+      <span class="tag">&lt;Router&gt;</span>
+        {<span class="cm">/* ... rutas */</span>}
+      <span class="tag">&lt;/Router&gt;</span>
+    <span class="tag">&lt;/HelmetProvider&gt;</span>
+  );
+}</pre>
+      </div>
+      <div class="task-section">
+        <h4>Componente SEOHead reutilizable</h4>
+        <pre><span class="cm">// src/components/SEOHead.tsx</span>
+<span class="kw">import</span> { Helmet } from <span class="str">'react-helmet-async'</span>;
+
+<span class="kw">interface</span> Props {
+  title: string;
+  description: string;
+  canonical: string;
+}
+
+<span class="kw">export function</span> <span class="fn">SEOHead</span>({ title, description, canonical }: Props) {
+  <span class="kw">return</span> (
+    <span class="tag">&lt;Helmet&gt;</span>
+      <span class="tag">&lt;title&gt;</span>{title}<span class="tag">&lt;/title&gt;</span>
+      <span class="tag">&lt;meta</span> name=<span class="str">"description"</span> content={description} <span class="tag">/&gt;</span>
+      <span class="tag">&lt;link</span> rel=<span class="str">"canonical"</span> href={canonical} <span class="tag">/&gt;</span>
+    <span class="tag">&lt;/Helmet&gt;</span>
+  );
+}</pre>
+      </div>
+      <div class="task-section">
+        <h4>Títulos por Ruta</h4>
+        <pre><span class="cm">// / — Homepage</span>
+title: <span class="str">"Genaro Pretill | Full Stack Developer — React, Vue.js & Node.js"</span>
+description: <span class="str">"Full Stack Developer especializado en React.js, Vue.js, Node.js, TypeScript y arquitecturas modernas. Ver proyectos y experiencia."</span>
+canonical: <span class="str">"https://genaropretill.com/"</span>
+
+<span class="cm">// /about</span>
+title: <span class="str">"Sobre Mí | Genaro Pretill — Full Stack Developer"</span>
+description: <span class="str">"Conoce a Genaro Pretill: desarrollador Full Stack con experiencia en Vue.js, React.js, Node.js y DevOps en Izipay (Interbank)."</span>
+canonical: <span class="str">"https://genaropretill.com/about"</span>
+
+<span class="cm">// /projects</span>
+title: <span class="str">"Proyectos | Genaro Pretill — Portfolio Full Stack"</span>
+description: <span class="str">"Portfolio de proyectos desarrollados con React, Vue.js, Node.js y TypeScript. Aplicaciones web modernas, APIs y DevOps."</span>
+canonical: <span class="str">"https://genaropretill.com/projects"</span>
+
+<span class="cm">// /contact</span>
+title: <span class="str">"Contacto | Genaro Pretill — Full Stack Developer"</span>
+description: <span class="str">"¿Tienes un proyecto en mente? Contáctame para colaborar en desarrollo web full stack."</span>
+canonical: <span class="str">"https://genaropretill.com/contact"</span>
+
+<span class="cm">// /cv</span>
+title: <span class="str">"CV | Genaro Pretill Escobar — Full Stack & DevOps Developer"</span>
+description: <span class="str">"Currículum de Genaro Pretill: experiencia como Full Stack Developer y DevOps Engineer en Izipay (Interbank)."</span>
+canonical: <span class="str">"https://genaropretill.com/cv"</span></pre>
+      </div>
+      <div class="task-section">
+        <h4>Criterios de Aceptación</h4>
+        <ul class="ac-list">
+          <li>Cada ruta tiene un <code>&lt;title&gt;</code> único visible en la pestaña del navegador</li>
+          <li>Cada ruta tiene <code>&lt;meta name="description"&gt;</code> único</li>
+          <li>El canonical de cada ruta apunta a su propia URL (no a la raíz)</li>
+          <li>Validar con Chrome DevTools → Elements → buscar <code>&lt;title&gt;</code> al navegar entre rutas</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ ALTOS ═══════ -->
+  <div class="phase phase-high" id="altos">
+    🟠 Alta Prioridad — Esta semana
+  </div>
+
+  <!-- H-1 -->
+  <div class="task" id="h-1">
+    <div class="task-header">
+      <div class="task-id id-high">H1</div>
+      <div style="flex:1">
+        <div class="task-title">Configurar redirect 301 de <code>www.genaropretill.com</code> al dominio apex</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 15 min</span>
+          <span class="badge b-file">Fastly / CDN config</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Problema</h4>
+        <p><code>https://www.genaropretill.com/</code> retorna HTTP 404. Cualquier backlink hacia <code>www.</code> pierde toda la link equity.</p>
+      </div>
+      <div class="task-section">
+        <h4>Si usas Netlify — agregar en <code>netlify.toml</code> o <code>_redirects</code></h4>
+        <pre><span class="cm"># _redirects</span>
+https://www.genaropretill.com/* https://genaropretill.com/:splat 301!</pre>
+      </div>
+      <div class="task-section">
+        <h4>Si usas DNS directamente</h4>
+        <p>Crear un registro CNAME para <code>www</code> apuntando al dominio apex, y configurar el redirect 301 en el panel del hosting.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- H-2 -->
+  <div class="task" id="h-2">
+    <div class="task-header">
+      <div class="task-id id-high">H2</div>
+      <div style="flex:1">
+        <div class="task-title">Agregar security headers faltantes</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 20–30 min</span>
+          <span class="badge b-file">netlify.toml o _headers o Fastly VCL</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Implementación (Netlify <code>_headers</code>)</h4>
+        <pre>/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' cdn.jsdelivr.net fonts.googleapis.com www.google.com www.gstatic.com; style-src 'self' 'unsafe-inline' cdn.jsdelivr.net fonts.googleapis.com fonts.gstatic.com; font-src 'self' fonts.gstatic.com cdn.jsdelivr.net res.cloudinary.com data:; img-src 'self' res.cloudinary.com data:; connect-src 'self' https://*.firebaseio.com https://*.googleapis.com</pre>
+      </div>
+      <div class="task-section">
+        <h4>Criterios de Aceptación</h4>
+        <ul class="ac-list">
+          <li>Validar en <a href="https://securityheaders.com" target="_blank">securityheaders.com</a> — score mínimo A</li>
+          <li>El sitio sigue funcionando correctamente después de agregar la CSP</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- H-3 -->
+  <div class="task" id="h-3">
+    <div class="task-header">
+      <div class="task-id id-high">H3</div>
+      <div style="flex:1">
+        <div class="task-title">Fix Cache-Control de assets con hash — de 1h a 1 año</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 10 min</span>
+          <span class="badge b-file">_headers o netlify.toml</span>
+          <span class="badge b-why">Repeat-visit LCP: ~2s → &lt;100ms</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Implementación</h4>
+        <pre><span class="cm"># _headers (Netlify)</span>
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+<span class="cm"># netlify.toml alternativo</span>
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- H-4 -->
+  <div class="task" id="h-4">
+    <div class="task-header">
+      <div class="task-id id-high">H4</div>
+      <div style="flex:1">
+        <div class="task-title">Code splitting en Vite — separar Firebase, GSAP, i18n del bundle principal</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 1–2h</span>
+          <span class="badge b-file">vite.config.ts</span>
+          <span class="badge b-why">LCP estimado -800ms a -1.5s</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Contexto</h4>
+        <p>El bundle actual incluye Firebase SDK (auth: 227 refs, firestore: 59 refs), GSAP con ScrollTrigger, i18next, y React Router en un único chunk de 2,241 KB. Firebase solo se necesita en <code>/contact</code> y <code>/admin</code>.</p>
+      </div>
+      <div class="task-section">
+        <h4>Implementación en <code>vite.config.ts</code></h4>
+        <pre><span class="cm">// vite.config.ts</span>
+<span class="kw">import</span> { defineConfig } from <span class="str">'vite'</span>;
+
+<span class="kw">export default</span> <span class="fn">defineConfig</span>({
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          <span class="str">'react-vendor'</span>: [<span class="str">'react'</span>, <span class="str">'react-dom'</span>, <span class="str">'react-router-dom'</span>],
+          <span class="str">'firebase'</span>: [<span class="str">'firebase/app'</span>, <span class="str">'firebase/auth'</span>, <span class="str">'firebase/firestore'</span>],
+          <span class="str">'gsap'</span>: [<span class="str">'gsap'</span>],
+          <span class="str">'i18n'</span>: [<span class="str">'i18next'</span>, <span class="str">'react-i18next'</span>],
+        },
+      },
+    },
+  },
+});</pre>
+      </div>
+      <div class="task-section">
+        <h4>Criterios de Aceptación</h4>
+        <ul class="ac-list">
+          <li>El bundle principal (inicial) baja de 2,241 KB a menos de 400 KB</li>
+          <li>Verificar con <code>npx vite-bundle-visualizer</code> o <code>rollup-plugin-visualizer</code></li>
+          <li>La aplicación sigue funcionando correctamente en todas las rutas</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- H-5 -->
+  <div class="task" id="h-5">
+    <div class="task-header">
+      <div class="task-id id-high">H5</div>
+      <div style="flex:1">
+        <div class="task-title">Convertir rutas pesadas a <code>React.lazy()</code> — lazy loading por ruta</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 1–2h</span>
+          <span class="badge b-file">src/app/App.tsx</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Implementación</h4>
+        <pre><span class="cm">// src/app/App.tsx</span>
+<span class="kw">import</span> { lazy, Suspense } from <span class="str">'react'</span>;
+
+<span class="cm">// Convertir a lazy (las páginas pesadas primero)</span>
+<span class="kw">const</span> AdminDashboard = <span class="fn">lazy</span>(() =&gt; <span class="kw">import</span>(<span class="str">'../pages/AdminDashboard'</span>));
+<span class="kw">const</span> CVPage         = <span class="fn">lazy</span>(() =&gt; <span class="kw">import</span>(<span class="str">'../pages/CVPage'</span>));
+<span class="kw">const</span> ProjectsPage   = <span class="fn">lazy</span>(() =&gt; <span class="kw">import</span>(<span class="str">'../pages/ProjectsPage'</span>));
+<span class="kw">const</span> AboutPage      = <span class="fn">lazy</span>(() =&gt; <span class="kw">import</span>(<span class="str">'../pages/AboutPage'</span>));
+
+<span class="cm">// Envolver rutas en Suspense</span>
+<span class="tag">&lt;Routes&gt;</span>
+  <span class="tag">&lt;Route</span> path=<span class="str">"/"</span>          element={<span class="tag">&lt;HomePage /&gt;</span>} <span class="tag">/&gt;</span>
+  <span class="tag">&lt;Route</span> path=<span class="str">"/about"</span>
+    element={<span class="tag">&lt;Suspense</span> fallback={<span class="tag">&lt;PageLoader /&gt;</span>}<span class="tag">&gt;&lt;AboutPage /&gt;&lt;/Suspense&gt;</span>}
+  <span class="tag">/&gt;</span>
+  <span class="tag">&lt;Route</span> path=<span class="str">"/projects"</span>
+    element={<span class="tag">&lt;Suspense</span> fallback={<span class="tag">&lt;PageLoader /&gt;</span>}<span class="tag">&gt;&lt;ProjectsPage /&gt;&lt;/Suspense&gt;</span>}
+  <span class="tag">/&gt;</span>
+  <span class="tag">&lt;Route</span> path=<span class="str">"/admin/*"</span>
+    element={<span class="tag">&lt;Suspense</span> fallback={<span class="tag">&lt;PageLoader /&gt;</span>}<span class="tag">&gt;&lt;AdminDashboard /&gt;&lt;/Suspense&gt;</span>}
+  <span class="tag">/&gt;</span>
+<span class="tag">&lt;/Routes&gt;</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- H-6 -->
+  <div class="task" id="h-6">
+    <div class="task-header">
+      <div class="task-id id-high">H6</div>
+      <div style="flex:1">
+        <div class="task-title">Agregar <code>noindex</code> a rutas <code>/admin/*</code> y <code>/seed-cv</code></div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 15 min</span>
+          <span class="badge b-file">AdminLayout.tsx · SeedCV.tsx</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Implementación</h4>
+        <pre><span class="cm">// En el componente admin layout (o en cada página admin)</span>
+<span class="kw">import</span> { Helmet } from <span class="str">'react-helmet-async'</span>;
+
+<span class="kw">export function</span> <span class="fn">AdminLayout</span>({ children }) {
+  <span class="kw">return</span> (
+    <span class="tag">&lt;&gt;</span>
+      <span class="tag">&lt;Helmet&gt;</span>
+        <span class="tag">&lt;meta</span> name=<span class="str">"robots"</span> content=<span class="str">"noindex, nofollow"</span> <span class="tag">/&gt;</span>
+      <span class="tag">&lt;/Helmet&gt;</span>
+      {children}
+    <span class="tag">&lt;/&gt;</span>
+  );
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- H-7 -->
+  <div class="task" id="h-7">
+    <div class="task-header">
+      <div class="task-id id-high">H7</div>
+      <div style="flex:1">
+        <div class="task-title">Cargar Devicon de forma no-bloqueante — TTFB de 588ms en critical path</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 20–30 min</span>
+          <span class="badge b-file">index.html</span>
+          <span class="badge b-why">FCP -400–600ms</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Opción A (Fix rápido) — media print trick</h4>
+        <pre><span class="cm">&lt;!-- ANTES (render-blocking) --&gt;</span>
+<span class="tag">&lt;link</span> rel=<span class="str">"stylesheet"</span> href=<span class="str">"https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"</span><span class="tag">&gt;</span>
+
+<span class="cm">&lt;!-- DESPUÉS (non-blocking) --&gt;</span>
+<span class="tag">&lt;link</span> rel=<span class="str">"stylesheet"</span>
+  href=<span class="str">"https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/devicon.min.css"</span>
+  media=<span class="str">"print"</span>
+  onload=<span class="str">"this.media='all'"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;noscript&gt;</span>
+  <span class="tag">&lt;link</span> rel=<span class="str">"stylesheet"</span> href=<span class="str">"https://cdn.jsdelivr.net/.../devicon.min.css"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/noscript&gt;</span></pre>
+      </div>
+      <div class="task-section">
+        <h4>Opción B (Recomendada) — SVGs inline via npm</h4>
+        <pre>npm install devicon  <span class="cm"># o importar SVGs individualmente desde el repo</span>
+
+<span class="cm">// En vez de &lt;i class="devicon-react-original"&gt;, usar SVG directo:</span>
+<span class="kw">import</span> ReactIcon from <span class="str">'devicon/icons/react/react-original.svg?react'</span>;
+<span class="tag">&lt;ReactIcon</span> className=<span class="str">"w-8 h-8"</span> aria-label=<span class="str">"React.js"</span> <span class="tag">/&gt;</span></pre>
+        <p style="margin-top:8px; font-size:12px; color:var(--text-muted);">La Opción B elimina el external request por completo y también resuelve el CLS por <code>font-display:block</code>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- H-8 -->
+  <div class="task" id="h-8">
+    <div class="task-header">
+      <div class="task-id id-high">H8</div>
+      <div style="flex:1">
+        <div class="task-title">Google Fonts: reemplazar <code>@import</code> en CSS por <code>&lt;link&gt;</code> en HTML</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 10 min</span>
+          <span class="badge b-file">src/styles/index.css · index.html</span>
+          <span class="badge b-why">LCP -200–400ms</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Implementación</h4>
+        <pre><span class="cm">/* src/styles/index.css — ELIMINAR esta línea */</span>
+@import <span class="str">"https://fonts.googleapis.com/css2?family=Inter:..."</span>;
+
+<span class="cm">&lt;!-- index.html — AGREGAR en &lt;head&gt; --&gt;</span>
+<span class="tag">&lt;link</span> rel=<span class="str">"preconnect"</span> href=<span class="str">"https://fonts.googleapis.com"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;link</span> rel=<span class="str">"preconnect"</span> href=<span class="str">"https://fonts.gstatic.com"</span> crossorigin<span class="tag">&gt;</span>
+<span class="tag">&lt;link</span> rel=<span class="str">"stylesheet"</span>
+  href=<span class="str">"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Fira+Code:wght@400;500;600&amp;display=swap"</span><span class="tag">&gt;</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- H-9 -->
+  <div class="task" id="h-9">
+    <div class="task-header">
+      <div class="task-id id-high">H9</div>
+      <div style="flex:1">
+        <div class="task-title">Corregir Person schema — LinkedIn URL, agregar <code>image</code> y <code>@id</code></div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 15 min</span>
+          <span class="badge b-file">index.html (bloque JSON-LD)</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Errores a Corregir</h4>
+        <pre><span class="cm">// ANTES — 3 errores</span>
+{
+  <span class="str">"@type"</span>: <span class="str">"Person"</span>,
+  <span class="cm">// Sin @id — Google no puede disambiguar la entidad</span>
+  <span class="cm">// Sin image — no califica para Knowledge Panel</span>
+  <span class="str">"sameAs"</span>: [
+    <span class="str">"https://linkedin.com/in/genaropretill"</span>  <span class="cm">// Falta www.</span>
+  ]
+}
+
+<span class="cm">// DESPUÉS — corregido (ver schema/01-person.jsonld generado)</span>
+{
+  <span class="str">"@context"</span>: <span class="str">"https://schema.org"</span>,
+  <span class="str">"@type"</span>: <span class="str">"Person"</span>,
+  <span class="str">"@id"</span>: <span class="str">"https://genaropretill.com/#person"</span>,
+  <span class="str">"name"</span>: <span class="str">"Genaro Pretill"</span>,
+  <span class="str">"jobTitle"</span>: <span class="str">"Full Stack Developer"</span>,
+  <span class="str">"image"</span>: {
+    <span class="str">"@type"</span>: <span class="str">"ImageObject"</span>,
+    <span class="str">"url"</span>: <span class="str">"https://res.cloudinary.com/gepres/image/upload/f_auto,w_400/[tu-avatar]"</span>
+  },
+  <span class="str">"sameAs"</span>: [
+    <span class="str">"https://github.com/genaropretill"</span>,
+    <span class="str">"https://www.linkedin.com/in/genaropretill"</span>  <span class="cm">// Correcto con www.</span>
+  ]
+}</pre>
+        <p style="margin-top:8px; font-size:12px; color:var(--text-muted);">El archivo completo ya está generado en <code>seo-demo/schema/01-person.jsonld</code>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- H-10 -->
+  <div class="task" id="h-10">
+    <div class="task-header">
+      <div class="task-id id-high">H10</div>
+      <div style="flex:1">
+        <div class="task-title">Agregar schemas <code>WebSite</code> y <code>ProfilePage</code> al index.html</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 10 min</span>
+          <span class="badge b-file">index.html</span>
+          <span class="badge b-why">Sitelinks Searchbox + ProfilePage rich result</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <p>Los archivos JSON-LD ya están generados en <code>seo-demo/schema/02-website.jsonld</code> y <code>seo-demo/schema/03-profilepage.jsonld</code>. Copiar el contenido de cada uno en bloques <code>&lt;script type="application/ld+json"&gt;</code> separados en el <code>&lt;head&gt;</code> del <code>index.html</code>.</p>
+        <ul class="ac-list" style="margin-top:12px">
+          <li>Validar los 3 schemas juntos en <a href="https://search.google.com/test/rich-results" target="_blank">Rich Results Test de Google</a></li>
+          <li>El test debe mostrar "Person" y "WebSite" como tipos detectados sin errores</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- H-11 -->
+  <div class="task" id="h-11">
+    <div class="task-header">
+      <div class="task-id id-high">H11</div>
+      <div style="flex:1">
+        <div class="task-title">Mover CTAs above the fold en laptop — reducir padding vertical del hero</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 20–30 min</span>
+          <span class="badge b-file">HeroSection.tsx</span>
+          <span class="badge b-why">CTA visible en 1366×768 sin scroll</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Problema</h4>
+        <p>Los botones "Ver Proyectos" y "Contactar" renderizan en <code>top: 808px</code> en un viewport de 768px. El ícono decorativo <code>&lt;/&gt;</code> consume demasiado espacio vertical.</p>
+      </div>
+      <div class="task-section">
+        <h4>Implementación</h4>
+        <pre><span class="cm">// Reducir el tamaño del ícono decorativo y el padding del hero</span>
+<span class="cm">// ANTES</span>
+&lt;section className=<span class="str">"min-h-screen pt-24 pb-16"</span>&gt;
+  &lt;div className=<span class="str">"text-8xl mb-8"</span>&gt;&lt;/&gt;&lt;/div&gt;  <span class="cm">// muy grande</span>
+
+<span class="cm">// DESPUÉS</span>
+&lt;section className=<span class="str">"min-h-screen pt-16 md:pt-20 pb-8"</span>&gt;
+  &lt;div className=<span class="str">"text-5xl md:text-6xl mb-4 md:mb-6"</span>&gt;&lt;/&gt;&lt;/div&gt;</pre>
+      </div>
+      <div class="task-section">
+        <h4>Criterio de Aceptación</h4>
+        <ul class="ac-list">
+          <li>En Chrome DevTools con viewport 1366×768, ambos CTAs son completamente visibles sin scroll</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- H-12 -->
+  <div class="task" id="h-12">
+    <div class="task-header">
+      <div class="task-id id-high">H12</div>
+      <div style="flex:1">
+        <div class="task-title">Fix imagen de perfil broken — naturalWidth y naturalHeight = 0</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 20–30 min</span>
+          <span class="badge b-file">HeroSection.tsx · Firestore config</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Implementación</h4>
+        <pre><span class="cm">// Agregar fallback en el componente de imagen del avatar</span>
+<span class="tag">&lt;img</span>
+  src={profile?.avatarUrl || <span class="str">'/assets/avatar-fallback.jpg'</span>}
+  onError={(e) =&gt; { e.currentTarget.src = <span class="str">'/assets/avatar-fallback.jpg'</span> }}
+  width={<span class="num">400</span>}
+  height={<span class="num">400</span>}
+  alt=<span class="str">"Genaro Pretill Escobar"</span>
+  fetchpriority=<span class="str">"high"</span>
+<span class="tag">/&gt;</span></pre>
+        <p style="margin-top:8px; font-size:12px; color:var(--text-muted);">También verificar la URL del avatar en Firestore y que la imagen esté subida a Cloudinary con los permisos correctos.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- H-13 -->
+  <div class="task" id="h-13">
+    <div class="task-header">
+      <div class="task-id id-high">H13</div>
+      <div style="flex:1">
+        <div class="task-title">Crear <code>public/llms.txt</code> para crawlers de AI</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 10 min</span>
+          <span class="badge b-file">public/llms.txt</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Contenido</h4>
+        <pre># Genaro Pretill — Full Stack Developer
+
+## About
+Genaro Pretill is a Full Stack Developer and DevOps Engineer currently working
+at Izipay (Interbank). Specialized in React.js, Vue.js, Node.js, TypeScript,
+and modern cloud/DevOps infrastructure.
+
+## Expertise
+- Frontend: React.js, Vue.js, Next.js, TypeScript, Tailwind CSS
+- Backend: Node.js, NestJS, REST APIs, PostgreSQL, MongoDB
+- DevOps & Cloud: AWS, Docker, Kubernetes, CI/CD pipelines
+- Languages: JavaScript, TypeScript, Python
+
+## Links
+- Portfolio: https://genaropretill.com
+- Projects: https://genaropretill.com/projects
+- About: https://genaropretill.com/about
+- Contact: https://genaropretill.com/contact
+- GitHub: https://github.com/genaropretill
+- LinkedIn: https://www.linkedin.com/in/genaropretill</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ MEDIOS ═══════ -->
+  <div class="phase phase-medium" id="medios">
+    🟡 Prioridad Media — Este mes
+  </div>
+
+  <!-- M-1 -->
+  <div class="task" id="m-1">
+    <div class="task-header">
+      <div class="task-id id-medium">M1</div>
+      <div style="flex:1">
+        <div class="task-title">Crear rutas <code>/projects/:slug</code> — páginas individuales por proyecto</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 4–8h</span>
+          <span class="badge b-file">App.tsx · ProjectDetail.tsx · Firestore</span>
+          <span class="badge b-why">E-E-A-T Autoridad + Indexabilidad</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Problema</h4>
+        <p>Los proyectos se muestran en modals sobre la URL <code>/</code>. No son indexables individualmente, no se pueden linkear directamente, y las AI no pueden citarlos.</p>
+      </div>
+      <div class="task-section">
+        <h4>Estructura de la Página de Proyecto</h4>
+        <pre><span class="cm">// src/pages/ProjectDetail.tsx</span>
+<span class="cm">// URL: /projects/[slug]</span>
+<span class="cm">// Contenido recomendado:</span>
+
+1. Título del proyecto (H1)
+2. Stack tecnológico usado (badges/tags)
+3. Problema que resuelve (H2 + párrafo)
+4. Solución implementada (H2 + descripción técnica)
+5. Decisiones de arquitectura tomadas
+6. Screenshots o demo video (iframe)
+7. Métricas de impacto (si aplica)
+8. Links: Demo en vivo + Repositorio GitHub
+9. Schema SoftwareApplication (ver M8)</pre>
+      </div>
+      <div class="task-section">
+        <h4>Schema por Proyecto</h4>
+        <pre>{
+  <span class="str">"@context"</span>: <span class="str">"https://schema.org"</span>,
+  <span class="str">"@type"</span>: <span class="str">"SoftwareApplication"</span>,
+  <span class="str">"@id"</span>: <span class="str">"https://genaropretill.com/projects/[slug]#app"</span>,
+  <span class="str">"name"</span>: project.title,
+  <span class="str">"description"</span>: project.description,
+  <span class="str">"url"</span>: <span class="str">"https://genaropretill.com/projects/[slug]"</span>,
+  <span class="str">"applicationCategory"</span>: <span class="str">"WebApplication"</span>,
+  <span class="str">"author"</span>: { <span class="str">"@id"</span>: <span class="str">"https://genaropretill.com/#person"</span> },
+  <span class="str">"codeRepository"</span>: project.githubUrl
+}</pre>
+      </div>
+      <div class="task-section">
+        <h4>Criterios de Aceptación</h4>
+        <ul class="ac-list">
+          <li>Cada proyecto tiene una URL única (<code>/projects/nombre-proyecto</code>)</li>
+          <li>La página del proyecto renderiza con contenido visible sin JS (o se pre-renderiza)</li>
+          <li>El sitemap incluye las URLs de los proyectos</li>
+          <li>Cada página tiene title y meta description únicos via react-helmet-async</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- M-2 -->
+  <div class="task" id="m-2">
+    <div class="task-header">
+      <div class="task-id id-medium">M2</div>
+      <div style="flex:1">
+        <div class="task-title">Mejorar contraste de texto — cumplir WCAG AA (ratio 4.5:1)</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 30–45 min</span>
+          <span class="badge b-file">tailwind.config.ts · src/styles/index.css</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Elementos a Corregir</h4>
+        <pre><span class="cm">/* 1. Texto descriptivo del hero — aclarar */</span>
+<span class="cm">/* ANTES: text-gray-400 (demasiado oscuro sobre fondo near-black) */</span>
+<span class="cm">/* DESPUÉS: text-gray-300 o text-slate-300 */</span>
+
+<span class="cm">/* 2. Botón "Contactar" (ghost/outlined) — hacer más visible */</span>
+<span class="cm">/* ANTES: border-purple-500 text-purple-400 (casi invisible sobre dark bg) */</span>
+<span class="cm">/* DESPUÉS: border-purple-400 text-white bg-purple-500/20 */</span>
+
+<span class="cm">/* 3. Footer links — aumentar de 14px a 16px */</span>
+<span class="cm">/* 4. Contact email — mínimo 16px en mobile */</span></pre>
+      </div>
+      <div class="task-section">
+        <h4>Herramienta de validación</h4>
+        <p>Usar <a href="https://webaim.org/resources/contrastchecker/" target="_blank">WebAIM Contrast Checker</a> para verificar que el ratio sea ≥ 4.5:1 (AA) o ≥ 7:1 (AAA).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- M-3 -->
+  <div class="task" id="m-3">
+    <div class="task-header">
+      <div class="task-id id-medium">M3</div>
+      <div style="flex:1">
+        <div class="task-title">Tap targets ≥ 48px — botones de filtro y footer links</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 20 min</span>
+          <span class="badge b-file">ProjectsSection.tsx · Footer.tsx</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Implementación</h4>
+        <pre><span class="cm">// Botones de filtro (40px → 48px)</span>
+<span class="tag">&lt;button</span> className=<span class="str">"min-h-[48px] px-4 py-3 ..."</span><span class="tag">&gt;</span>Todos<span class="tag">&lt;/button&gt;</span>
+
+<span class="cm">// Footer links (20px → 48px)</span>
+<span class="tag">&lt;a</span> className=<span class="str">"min-h-[48px] flex items-center ..."</span> href=<span class="str">"..."</span><span class="tag">&gt;</span>
+  Sobre Mí
+<span class="tag">&lt;/a&gt;</span>
+
+<span class="cm">// Language toggle (36px → 48px)</span>
+<span class="tag">&lt;button</span> className=<span class="str">"min-h-[48px] min-w-[48px] ..."</span><span class="tag">&gt;</span>EN<span class="tag">&lt;/button&gt;</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- M-4 -->
+  <div class="task" id="m-4">
+    <div class="task-header">
+      <div class="task-id id-medium">M4</div>
+      <div style="flex:1">
+        <div class="task-title">Agregar hreflang self-referencing (ES/EN)</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 10 min</span>
+          <span class="badge b-file">index.html o SEOHead.tsx</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Implementación</h4>
+        <pre><span class="cm">&lt;!-- Agregar en el &lt;head&gt; de index.html --&gt;</span>
+<span class="tag">&lt;link</span> rel=<span class="str">"alternate"</span> hreflang=<span class="str">"es"</span>       href=<span class="str">"https://genaropretill.com/"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;link</span> rel=<span class="str">"alternate"</span> hreflang=<span class="str">"x-default"</span> href=<span class="str">"https://genaropretill.com/"</span><span class="tag">&gt;</span>
+
+<span class="cm">&lt;!-- O dinámicamente en SEOHead.tsx si el idioma cambia por ruta --&gt;</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- M-5 -->
+  <div class="task" id="m-5">
+    <div class="task-header">
+      <div class="task-id id-medium">M5</div>
+      <div style="flex:1">
+        <div class="task-title">Actualizar HSTS — agregar <code>includeSubDomains; preload</code></div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 10 min + propagación</span>
+          <span class="badge b-why">Después de resolver H1 (www redirect)</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Implementación</h4>
+        <pre><span class="cm"># En _headers o netlify.toml</span>
+Strict-Transport-Security: max-age=31556926; includeSubDomains; preload</pre>
+        <p style="margin-top:8px; font-size:12px; color:var(--text-muted);">Una vez configurado, registrar en <a href="https://hstspreload.org" target="_blank">hstspreload.org</a>. Prerequisito: H1 (www redirect) debe estar funcionando antes de activar <code>includeSubDomains</code>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- M-6 -->
+  <div class="task" id="m-6">
+    <div class="task-header">
+      <div class="task-id id-medium">M6</div>
+      <div style="flex:1">
+        <div class="task-title">Aplicar transformaciones Cloudinary a todas las imágenes</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 30–45 min</span>
+          <span class="badge b-file">HeroSection.tsx · ProjectCard.tsx · index.html (OG)</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Implementación</h4>
+        <pre><span class="cm">// Helper para URLs de Cloudinary optimizadas</span>
+<span class="kw">export function</span> <span class="fn">cloudinaryUrl</span>(publicId: string, width: number) {
+  <span class="kw">return</span> <span class="str">`https://res.cloudinary.com/gepres/image/upload/f_auto,q_auto,w_${width}/${publicId}`</span>;
+}
+
+<span class="cm">// En componentes:</span>
+&lt;img src={<span class="fn">cloudinaryUrl</span>(<span class="str">'avatar'</span>, <span class="num">400</span>)} width=<span class="num">400</span> height=<span class="num">400</span> /&gt;
+
+<span class="cm">// OG image en index.html:</span>
+<span class="tag">&lt;meta</span> property=<span class="str">"og:image"</span>
+  content=<span class="str">"https://res.cloudinary.com/gepres/image/upload/f_auto,q_auto,w_1200/v.../content-img_dlkevd.jpg"</span><span class="tag">&gt;</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- M-7 -->
+  <div class="task" id="m-7">
+    <div class="task-header">
+      <div class="task-id id-medium">M7</div>
+      <div style="flex:1">
+        <div class="task-title">Agregar sección de Testimonios en <code>/about</code></div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 2–4h</span>
+          <span class="badge b-file">src/types/index.ts · AboutPage.tsx · Firestore</span>
+          <span class="badge b-why">E-E-A-T Autoridad</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Implementación</h4>
+        <pre><span class="cm">// 1. Agregar tipo en types/index.ts</span>
+<span class="kw">interface</span> Testimonial {
+  id: string;
+  name: string;
+  role: string;
+  company: string;
+  text: string;
+  linkedinUrl?: string;
+  avatarUrl?: string;
+}
+
+<span class="cm">// 2. Crear colección en Firestore: "testimonials"
+// 3. Componente TestimonialCard
+// 4. Agregar al menos 2-3 testimonios reales de LinkedIn</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- M-8 -->
+  <div class="task" id="m-8">
+    <div class="task-header">
+      <div class="task-id id-medium">M8</div>
+      <div style="flex:1">
+        <div class="task-title">Schema <code>SoftwareApplication</code> dinámico en páginas de proyecto</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 1h</span>
+          <span class="badge b-why">Depende de M1</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <p>Implementar via <code>react-helmet-async</code> en el componente <code>ProjectDetail.tsx</code>. El template JSON-LD ya está generado en <code>seo-demo/schema/04-software-application-example.jsonld</code>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- M-9 -->
+  <div class="task" id="m-9">
+    <div class="task-header">
+      <div class="task-id id-medium">M9</div>
+      <div style="flex:1">
+        <div class="task-title">Poblar Firestore con contenido real — mínimo viable para portfolio</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 2–4h</span>
+          <span class="badge b-why">Sin datos, el sitio muestra placeholders (thin content)</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Colecciones Mínimas</h4>
+        <ul class="ac-list">
+          <li><strong>projects</strong> — mínimo 3 proyectos reales con título, descripción, tech stack, imageUrl, demoUrl, githubUrl</li>
+          <li><strong>experience</strong> — mínimo 2 entradas (Izipay + trabajo anterior) con empresa, rol, fechas, descripción, achievements, tech</li>
+          <li><strong>skills</strong> — mínimo 8 skills con nombre, nivel (0-100), categoría</li>
+          <li><strong>profile</strong> — nombre completo, bio, avatarUrl, yearsOfExperience, projectsCompleted</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ BAJOS ═══════ -->
+  <div class="phase phase-low" id="bajos">
+    🟢 Baja Prioridad — Backlog
+  </div>
+
+  <!-- L-1 -->
+  <div class="task" id="l-1">
+    <div class="task-header">
+      <div class="task-id id-low">L1</div>
+      <div style="flex:1">
+        <div class="task-title">Migrar a SSG — Astro, Next.js export, o react-snap</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ Días–semanas</span>
+          <span class="badge b-why">Mayor impacto SEO estructural posible</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Opciones Ordenadas por Esfuerzo</h4>
+        <pre><span class="cm">// OPCIÓN 1 — react-snap (menor esfuerzo, mismo stack)</span>
+npm install --save-dev react-snap
+<span class="cm">// Agrega en package.json "postbuild": "react-snap"</span>
+<span class="cm">// Pre-renderiza el HTML de cada ruta en el build</span>
+
+<span class="cm">// OPCIÓN 2 — Migrar a Next.js (mismo React, SSG/SSR)</span>
+<span class="cm">// Usar "next export" para páginas estáticas</span>
+<span class="cm">// Firebase Firestore → fetch en getStaticProps</span>
+
+<span class="cm">// OPCIÓN 3 — Astro (recomendado para nuevo portfolio)</span>
+<span class="cm">// Genera HTML estático, React islands para interactividad</span>
+<span class="cm">// Zero JS por defecto — máximo rendimiento</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- L-2 -->
+  <div class="task" id="l-2">
+    <div class="task-header">
+      <div class="task-id id-low">L2</div>
+      <div style="flex:1">
+        <div class="task-title">Blog técnico en <code>/blog</code> — mínimo 2 artículos por trimestre</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ Ongoing</span>
+          <span class="badge b-why">Mayor palanca de tráfico orgánico a largo plazo</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Temas Sugeridos (alta demanda, expertise real)</h4>
+        <ul class="ac-list">
+          <li>"Cómo configurar un pipeline CI/CD con GitHub Actions y Docker en AWS" — experiencia real de Izipay</li>
+          <li>"React vs Vue.js en 2026: cuándo usar cada uno" — visión de desarrollador con experiencia en ambos</li>
+          <li>"Gestión de infraestructura Kubernetes para equipos pequeños" — DevOps Engineer perspective</li>
+          <li>"TypeScript strict mode: los 5 errores más comunes y cómo evitarlos"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- L-3 -->
+  <div class="task" id="l-3">
+    <div class="task-header">
+      <div class="task-id id-low">L3</div>
+      <div style="flex:1">
+        <div class="task-title">Eliminar meta tags obsoletos del HTML template</div>
+        <div class="task-meta">
+          <span class="badge b-effort">⏱ 5 min</span>
+          <span class="badge b-file">index.html</span>
+        </div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-section">
+        <h4>Tags a Eliminar</h4>
+        <pre><span class="cm">&lt;!-- ELIMINAR: ignorado por Google desde 2000 --&gt;</span>
+<span class="tag">&lt;meta</span> name=<span class="str">"revisit-after"</span> content=<span class="str">"7 days"</span><span class="tag">&gt;</span>
+
+<span class="cm">&lt;!-- ELIMINAR: no es un estándar HTML --&gt;</span>
+<span class="tag">&lt;meta</span> name=<span class="str">"title"</span> content=<span class="str">"..."</span><span class="tag">&gt;</span>
+
+<span class="cm">&lt;!-- ELIMINAR o reducir a max 5 términos --&gt;</span>
+<span class="tag">&lt;meta</span> name=<span class="str">"keywords"</span> content=<span class="str">"... 15 terms ..."</span><span class="tag">&gt;</span>
+
+<span class="cm">&lt;!-- ELIMINAR: no es estándar --&gt;</span>
+<span class="tag">&lt;meta</span> name=<span class="str">"language"</span> content=<span class="str">"Spanish"</span><span class="tag">&gt;</span>
+<span class="cm">&lt;!-- ya está cubierto por &lt;html lang="es"&gt; --&gt;</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div style="background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:24px; margin-top:32px;">
+    <h2 style="font-size:15px; font-weight:700; margin-bottom:16px;">📋 Resumen de Esfuerzo Total</h2>
+    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px;">
+      <div style="background:var(--surface2);border:1px solid rgba(248,81,73,.3);border-radius:6px;padding:14px;">
+        <div style="font-size:22px;font-weight:800;color:#f85149;">~2h</div>
+        <div style="font-size:12px;color:var(--text-muted);">3 Bugs — Producción</div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid rgba(240,136,62,.3);border-radius:6px;padding:14px;">
+        <div style="font-size:22px;font-weight:800;color:#f0883e;">~6h</div>
+        <div style="font-size:12px;color:var(--text-muted);">7 Issues Críticos</div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid rgba(210,153,34,.3);border-radius:6px;padding:14px;">
+        <div style="font-size:22px;font-weight:800;color:#d29922;">~10h</div>
+        <div style="font-size:12px;color:var(--text-muted);">13 Issues Altos</div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid rgba(63,185,80,.3);border-radius:6px;padding:14px;">
+        <div style="font-size:22px;font-weight:800;color:#3fb950;">~20h</div>
+        <div style="font-size:12px;color:var(--text-muted);">9 Issues Medios</div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid rgba(88,166,255,.3);border-radius:6px;padding:14px;">
+        <div style="font-size:22px;font-weight:800;color:#58a6ff;">Ongoing</div>
+        <div style="font-size:12px;color:var(--text-muted);">3 Backlog</div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px;">
+        <div style="font-size:22px;font-weight:800;color:#e6edf3;">80+</div>
+        <div style="font-size:12px;color:var(--text-muted);">Score objetivo post-fixes</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Implementation Spec — genaropretill.com · Basado en SEO Audit del 23 de febrero 2026 · Score actual: 49/100 → Objetivo: 80+/100
+</div>
+
+</body>
+</html>
