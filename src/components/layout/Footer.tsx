@@ -69,7 +69,7 @@ export const Footer = () => {
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="text-slate-600 dark:text-light/60 hover:text-primary transition-colors cursor-hover"
+                    className="min-h-[48px] flex items-center text-slate-600 dark:text-light/60 hover:text-primary transition-colors cursor-hover"
                   >
                     {link.name}
                   </Link>

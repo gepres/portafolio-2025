@@ -54,7 +54,7 @@ export const Hero = () => {
   // const avatarInitial = profile?.avatarInitial || 'G';
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-4 pt-16">
+    <section className="relative min-h-screen flex items-center justify-center px-4 pt-16 pb-8">
       <motion.div
         className="max-w-5xl mx-auto text-center"
         variants={staggerContainer}
@@ -62,13 +62,17 @@ export const Hero = () => {
         animate="visible"
       >
         {/* Avatar */}
-        <motion.div variants={staggerItem} className="mb-8 flex justify-center">
-          <div className="relative w-40 h-40">
+        <motion.div variants={staggerItem} className="mb-4 md:mb-8 flex justify-center">
+          <div className="relative w-28 h-28 md:w-40 md:h-40">
             {profile?.avatarHero ? (
               <div className="w-full h-full rounded-full overflow-hidden glass border-2 border-transparent bg-gradient-to-r from-primary to-accent p-1">
                 <img
                   src={profile.avatarHero}
                   alt={fullName}
+                  width={400}
+                  height={400}
+                  fetchPriority="high"
+                  onError={(e) => { e.currentTarget.style.display = 'none'; }}
                   className="w-full h-full rounded-full object-cover"
                 />
               </div>
@@ -170,7 +174,7 @@ export const Hero = () => {
         {/* Greeting */}
         <motion.p
           variants={staggerItem}
-          className="text-primary text-lg md:text-xl mb-4 font-medium"
+          className="text-primary text-base md:text-xl mb-2 md:mb-4 font-medium"
         >
           {t('home.hero.greeting')}
         </motion.p>
@@ -178,7 +182,7 @@ export const Hero = () => {
         {/* Name */}
         <motion.h1
           variants={staggerItem}
-          className="text-5xl md:text-7xl font-bold mb-4 gradient-text"
+          className="text-4xl md:text-7xl font-bold mb-2 md:mb-4 gradient-text"
         >
           {fullName}
         </motion.h1>
@@ -186,7 +190,7 @@ export const Hero = () => {
         {/* Title */}
         <motion.h2
           variants={staggerItem}
-          className="text-2xl md:text-4xl font-semibold text-slate-700 dark:text-light/90 mb-6"
+          className="text-xl md:text-4xl font-semibold text-slate-700 dark:text-light/90 mb-3 md:mb-6"
         >
           {title}
         </motion.h2>
@@ -194,7 +198,7 @@ export const Hero = () => {
         {/* Subtitle */}
         <motion.div
           variants={staggerItem}
-          className="text-xl md:text-2xl text-slate-600 dark:text-light/70 mb-8 min-h-[2rem] md:min-h-[2.5rem]"
+          className="text-lg md:text-2xl text-slate-600 dark:text-light/70 mb-4 md:mb-8 min-h-[2rem] md:min-h-[2.5rem]"
         >
           <TypeAnimation
             key={subtitle}
@@ -214,7 +218,7 @@ export const Hero = () => {
         {/* Description */}
         <motion.p
           variants={staggerItem}
-          className="text-lg text-slate-600 dark:text-light/60 max-w-2xl mx-auto mb-12"
+          className="text-base md:text-lg text-slate-600 dark:text-light/60 max-w-2xl mx-auto mb-6 md:mb-12"
         >
           {description}
         </motion.p>
@@ -222,7 +226,7 @@ export const Hero = () => {
         {/* CTA Buttons */}
         <motion.div
           variants={staggerItem}
-          className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12"
+          className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6 md:mb-12"
         >
           <Button
             variant="primary"

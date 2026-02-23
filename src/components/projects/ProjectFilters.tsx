@@ -24,7 +24,7 @@ export const ProjectFilters = ({ activeFilter, onFilterChange }: ProjectFiltersP
         <motion.button
           key={filter.value}
           onClick={() => onFilterChange(filter.value)}
-          className={`px-6 py-2 rounded-full cursor-hover transition-all relative ${
+          className={`px-6 py-3 min-h-[48px] rounded-full cursor-hover transition-all relative ${
             activeFilter === filter.value
               ? 'text-white'
               : 'text-slate-600 dark:text-light/60 hover:text-primary'
