@@ -7,17 +7,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Primary Meta Tags -->
-  <title>Genaro Pretill | Full Stack Developer</title>
-  <meta name="title" content="Genaro Pretill | Full Stack Developer - React, Node.js & TypeScript" />
+  <title>Genaro Pretill | Full Stack Developer — React, Vue.js & NestJS</title>
+  <meta name="title" content="Genaro Pretill | Full Stack Developer — React, Vue.js & NestJS" />
   <meta name="description"
-    content="Portfolio de Genaro Pretill - Full Stack Developer especializado en React, Node.js, TypeScript y arquitecturas modernas. Desarrollador web con experiencia en DevOps y soluciones cloud." />
+    content="Portfolio de Genaro Pretill - Full Stack Developer especializado en React.js, Vue.js, NestJS, TypeScript y arquitecturas modernas. Experiencia en DevOps y soluciones cloud." />
   <meta name="keywords"
-    content="Full Stack Developer, React.js, Vue.js, Node.js, TypeScript, Web Development, DevOps, JavaScript, Frontend, Backend, Portfolio, Desarrollador Web, Cloud Computing, API REST, MongoDB, PostgreSQL" />
+    content="Full Stack Developer, React.js, Vue.js, NestJS, Node.js, TypeScript, Web Development, DevOps, JavaScript, Frontend, Backend, Portfolio, Desarrollador Web, Cloud Computing, API REST, PostgreSQL, Firebase" />
   <meta name="author" content="Genaro Pretill" />
   <meta name="robots" content="index, follow" />
   <meta name="language" content="Spanish" />
   <meta name="revisit-after" content="7 days" />
-  <link rel="canonical" href="https://genaropretill.com" />
+  <link rel="canonical" href="https://genaropretill.com/" />
+
+  <!-- Preconnects para recursos externos (mejora LCP) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://res.cloudinary.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+  <!-- Google Fonts via link (no @import en CSS — mejora LCP 200-400ms) -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
@@ -40,34 +50,90 @@
   <meta property="twitter:image"
     content="https://res.cloudinary.com/gepres/image/upload/v1573426296/extras/content-img_dlkevd.jpg" />
 
-  <!-- Structured Data / JSON-LD -->
+  <!-- Structured Data / JSON-LD — Person -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Person",
-    "name": "Genaro Pretill",
+    "@id": "https://genaropretill.com/#person",
+    "name": "Genaro Pretill Escobar",
     "jobTitle": "Full Stack Developer",
-    "description": "Full Stack Developer especializado en React.js, Vue.js, Node.js, TypeScript y arquitecturas modernas",
+    "description": "Full Stack Developer especializado en React.js, Vue.js, NestJS, TypeScript y arquitecturas modernas",
     "url": "https://genaropretill.com",
+    "image": {
+      "@type": "ImageObject",
+      "url": "https://genaropretill.com/images/logo.png",
+      "width": 400,
+      "height": 400
+    },
     "sameAs": [
       "https://github.com/genaropretill",
-      "https://linkedin.com/in/genaropretill"
+      "https://www.linkedin.com/in/genaropretill"
     ],
     "knowsAbout": [
-      "Vue.js",
       "React.js",
+      "Vue.js",
+      "NestJS",
       "Node.js",
       "TypeScript",
       "JavaScript",
       "Web Development",
       "DevOps",
-      "Full Stack Development"
-    ]
+      "Full Stack Development",
+      "Firebase",
+      "PostgreSQL",
+      "Docker"
+    ],
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Izipay / Interbank",
+      "url": "https://www.izipay.pe"
+    }
   }
   </script>
 
-  <!-- Stylesheets -->
-  <link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+  <!-- Structured Data / JSON-LD — WebSite -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": "https://genaropretill.com/#website",
+    "url": "https://genaropretill.com",
+    "name": "Genaro Pretill — Portfolio",
+    "description": "Portfolio de Genaro Pretill, Full Stack Developer especializado en React.js, Vue.js y NestJS",
+    "inLanguage": ["es", "en"],
+    "author": {
+      "@id": "https://genaropretill.com/#person"
+    }
+  }
+  </script>
+
+  <!-- Structured Data / JSON-LD — ProfilePage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "@id": "https://genaropretill.com/#profilepage",
+    "url": "https://genaropretill.com",
+    "name": "Genaro Pretill | Full Stack Developer — React, Vue.js & NestJS",
+    "isPartOf": {
+      "@id": "https://genaropretill.com/#website"
+    },
+    "about": {
+      "@id": "https://genaropretill.com/#person"
+    },
+    "dateModified": "2026-02-23"
+  }
+  </script>
+
+  <!-- Devicon — carga no-bloqueante (mejora FCP 400-600ms) -->
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/devicon.min.css"
+    media="print"
+    onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/devicon.min.css">
+  </noscript>
 
   <!-- Favicons -->
   <link rel="apple-touch-icon" sizes="57x57" href="/meta/apple-icon-57x57.png">

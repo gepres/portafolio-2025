@@ -1,10 +1,9 @@
 User-agent: *
 Allow: /
 Disallow: /admin/
-Disallow: /admin/login
-Disallow: /admin/dashboard
+Disallow: /seed-cv
 
-# AI Crawlers - permitir para GEO/AI search visibility
+# AI Crawlers — permitir indexacion para AI search visibility
 User-agent: GPTBot
 Allow: /
 

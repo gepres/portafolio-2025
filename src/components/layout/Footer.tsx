@@ -104,8 +104,13 @@ export const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-8 pt-8 border-t border-white/10 text-center text-slate-600 dark:text-light/60 text-sm">
+        <div className="mt-8 pt-8 border-t border-white/10 text-center text-slate-600 dark:text-light/60 text-sm space-y-2">
           <p>{t('footer.madeWith')}</p>
+          <p>
+            <Link to="/privacy-policy" className="hover:text-primary transition-colors">
+              Política de Privacidad
+            </Link>
+          </p>
         </div>
       </div>
 

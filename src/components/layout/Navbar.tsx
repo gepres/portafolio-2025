@@ -58,26 +58,33 @@ export const Navbar = () => {
     setIsOpen(false);
   }, [location]);
 
+  const scrollToSection = (hash: string) => {
+    if (location.pathname !== '/') {
+      window.location.href = '/' + hash;
+      return;
+    }
+    const id = hash.substring(1);
+    const element = document.getElementById(id);
+    if (element) {
+      const offset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+    }
+  };
+
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, hash: string) => {
     if (hash) {
       e.preventDefault();
-      if (location.pathname !== '/') {
-        window.location.href = '/' + hash;
-      } else {
-        const id = hash.substring(1);
-        const element = document.getElementById(id);
-        if (element) {
-          const offset = 80;
-          const elementPosition = element.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset - offset;
-
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          });
-        }
-      }
+      scrollToSection(hash);
     }
+  };
+
+  const handleMobileNavClick = (e: React.MouseEvent<HTMLAnchorElement>, hash: string) => {
+    e.preventDefault();
+    // Cierra el menú primero, luego espera que termine la animación (300ms) antes de hacer scroll
+    setIsOpen(false);
+    setTimeout(() => scrollToSection(hash), 320);
   };
 
   const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -144,23 +151,27 @@ export const Navbar = () => {
             })}
           </div>
 
-          {/* Admin Button & Theme Toggle */}
+          {/* Theme Toggle + Admin link (solo si autenticado) */}
           <div className="hidden lg:flex items-center space-x-4">
             <LanguageToggle />
             <ThemeToggle />
-            <Link
-              to={isAuthenticated ? '/admin/dashboard' : '/admin/login'}
-              className="px-4 py-2 glass-hover rounded-lg flex items-center space-x-2 cursor-hover"
-            >
-              <User className="w-4 h-4" />
-              <span>{isAuthenticated ? 'Dashboard' : 'Admin'}</span>
-            </Link>
+            {isAuthenticated && (
+              <Link
+                to="/admin/dashboard"
+                className="px-4 py-2 glass-hover rounded-lg flex items-center space-x-2 cursor-hover"
+              >
+                <User className="w-4 h-4" />
+                <span>Dashboard</span>
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="lg:hidden p-2 rounded-lg glass-hover cursor-hover"
+            aria-label={isOpen ? 'Cerrar menú de navegación' : 'Abrir menú de navegación'}
+            aria-expanded={isOpen}
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -184,9 +195,9 @@ export const Navbar = () => {
                   <a
                     key={link.name}
                     href={link.path + link.hash}
-                    onClick={(e) => handleSmoothScroll(e, link.hash)}
+                    onClick={(e) => handleMobileNavClick(e, link.hash)}
                     className={cn(
-                      'block px-4 py-3 rounded-lg transition-all duration-300',
+                      'block px-4 py-3 rounded-lg transition-all duration-300 min-h-[48px] flex items-center',
                       isActive
                         ? 'bg-primary/20 text-primary'
                         : 'text-slate-600 dark:text-light/80 hover:bg-white/5'
@@ -203,12 +214,14 @@ export const Navbar = () => {
                 <ThemeToggle />
               </div>
 
-              <Link
-                to={isAuthenticated ? '/admin/dashboard' : '/admin/login'}
-                className="block px-4 py-3 rounded-lg bg-primary/20 text-primary text-center"
-              >
-                {isAuthenticated ? 'Dashboard' : 'Admin'}
-              </Link>
+              {isAuthenticated && (
+                <Link
+                  to="/admin/dashboard"
+                  className="block px-4 py-3 rounded-lg bg-primary/20 text-primary text-center min-h-[48px] flex items-center justify-center"
+                >
+                  Dashboard
+                </Link>
+              )}
             </div>
 
           </motion.div>

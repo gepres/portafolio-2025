@@ -1,6 +1,7 @@
 import { useCV } from '../hooks/useCV';
 import { CVTemplate } from '../components/CV/CVTemplate';
 import { CVPDFGenerator } from '../components/CV/CVPDFGenerator';
+import { SEOHead } from '../components/SEOHead';
 import ThemeToggle from '../components/ThemeToggle';
 import { LanguageToggle } from '../components/LanguageToggle';
 import { Loader } from '../components/ui/Loader';
@@ -43,6 +44,11 @@ export const CVPage = () => {
 
   return (
     <>
+      <SEOHead
+        title="CV | Genaro Pretill Escobar — Full Stack & DevOps Developer"
+        description="Currículum de Genaro Pretill: experiencia como Full Stack Developer y DevOps Engineer en Izipay (Interbank). React, Vue.js, NestJS, TypeScript."
+        canonical="https://genaropretill.com/cv"
+      />
       <div className="min-h-screen bg-gray-100 dark:bg-gray-900 py-12 px-4">
         <div className="max-w-[210mm] mx-auto">
           {/* Action Buttons */}

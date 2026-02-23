@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider, useAuthContext } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 
@@ -11,6 +12,7 @@ import { Footer } from '../components/layout/Footer';
 import { Home } from '../pages/Home';
 import { CVPage } from '../pages/CVPage';
 import { SeedCVPage } from '../pages/SeedCVPage';
+import { PrivacyPolicy } from '../pages/PrivacyPolicy';
 import { Login } from '../pages/admin/Login';
 import { Dashboard } from '../pages/admin/Dashboard';
 
@@ -61,6 +63,9 @@ function AppContent() {
           <Route path="/cv" element={<CVPage />} />
           <Route path="/seed-cv" element={<SeedCVPage />} />
 
+          {/* Legal */}
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+
           {/* Admin Routes without main layout */}
           <Route path="/admin/login" element={<Login />} />
           <Route
@@ -110,9 +115,11 @@ function AppContent() {
 
 function App() {
   return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
+    <HelmetProvider>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </HelmetProvider>
   );
 }
 

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { SEOHead } from '../components/SEOHead';
 import { Hero } from '../components/home/Hero';
 import { AnimatedBackground } from '../components/home/AnimatedBackground';
 import { PageTransition } from '../components/layout/PageTransition';
@@ -77,6 +78,11 @@ export const Home = () => {
 
   return (
     <PageTransition>
+      <SEOHead
+        title="Genaro Pretill | Full Stack Developer — React, Vue.js & NestJS"
+        description="Full Stack Developer especializado en React.js, Vue.js, NestJS, TypeScript y arquitecturas modernas. Ver proyectos y experiencia."
+        canonical="https://genaropretill.com/"
+      />
       <AnimatedBackground />
       <Hero />
       <AboutSection />

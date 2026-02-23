@@ -3,9 +3,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'react-hot-toast';
 import { Send } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 import { Card } from '../../ui/Card';
 import { Button } from '../../ui/Button';
 import { useTranslation } from 'react-i18next';
+
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID as string;
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string;
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string;
 
 const contactSchema = z.object({
   name: z.string().min(2, 'El nombre debe tener al menos 2 caracteres'),
@@ -29,12 +34,22 @@ export const ContactForm = () => {
 
   const onSubmit = async (data: ContactFormData) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      console.log('Form data:', data);
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          from_name: data.name,
+          from_email: data.email,
+          subject: data.subject,
+          message: data.message,
+        },
+        EMAILJS_PUBLIC_KEY
+      );
       toast.success('¡Mensaje enviado con éxito!');
       reset();
     } catch (error) {
-      toast.error('Error al enviar el mensaje');
+      console.error('EmailJS error:', error);
+      toast.error('Error al enviar el mensaje. Intenta de nuevo o contáctame directamente.');
     }
   };
 

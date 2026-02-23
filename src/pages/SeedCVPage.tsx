@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { seedCVData } from '../lib/firebase/seedCVData';
+import { SEOHead } from '../components/SEOHead';
 import { Database, CheckCircle, XCircle, Loader } from 'lucide-react';
 
 export const SeedCVPage = () => {
@@ -27,6 +28,13 @@ export const SeedCVPage = () => {
   };
 
   return (
+    <>
+    <SEOHead
+      title="Seed CV | Admin"
+      description="Admin utility page."
+      canonical="https://genaropretill.com/seed-cv"
+      noindex={true}
+    />
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8">
         <div className="text-center mb-8">
@@ -104,5 +112,6 @@ export const SeedCVPage = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };

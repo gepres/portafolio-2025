@@ -47,7 +47,7 @@ export const Hero = () => {
     { icon: Mail, href: profile?.socialLinks?.email || 'mailto:contact@example.com', label: 'Email', show: !!profile?.socialLinks?.email },
   ].filter(link => link.show);
 
-  const fullName = profile ? getLocalizedText(profile.fullName, currentLang) : 'Your Name';
+  const fullName = profile ? getLocalizedText(profile.fullName, currentLang) : 'Genaro Pretill Escobar';
   const title = profile ? getLocalizedText(profile.title, currentLang) : t('home.hero.title');
   const subtitle = profile ? getLocalizedText(profile.subtitle, currentLang) : t('home.hero.subtitle');
   const description = profile ? getLocalizedText(profile.description, currentLang) : t('home.hero.description');

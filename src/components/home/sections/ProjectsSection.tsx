@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 
 export const ProjectsSection = () => {
   const { t } = useTranslation();
-  const { projects, loading: projectsLoading } = useProjects();
+  const { projects, loading: projectsLoading, error: projectsError } = useProjects();
   const [activeFilter, setActiveFilter] = useState<ProjectFilterCategory>('all');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -57,6 +57,13 @@ export const ProjectsSection = () => {
             <div className="text-center py-20">
               <div className="inline-block w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
             </div>
+          ) : projectsError ? (
+            <FadeIn className="text-center py-20">
+              <div className="glass rounded-2xl p-12 max-w-md mx-auto">
+                <p className="text-red-400 font-semibold mb-2">No se pudieron cargar los proyectos.</p>
+                <p className="text-slate-500 dark:text-light/50 text-sm">{projectsError}</p>
+              </div>
+            </FadeIn>
           ) : filteredProjects.length > 0 ? (
             <>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
