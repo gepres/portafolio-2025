@@ -1,0 +1,31 @@
+# Genaro Pretill — Full Stack Developer
+
+> Personal portfolio of Genaro Pretill, Full Stack Developer specializing in React, Node.js, TypeScript, and cloud architectures. Based in Lima, Perú.
+
+## About
+
+Genaro Pretill is a Full Stack Developer with experience at fintech companies (Izipay/Interbank) in Lima, Perú. Specializes in modern web architectures using React.js, Vue.js, Node.js, TypeScript, and DevOps practices.
+
+## Skills
+
+- **Frontend**: React.js, Vue.js, TypeScript, Tailwind CSS, GSAP animations
+- **Backend**: Node.js, Express, REST APIs, GraphQL
+- **Cloud & DevOps**: Firebase, GCP, Docker, CI/CD pipelines
+- **Databases**: PostgreSQL, MongoDB, Firestore
+
+## Work Experience
+
+- Full Stack Developer at Izipay / Interbank (Lima, Perú) — fintech payment solutions
+- Projects available at: https://genaropretill.com/projects
+
+## Contact
+
+- Email: Available via contact form at https://genaropretill.com/#contact
+- GitHub: https://github.com/genaropretill
+- LinkedIn: https://www.linkedin.com/in/genaropretill
+
+## Pages
+
+- Homepage: https://genaropretill.com/
+- Projects: https://genaropretill.com/projects
+- CV / Resume: https://genaropretill.com/cv
