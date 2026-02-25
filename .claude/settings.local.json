@@ -9,7 +9,14 @@
       "Bash(python:*)",
       "Bash(node -e:*)",
       "Bash(del \"D:\\\\PROYECTOS\\\\gepres\\\\portafolio-ia\\\\portfolio-genaro-2025\\\\src\\\\pages\\\\SeedCVPage.tsx\")",
-      "Bash(Remove-Item \"D:\\\\PROYECTOS\\\\gepres\\\\portafolio-ia\\\\portfolio-genaro-2025\\\\src\\\\pages\\\\SeedCVPage.tsx\" -Force)"
+      "Bash(Remove-Item \"D:\\\\PROYECTOS\\\\gepres\\\\portafolio-ia\\\\portfolio-genaro-2025\\\\src\\\\pages\\\\SeedCVPage.tsx\" -Force)",
+      "Bash(python3 -c:*)",
+      "Bash(node --version:*)",
+      "Bash(bash --version)",
+      "Bash(echo:*)",
+      "Bash(printf:*)",
+      "WebFetch(domain:genaropretill.com)",
+      "WebFetch(domain:www.genaropretill.com)"
     ]
   }
 }

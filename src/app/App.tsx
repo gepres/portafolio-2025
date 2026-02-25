@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { MotionConfig } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
 import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider, useAuthContext } from '../context/AuthContext';
@@ -45,6 +46,7 @@ function AppContent() {
   const { theme } = useTheme();
 
   return (
+    <MotionConfig reducedMotion="user">
     <BrowserRouter>
       <CustomCursor />
       <Routes>
@@ -108,6 +110,7 @@ function AppContent() {
           }}
         />
     </BrowserRouter>
+    </MotionConfig>
   );
 }
 

@@ -54,9 +54,12 @@ export const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
+  const [prevLocation, setPrevLocation] = useState(location);
+
+  if (prevLocation !== location) {
+    setPrevLocation(location);
     setIsOpen(false);
-  }, [location]);
+  }
 
   const scrollToSection = (hash: string) => {
     if (location.pathname !== '/') {
