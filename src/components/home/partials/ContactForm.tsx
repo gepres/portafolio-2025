@@ -7,6 +7,7 @@ import emailjs from '@emailjs/browser';
 import { Card } from '../../ui/Card';
 import { Button } from '../../ui/Button';
 import { useTranslation } from 'react-i18next';
+import { trackContactFormSubmit } from '../../../lib/analytics/gtag';
 
 const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID as string;
 const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string;
@@ -45,6 +46,7 @@ export const ContactForm = () => {
         },
         EMAILJS_PUBLIC_KEY
       );
+      trackContactFormSubmit();
       toast.success('¡Mensaje enviado con éxito!');
       reset();
     } catch (error) {

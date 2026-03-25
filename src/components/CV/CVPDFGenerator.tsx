@@ -3,6 +3,7 @@ import { Download } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import toast from 'react-hot-toast';
+import { trackCVDownload } from '../../lib/analytics/gtag';
 
 interface CVPDFGeneratorProps {
   fullName: string;
@@ -98,6 +99,7 @@ export const CVPDFGenerator = ({ fullName }: CVPDFGeneratorProps) => {
         pdf.save(fileName);
       }
 
+      trackCVDownload();
       toast.success('PDF generado exitosamente', { id: loadingToast });
 
       // Restaurar visibilidad del contenedor oculto si se usó

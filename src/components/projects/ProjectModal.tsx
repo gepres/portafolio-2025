@@ -6,6 +6,7 @@ import type { Project, Experience } from '../../types';
 import { getExperiences } from '../../lib/firebase/firestore';
 import { useLocalizedText, getLocalizedText } from '../../lib/utils/i18n';
 import { useTranslation } from 'react-i18next';
+import { trackProjectView } from '../../lib/analytics/gtag';
 
 interface ProjectModalProps {
   project: Project | null;
@@ -21,6 +22,12 @@ export const ProjectModal = ({ project, isOpen, onClose }: ProjectModalProps) =>
   const title = useLocalizedText(project?.title);
   const description = useLocalizedText(project?.description);
   const longDescription = useLocalizedText(project?.longDescription || undefined);
+
+  useEffect(() => {
+    if (isOpen && project) {
+      trackProjectView(typeof project.title === 'string' ? project.title : project.title?.es ?? '');
+    }
+  }, [isOpen, project]);
 
   useEffect(() => {
     const fetchClient = async () => {

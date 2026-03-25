@@ -8,6 +8,7 @@ import { useTheme } from '../context/ThemeContext';
 import { CustomCursor } from '../components/animations/CustomCursor';
 import { Navbar } from '../components/layout/Navbar';
 import { Footer } from '../components/layout/Footer';
+import { usePageTracking } from '../hooks/usePageTracking';
 
 // Pages
 import { Home } from '../pages/Home';
@@ -42,12 +43,18 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
+function AppRoutes() {
+  usePageTracking();
+  return null;
+}
+
 function AppContent() {
   const { theme } = useTheme();
 
   return (
     <MotionConfig reducedMotion="user">
     <BrowserRouter>
+      <AppRoutes />
       <CustomCursor />
       <Routes>
           {/* Public Routes with Layout */}
