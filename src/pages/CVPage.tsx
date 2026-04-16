@@ -1,6 +1,7 @@
 import { useCV } from '../hooks/useCV';
 import { CVTemplate } from '../components/CV/CVTemplate';
 import { CVPDFGenerator } from '../components/CV/CVPDFGenerator';
+import { CVWordGenerator } from '../components/CV/CVWordGenerator';
 import { SEOHead } from '../components/SEOHead';
 import ThemeToggle from '../components/ThemeToggle';
 import { LanguageToggle } from '../components/LanguageToggle';
@@ -57,7 +58,10 @@ export const CVPage = () => {
               <ThemeToggle />
               <LanguageToggle />
             </div>
-            <CVPDFGenerator fullName={cvData.personalInfo.fullName} />
+            <div className="flex flex-wrap gap-3">
+              <CVWordGenerator cvData={cvData} />
+              <CVPDFGenerator fullName={cvData.personalInfo.fullName} />
+            </div>
           </div>
 
           {/* CV Template - Visible (responsive) */}

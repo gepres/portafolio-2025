@@ -34,8 +34,12 @@ export const event = (
 };
 
 // Eventos predefinidos para el portfolio
-export const trackCVDownload = (): void =>
-  event('cv_download', { category: 'engagement', label: 'CV PDF' });
+export const trackCVDownload = (format: 'pdf' | 'word' = 'pdf'): void =>
+  event('cv_download', {
+    category: 'engagement',
+    label: format === 'word' ? 'CV Word' : 'CV PDF',
+    format,
+  });
 
 export const trackProjectView = (projectName: string): void =>
   event('project_view', { category: 'portfolio', label: projectName });

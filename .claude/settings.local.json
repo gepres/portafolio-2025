@@ -16,7 +16,9 @@
       "Bash(echo:*)",
       "Bash(printf:*)",
       "WebFetch(domain:genaropretill.com)",
-      "WebFetch(domain:www.genaropretill.com)"
+      "WebFetch(domain:www.genaropretill.com)",
+      "Bash(ls -la .npmrc)",
+      "Bash(cat .npmrc)"
     ]
   }
 }
