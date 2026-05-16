@@ -1,0 +1,73 @@
+[
+  { "repo": "portafolio-2025", "title": "portafolio-2025", "category": "frontend",
+    "technologies": ["React", "TypeScript", "Vite", "Tailwind CSS"],
+    "description": "Portafolio personal desarrollado con React y TypeScript.", "demoUrl": null },
+
+  { "repo": "expense-management", "title": "expense-management", "category": "frontend",
+    "technologies": ["React", "TypeScript", "Firebase"],
+    "description": "App de gestión de saldos.", "demoUrl": null },
+
+  { "repo": "expense-management-nestjs", "title": "expense-management-nestjs", "category": "backend",
+    "technologies": ["NestJS", "TypeScript", "Node.js"],
+    "description": "Backend con NestJS para la gestión de saldos.",
+    "demoUrl": "https://expense-management-nestjs.vercel.app" },
+
+  { "repo": "expense-management-firebase-functions", "title": "expense-management-firebase-functions", "category": "backend",
+    "technologies": ["Firebase Functions", "TypeScript", "Node.js"],
+    "description": "Cloud Functions en Firebase para la app de gestión de saldos.", "demoUrl": null },
+
+  { "repo": "CITES-app", "title": "CITES-app", "category": "frontend",
+    "technologies": ["React", "TypeScript"],
+    "description": "Aplicativo web para consultar el Listado oficial de Especies de Fauna Silvestre CITES – Perú (MINAM 2023): 568 especies con taxonomía completa, Apéndice CITES, categoría nacional, estado UICN, geografía, autoría, sinónimos y comentarios.", "demoUrl": null },
+
+  { "repo": "trek-peru", "title": "trek-peru", "category": "fullstack",
+    "technologies": ["React", "TypeScript", "Node.js"],
+    "description": "Plataforma colaborativa multiusuario para compartir y organizar rutas de trekking en Perú.",
+    "demoUrl": "https://trek-peru.vercel.app" },
+
+  { "repo": "chat-gemini-ia-nestjs", "title": "chat-gemini-ia-nestjs", "category": "backend",
+    "technologies": ["NestJS", "TypeScript", "Google Gemini"],
+    "description": "Backend en NestJS para un chat con IA usando la API de Google Gemini.", "demoUrl": null },
+
+  { "repo": "expo-chat-gemini-ia", "title": "expo-chat-gemini-ia", "category": "mobile",
+    "technologies": ["React Native", "Expo", "Google Gemini"],
+    "description": "App móvil (Expo/React Native) de chat con IA usando la API de Google Gemini.", "demoUrl": null },
+
+  { "repo": "gepres-blogs-servidor", "title": "gepres-blogs-servidor", "category": "backend",
+    "technologies": ["Node.js", "Express", "Cloudinary"],
+    "description": "Servidor para un blog usando Node.js, Express y Cloudinary como almacén de imágenes.",
+    "demoUrl": "https://gepres-blogs-server.herokuapp.com/" },
+
+  { "repo": "multi-modal-chatbot", "title": "multi-modal-chatbot", "category": "frontend",
+    "technologies": ["React", "TypeScript", "IA"],
+    "description": "Chatbot multimodal construido con React y TypeScript.", "demoUrl": null },
+
+  { "repo": "mcp-learning-app", "title": "mcp-learning-app", "category": "fullstack",
+    "technologies": ["JavaScript", "MCP"],
+    "description": "Aplicativo de aprendizaje (MCP).", "demoUrl": null },
+
+  { "repo": "frontend-laiktech", "title": "frontend-laiktech", "category": "frontend",
+    "technologies": ["React", "TypeScript"],
+    "description": "Proyecto frontend (Laiktech).", "demoUrl": null },
+
+  { "repo": "backend-laiktech", "title": "backend-laiktech", "category": "backend",
+    "technologies": ["NestJS", "TypeScript", "Node.js"],
+    "description": "Proyecto backend (Laiktech).", "demoUrl": null },
+
+  { "repo": "CirkulaStoresFrontend", "title": "CirkulaStoresFrontend", "category": "mobile",
+    "technologies": ["React Native", "TypeScript"],
+    "description": "App móvil para explorar tiendas cercanas a la ubicación del usuario, construida con React Native y TypeScript.", "demoUrl": null },
+
+  { "repo": "cirkulaStoreApi", "title": "cirkulaStoreApi", "category": "backend",
+    "technologies": ["C#", "ASP.NET Core 8", ".NET"],
+    "description": "API REST en ASP.NET Core 8: gestiona tiendas con CRUD completo, calcula la distancia desde un punto de origen a cada tienda e indica si la tienda está abierta en el momento de la consulta.", "demoUrl": null },
+
+  { "repo": "teslo-shop", "title": "teslo-shop", "category": "fullstack",
+    "technologies": ["Next.js", "React", "TypeScript"],
+    "description": "Página e-commerce con Next.js.",
+    "demoUrl": "https://teslo-shop-seven-iota.vercel.app" },
+
+  { "repo": "chatGPT-nestjs", "title": "chatGPT-nestjs", "category": "backend",
+    "technologies": ["NestJS", "TypeScript", "OpenAI"],
+    "description": "API REST para consumir la API de ChatGPT en distintos flujos.", "demoUrl": null }
+]

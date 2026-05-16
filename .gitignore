@@ -26,3 +26,6 @@ dist-ssr
 
 .env
 .env.local
+
+# Generated artifacts (regenerable: node scripts/sync-projects.mjs --export)
+projects-export.json

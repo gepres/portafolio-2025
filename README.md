@@ -25,6 +25,26 @@ npm run dev
 2. Habilitar Authentication, Firestore y Storage
 3. Copiar credenciales a .env
 
+## 📂 Sincronización de proyectos (GitHub → Firebase)
+
+La colección `/projects` se mantiene curada y sincronizada con los repos de
+GitHub mediante una herramienta única e idempotente:
+
+```bash
+# Validar (solo lectura, no escribe): compara GitHub ↔ Firebase
+node scripts/sync-projects.mjs
+
+# Escribir los curados faltantes (auth por variables de entorno)
+$env:FB_ADMIN_EMAIL="..."; $env:FB_ADMIN_PASSWORD="..."; node scripts/sync-projects.mjs --write
+
+# Exportar la colección a projects-export.json (artefacto ignorado por git)
+node scripts/sync-projects.mjs --export
+```
+
+- Fuente de verdad: `scripts/curated-projects.json` (lista blanca editable).
+- Para agregar un proyecto: añade su entrada al JSON, valida y luego `--write`.
+- Documentación completa del flujo: [`docs/PROJECTS_SYNC.md`](docs/PROJECTS_SYNC.md).
+
 ## 🚀 Deployment
 
 ```bash
