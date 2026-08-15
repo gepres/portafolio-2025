@@ -45,6 +45,25 @@ node scripts/sync-projects.mjs --export
 - Para agregar un proyecto: añade su entrada al JSON, valida y luego `--write`.
 - Documentación completa del flujo: [`docs/PROJECTS_SYNC.md`](docs/PROJECTS_SYNC.md).
 
+## 💼 Experiencia: empresa vs. freelance
+
+Cada documento de `/experiences` lleva `employmentType: 'company' | 'freelance'`. El CV
+(`/cv`, PDF y Word) muestra dos bloques separados —Experiencia Profesional y Proyectos
+Freelance— y la timeline del home marca las freelance con un badge. Los documentos sin el
+campo se tratan como `company`.
+
+El tipo se edita desde el panel admin. Para clasificar en lote:
+
+```bash
+# Validar (solo lectura): muestra qué quedaría como empresa y qué como freelance
+node scripts/backfill-employment-type.mjs
+
+# Escribir el campo (auth por variables de entorno)
+$env:FB_ADMIN_EMAIL="..."; $env:FB_ADMIN_PASSWORD="..."; node scripts/backfill-employment-type.mjs --write
+```
+
+La lista de empresas freelance vive en la constante `FREELANCE` del script.
+
 ## 🚀 Deployment
 
 ```bash

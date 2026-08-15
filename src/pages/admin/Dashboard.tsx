@@ -711,7 +711,20 @@ export const Dashboard = () => {
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <h4 className="font-bold text-lg dark:text-light/80 text-black gradient-text">{getLocalizedText(exp.role, currentLang)}</h4>
-                        <p className="dark:text-light/80 text-black mb-2">{exp.company}</p>
+                        <p className="dark:text-light/80 text-black mb-2">
+                          {exp.company}
+                          <span
+                            className={`ml-2 px-2 py-0.5 text-xs rounded-full align-middle ${
+                              exp.employmentType === 'freelance'
+                                ? 'bg-accent/20 text-accent'
+                                : 'bg-primary/20 text-primary'
+                            }`}
+                          >
+                            {exp.employmentType === 'freelance'
+                              ? t('admin.experienceForm.typeFreelance')
+                              : t('admin.experienceForm.typeCompany')}
+                          </span>
+                        </p>
                         <p className="text-sm dark:text-light/60 text-black mb-4">
                           {exp.startDate} - {exp.endDate}
                         </p>

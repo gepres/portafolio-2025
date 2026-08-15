@@ -168,6 +168,8 @@ export const getAllCVData = async (): Promise<CVData | null> => {
         description: exp.description,
         technologies: exp.technologies || [],
         current: exp.current,
+        // Los documentos sin el campo son experiencia de empresa
+        employmentType: exp.employmentType ?? 'company',
         order: exp.order || index,
       })),
     };

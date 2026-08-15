@@ -14,7 +14,7 @@ import {
 import { saveAs } from 'file-saver';
 import toast from 'react-hot-toast';
 import { trackCVDownload } from '../../lib/analytics/gtag';
-import type { BilingualText, CVData } from '../../types';
+import type { BilingualText, CVData, CVExperience } from '../../types';
 
 interface CVWordGeneratorProps {
   cvData: CVData;
@@ -31,9 +31,10 @@ const resolveText = (
   return text[lang] || text.es || text.en || '';
 };
 
-const translate = (key: 'workExperience' | 'education' | 'technicalSkills' | 'languages' | 'softSkills' | 'summary', lang: Lang): string => {
+const translate = (key: 'professionalExperience' | 'freelanceExperience' | 'education' | 'technicalSkills' | 'languages' | 'softSkills' | 'summary', lang: Lang): string => {
   const dict: Record<typeof key, Record<Lang, string>> = {
-    workExperience: { es: 'Experiencia Laboral', en: 'Work Experience' },
+    professionalExperience: { es: 'Experiencia Profesional', en: 'Professional Experience' },
+    freelanceExperience: { es: 'Proyectos Freelance', en: 'Freelance Projects' },
     education: { es: 'Educación', en: 'Education' },
     technicalSkills: { es: 'Habilidades Técnicas', en: 'Technical Skills' },
     languages: { es: 'Idiomas', en: 'Languages' },
@@ -56,6 +57,90 @@ const sectionHeading = (text: string): Paragraph =>
       }),
     ],
   });
+
+// Agrega un bloque de experiencia (encabezado + items). No hace nada si la lista viene vacía.
+const pushExperienceBlock = (
+  children: Paragraph[],
+  experiences: CVExperience[],
+  heading: string,
+  lang: Lang
+): void => {
+  if (experiences.length === 0) return;
+
+  children.push(sectionHeading(heading));
+  const sortedExp = [...experiences].sort((a, b) => a.order - b.order);
+
+  sortedExp.forEach((exp) => {
+    // Position + dates on same line via tab stop
+    children.push(
+      new Paragraph({
+        spacing: { before: 120, after: 40 },
+        tabStops: [{ type: TabStopType.RIGHT, position: TabStopPosition.MAX }],
+        children: [
+          new TextRun({
+            text: resolveText(exp.position, lang).toUpperCase(),
+            bold: true,
+            size: 22,
+            color: '111827',
+          }),
+          new TextRun({ text: '\t' }),
+          new TextRun({
+            text: `${exp.startDate} - ${exp.endDate}`,
+            size: 20,
+            color: '6B7280',
+          }),
+        ],
+      })
+    );
+
+    children.push(
+      new Paragraph({
+        spacing: { after: 80 },
+        children: [
+          new TextRun({
+            text: exp.company,
+            italics: true,
+            bold: true,
+            size: 21,
+            color: '374151',
+          }),
+        ],
+      })
+    );
+
+    const description = resolveText(exp.description, lang);
+    if (description) {
+      children.push(
+        new Paragraph({
+          alignment: AlignmentType.JUSTIFIED,
+          spacing: { after: 80 },
+          children: [new TextRun({ text: description, size: 21, color: '374151' })],
+        })
+      );
+    }
+
+    if (exp.technologies && exp.technologies.length > 0) {
+      children.push(
+        new Paragraph({
+          spacing: { after: 120 },
+          children: [
+            new TextRun({
+              text: `Tech: `,
+              bold: true,
+              size: 20,
+              color: '6B7280',
+            }),
+            new TextRun({
+              text: exp.technologies.join(' · '),
+              size: 20,
+              color: '4B5563',
+            }),
+          ],
+        })
+      );
+    }
+  });
+};
 
 const buildDocument = (cvData: CVData, lang: Lang): Document => {
   const { personalInfo, experience, education, technicalSkills, languages, softSkills } = cvData;
@@ -130,82 +215,20 @@ const buildDocument = (cvData: CVData, lang: Lang): Document => {
     );
   }
 
-  // Work Experience
-  if (experience.length > 0) {
-    children.push(sectionHeading(translate('workExperience', lang)));
-    const sortedExp = [...experience].sort((a, b) => a.order - b.order);
+  // Work Experience: empresa y freelance en bloques separados
+  pushExperienceBlock(
+    children,
+    experience.filter((exp) => exp.employmentType !== 'freelance'),
+    translate('professionalExperience', lang),
+    lang
+  );
 
-    sortedExp.forEach((exp) => {
-      // Position + dates on same line via tab stop
-      children.push(
-        new Paragraph({
-          spacing: { before: 120, after: 40 },
-          tabStops: [{ type: TabStopType.RIGHT, position: TabStopPosition.MAX }],
-          children: [
-            new TextRun({
-              text: resolveText(exp.position, lang).toUpperCase(),
-              bold: true,
-              size: 22,
-              color: '111827',
-            }),
-            new TextRun({ text: '\t' }),
-            new TextRun({
-              text: `${exp.startDate} - ${exp.endDate}`,
-              size: 20,
-              color: '6B7280',
-            }),
-          ],
-        })
-      );
-
-      children.push(
-        new Paragraph({
-          spacing: { after: 80 },
-          children: [
-            new TextRun({
-              text: exp.company,
-              italics: true,
-              bold: true,
-              size: 21,
-              color: '374151',
-            }),
-          ],
-        })
-      );
-
-      const description = resolveText(exp.description, lang);
-      if (description) {
-        children.push(
-          new Paragraph({
-            alignment: AlignmentType.JUSTIFIED,
-            spacing: { after: 80 },
-            children: [new TextRun({ text: description, size: 21, color: '374151' })],
-          })
-        );
-      }
-
-      if (exp.technologies && exp.technologies.length > 0) {
-        children.push(
-          new Paragraph({
-            spacing: { after: 120 },
-            children: [
-              new TextRun({
-                text: `Tech: `,
-                bold: true,
-                size: 20,
-                color: '6B7280',
-              }),
-              new TextRun({
-                text: exp.technologies.join(' · '),
-                size: 20,
-                color: '4B5563',
-              }),
-            ],
-          })
-        );
-      }
-    });
-  }
+  pushExperienceBlock(
+    children,
+    experience.filter((exp) => exp.employmentType === 'freelance'),
+    translate('freelanceExperience', lang),
+    lang
+  );
 
   // Education
   if (education.length > 0) {

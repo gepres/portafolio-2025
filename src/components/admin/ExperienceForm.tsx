@@ -5,7 +5,7 @@ import { TechnologyInput } from '../ui/TechnologyInput';
 import { BilingualInput } from './BilingualInput';
 
 import { createEmptyBilingualText, isBilingualText, stringToBilingualText } from '../../lib/utils/i18n';
-import type { Experience } from '../../types';
+import type { EmploymentType, Experience } from '../../types';
 import { useTranslation } from 'react-i18next';
 
 interface ExperienceFormProps {
@@ -31,6 +31,7 @@ export const ExperienceForm = ({
     description: createEmptyBilingualText(),
     technologies: [] as string[],
     current: false,
+    employmentType: 'company' as EmploymentType,
   });
 
   const { t } = useTranslation();
@@ -45,6 +46,7 @@ export const ExperienceForm = ({
         description: isBilingualText(experience.description) ? experience.description : stringToBilingualText(experience.description),
         technologies: experience.technologies || [],
         current: experience.current,
+        employmentType: experience.employmentType ?? 'company',
       });
     } else {
       // Reset form
@@ -56,6 +58,7 @@ export const ExperienceForm = ({
         description: createEmptyBilingualText(),
         technologies: [],
         current: false,
+        employmentType: 'company',
       });
     }
   }, [experience, isOpen]);
@@ -71,12 +74,14 @@ export const ExperienceForm = ({
       description: formData.description,
       technologies: formData.technologies,
       current: formData.current,
+      // Siempre definido: updateExperience escribe en Firestore sin limpiar undefined
+      employmentType: formData.employmentType,
     };
 
     await onSubmit(experienceData);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -93,7 +98,7 @@ export const ExperienceForm = ({
       isLoading={isLoading}
       submitText={experience ? t('common.update') : t('common.create')}
     >
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-3 gap-4">
         <div>
           <label className="block text-sm font-medium mb-2">
             {t('admin.experienceForm.company')} <span className="text-red-400">*</span>
@@ -106,6 +111,23 @@ export const ExperienceForm = ({
             required
           />
         </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2">
+            {t('admin.experienceForm.employmentType')} <span className="text-red-400">*</span>
+          </label>
+          <select
+            name="employmentType"
+            value={formData.employmentType}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-3 rounded-lg glass border border-white/10 focus:border-primary focus:outline-none transition-all h-[46px]"
+          >
+            <option value="company" className="bg-dark">{t('admin.experienceForm.typeCompany')}</option>
+            <option value="freelance" className="bg-dark">{t('admin.experienceForm.typeFreelance')}</option>
+          </select>
+        </div>
+
         <div className="pt-8">
            <label className="flex items-center space-x-2 cursor-pointer glass px-4 py-2 rounded-lg border border-white/10 hover:bg-white/5 transition-colors h-[46px]">
             <input

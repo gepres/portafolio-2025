@@ -40,7 +40,14 @@ export const ExperienceCard = ({ experience, index }: ExperienceCardProps) => {
           )}
           <div className="flex-1">
             <h3 className="text-xl font-bold gradient-text">{getLocalizedText(experience.role, currentLang)}</h3>
-            <p className="text-primary font-semibold">{experience.company}</p>
+            <p className="text-primary font-semibold">
+              {experience.company}
+              {experience.employmentType === 'freelance' && (
+                <span className="ml-2 px-2 py-0.5 bg-accent/20 text-accent text-xs rounded-full align-middle">
+                  {t('home.experience.freelanceBadge')}
+                </span>
+              )}
+            </p>
             <p className="text-slate-500 dark:text-light/60 text-sm">
               {formatDate(experience.startDate)} - {experience.endDate === 'present' ? t('admin.experienceForm.current') : formatDate(experience.endDate)}
               {' · '}

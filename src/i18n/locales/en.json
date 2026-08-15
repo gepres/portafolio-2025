@@ -101,6 +101,7 @@
             "title": "Experience",
             "subtitle": "My professional journey",
             "present": "Present",
+            "freelanceBadge": "Freelance",
             "addExperience": "Add Your Experience",
             "addExperienceDesc": "Access the admin panel to add your professional experience."
         },
@@ -367,6 +368,9 @@
             "startDate": "Start Date",
             "endDate": "End Date",
             "current": "Current Job",
+            "employmentType": "Employment type",
+            "typeCompany": "Company",
+            "typeFreelance": "Freelance",
             "role": "Role / Position",
             "description": "Description",
             "technologies": "Technologies",

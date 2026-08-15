@@ -16,49 +16,67 @@ export const CVExperience = ({ experience, isPdf }: CVExperienceProps) => {
     return text[currentLang] || text.es || text.en || '';
   };
 
-  return (
-    <div className="mb-8">
-      <h3 className="text-2xl font-bold mb-6 uppercase tracking-wider">
-        {currentLang === 'es' ? 'Experiencia Laboral' : 'Work Experience'}
-      </h3>
-      <div className="space-y-6">
-        {experience.map((exp) => (
-          <div key={exp.id} className="border-l-2 border-gray-600 dark:border-gray-300 pl-4">
-            <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-2 gap-1 md:gap-0">
-              <div>
-                <h4 className="font-bold text-base uppercase">{getText(exp.position)}</h4>
-                <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">{exp.company}</p>
-              </div>
-              <p className="text-xs text-gray-600 dark:text-gray-400 md:whitespace-nowrap md:ml-4">
-                {exp.startDate} - {exp.endDate}
-              </p>
-            </div>
-            <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed text-justify">
-              {getText(exp.description)}
-            </p>
+  // Se conserva el orden recibido (actuales primero, luego fecha de inicio descendente)
+  const companyExperience = experience.filter((exp) => exp.employmentType !== 'freelance');
+  const freelanceExperience = experience.filter((exp) => exp.employmentType === 'freelance');
 
-            {exp.technologies && exp.technologies.length > 0 && (
-              <div className="mt-2 flex flex-wrap gap-2">
-                {exp.technologies.map((tech, idx) => (
-                  <div
-                    key={idx}
-                    className="text-xs rounded bg-gray-200 dark:bg-gray-700 h-6 text-gray-700 dark:text-gray-300"
-                    style={{
-                      display: isPdf ? '' : 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      padding: '0 8px',
-                      lineHeight: '1',
-                    }}
-                  >
-                    {tech}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
+  const renderExperience = (exp: CVExperienceType) => (
+    <div key={exp.id} className="border-l-2 border-gray-600 dark:border-gray-300 pl-4">
+      <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-2 gap-1 md:gap-0">
+        <div>
+          <h4 className="font-bold text-base uppercase">{getText(exp.position)}</h4>
+          <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">{exp.company}</p>
+        </div>
+        <p className="text-xs text-gray-600 dark:text-gray-400 md:whitespace-nowrap md:ml-4">
+          {exp.startDate} - {exp.endDate}
+        </p>
       </div>
+      <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed text-justify">
+        {getText(exp.description)}
+      </p>
+
+      {exp.technologies && exp.technologies.length > 0 && (
+        <div className="mt-2 flex flex-wrap gap-2">
+          {exp.technologies.map((tech, idx) => (
+            <div
+              key={idx}
+              className="text-xs rounded bg-gray-200 dark:bg-gray-700 h-6 text-gray-700 dark:text-gray-300"
+              style={{
+                display: isPdf ? '' : 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '0 8px',
+                lineHeight: '1',
+              }}
+            >
+              {tech}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
+  );
+
+  const renderSection = (title: string, experiences: CVExperienceType[]) => (
+    <div className="mb-8">
+      <h3 className="text-2xl font-bold mb-6 uppercase tracking-wider">{title}</h3>
+      <div className="space-y-6">{experiences.map(renderExperience)}</div>
+    </div>
+  );
+
+  return (
+    <>
+      {companyExperience.length > 0 &&
+        renderSection(
+          currentLang === 'es' ? 'Experiencia Profesional' : 'Professional Experience',
+          companyExperience
+        )}
+
+      {freelanceExperience.length > 0 &&
+        renderSection(
+          currentLang === 'es' ? 'Proyectos Freelance' : 'Freelance Projects',
+          freelanceExperience
+        )}
+    </>
   );
 };

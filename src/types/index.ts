@@ -32,6 +32,8 @@ export interface Experience {
   achievements?: (string | BilingualText)[];
   technologies: string[];
   current: boolean;
+  // Opcional: los documentos creados antes de esta distinción no lo traen y se asumen 'company'
+  employmentType?: EmploymentType;
   order?: number;
   createdAt?: Timestamp;
 }
@@ -151,6 +153,9 @@ export type ProjectCategory = 'frontend' | 'backend' | 'fullstack' | 'mobile';
 // Tipo para filtros de proyectos (incluye 'all')
 export type ProjectFilterCategory = 'all' | ProjectCategory;
 
+// Vínculo laboral de una experiencia: trabajo dentro de una empresa o trabajo freelance
+export type EmploymentType = 'company' | 'freelance';
+
 export type SkillCategory = 'frontend' | 'backend' | 'database' | 'cloud_devops' | 'project_management' | 'design' | 'other';
 
 // CV Data Types
@@ -193,6 +198,7 @@ export interface CVExperience {
   description: string | BilingualText;
   technologies: string[];
   current: boolean;
+  employmentType: EmploymentType; // resuelto al mapear desde 'experiences'
   order: number;
 }
 
