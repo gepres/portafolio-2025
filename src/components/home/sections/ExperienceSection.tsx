@@ -16,7 +16,12 @@ export const ExperienceSection = () => {
     const fetchExperiences = async () => {
       try {
         const expData = await getExperiences();
-        setExperiences(expData);
+        // Primero la experiencia de empresa y al final la freelance;
+        // dentro de cada grupo se conserva el orden cronologico descendente
+        setExperiences([
+          ...expData.filter((exp) => exp.employmentType !== 'freelance'),
+          ...expData.filter((exp) => exp.employmentType === 'freelance'),
+        ]);
       } catch (error) {
         console.error('Error fetching experiences:', error);
       }
